@@ -1,12 +1,14 @@
 // Elección del reto de cada puzle. Con la semilla del día sale el mismo para todo el mundo.
 import { normText } from './text';
 import { rngPick, rngShuffle } from './daily';
-import { coverUrl, artistPicUrl, type Level, type UAlbum, type UArtist, type UrbanoDB } from './urbano';
+import { artistsIn, coverUrl, artistPicUrl, type Era, type Level, type UAlbum, type UArtist, type UrbanoDB } from './urbano';
 
 export interface PuzzleOpts {
   rng: () => number;
   /** Géneros urbanos en juego (el reto del día usa los dos) */
   genres: string[];
+  /** En modo libre, la época elegida en el inicio */
+  era?: Era;
   level: Level;
 }
 
@@ -15,7 +17,7 @@ export const dailyOpts = (rng: () => number): PuzzleOpts => ({ rng, genres: DAIL
 
 /** Los N artistas con más fans: en Fácil solo los muy conocidos. */
 function famousArtists(db: UrbanoDB, o: PuzzleOpts): UArtist[] {
-  const list = db.artists.filter((a) => o.genres.includes(a.g)).sort((x, y) => y.f - x.f);
+  const list = artistsIn(db, o.genres, o.era).sort((x, y) => y.f - x.f);
   const n = o.level === 'facil' ? 25 : o.level === 'normal' ? 55 : list.length;
   return list.slice(0, n);
 }
@@ -146,10 +148,11 @@ export const PYRAMID_SIZE = 5;
 
 /** Cinco canciones conocidas, de artistas distintos y con popularidades bien separadas. */
 export function pickPiramide(db: UrbanoDB, o: PuzzleOpts): PyramidSong[] {
+  const ids = new Set(artistsIn(db, o.genres, o.era).map((a) => a.id));
   const pool = db.tracks
-    .filter((t) => o.genres.includes(db.artistById.get(t.a)?.g ?? ''))
+    .filter((t) => ids.has(t.a))
     .sort((x, y) => y.r - x.r)
-    .slice(0, o.level === 'facil' ? 400 : o.level === 'normal' ? 1200 : 3000);
+    .slice(0, o.level === 'facil' ? 400 : o.level === 'normal' ? 1000 : 1800);
   for (let attempt = 0; attempt < 200; attempt++) {
     const pick = rngShuffle(pool, o.rng).slice(0, 40);
     const chosen: typeof pool = [];

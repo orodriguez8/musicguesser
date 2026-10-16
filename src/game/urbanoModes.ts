@@ -4,12 +4,13 @@ import { shuffle, uniqueBy } from '../lib/util';
 import type { Pool } from './pool';
 import { normText } from './text';
 import type { InfiltradoArtist, Option, Question, Track } from './types';
-import { artistPicUrl, coverUrl, type Level, type UArtist, type UrbanoDB } from './urbano';
+import { artistPicUrl, artistsIn, coverUrl, type Era, type Level, type UArtist, type UrbanoDB } from './urbano';
 
 export interface UrbanoCtx {
   db: UrbanoDB;
   pool: Pool;
   genres: string[];
+  era?: Era;
   level: Level;
   /** Canciones ya usadas en esta partida */
   used: Set<number>;
@@ -156,7 +157,8 @@ function famous(list: UArtist[], level: Level): UArtist[] {
 
 export function genInfiltrado(ctx: UrbanoCtx, count: number): Question[] {
   const { db, pool } = ctx;
-  const artists = db.artists.filter((a) => ctx.genres.includes(a.g));
+  // Solo artistas de la época elegida
+  const artists = artistsIn(db, ctx.genres, ctx.era);
   // Por turnos: un tipo de condición cada vez (si no, casi todo serían colaboraciones)
   const byType = new Map<Rule['type'], Rule[]>();
   for (const r of shuffle(rules(db, artists))) byType.set(r.type, [...(byType.get(r.type) ?? []), r]);
@@ -207,7 +209,8 @@ export function genAlbumLink(ctx: UrbanoCtx, count: number): Question[] {
     shuffle(pool.tracks).filter((t) => !ctx.used.has(t.id) && withFeats(t.albumId)),
     (t) => t.albumId,
   ).slice(0, count);
-  const allAlbums = db.albums.filter((al) => al.ft.length >= 2 && ctx.genres.includes(db.artistById.get(al.a)?.g ?? ''));
+  const eraIds = new Set(artistsIn(db, ctx.genres, ctx.era).map((a) => a.id));
+  const allAlbums = db.albums.filter((al) => al.ft.length >= 2 && eraIds.has(al.a));
   return picks.map((t: Track): Question => {
     const al = db.albumById.get(t.albumId)!;
     const artist = db.artistById.get(al.a)!;

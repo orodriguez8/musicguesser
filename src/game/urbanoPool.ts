@@ -5,19 +5,18 @@ import { abortError, mapLimit, nonNull, shuffle } from '../lib/util';
 import { freshFirst } from './history';
 import type { Pool } from './pool';
 import type { ArtistRef, Filter, Track } from './types';
-import { artistPicUrl, coverUrl, ERAS, loadUrbano, type Level, type UrbanoDB, type UTrack } from './urbano';
+import { artistPicUrl, artistsIn, coverUrl, ERAS, loadUrbano, type Level, type UArtist, type UrbanoDB, type UTrack } from './urbano';
 
 type GenresFilter = Extract<Filter, { kind: 'genres' }>;
 
 /**
- * Qué tramo de popularidad entra en cada dificultad (0 = lo más escuchado).
- * Difícil se salta los grandes éxitos: temas menos conocidos, artistas de culto y clásicos
- * antiguos, que hoy tienen menos escuchas.
+ * Qué canciones de cada artista entran según la dificultad (0 = su canción más escuchada).
+ * Difícil se salta sus 2 grandes éxitos pero se queda en temas conocidos, nada de rarezas.
  */
-const BANDS: Record<Level, [number, number]> = {
-  facil: [0, 0.18],
-  normal: [0, 0.5],
-  dificil: [0.2, 0.85],
+const SONGS: Record<Level, [number, number]> = {
+  facil: [0, 6],
+  normal: [0, 12],
+  dificil: [2, 16],
 };
 
 
@@ -27,20 +26,32 @@ export interface UrbanoPool {
   labels: Pool;
   /** Año original de cada canción (Máquina del tiempo no tiene que buscarlo). */
   years: Map<number, number>;
+  /** Todos los artistas de la época elegida (opciones de ¿Quién canta?) */
+  eraArtists: ArtistRef[];
   db: UrbanoDB;
+}
+
+/** Artistas en juego: los de la época elegida; en Fácil, solo la mitad más famosa. */
+export function filterArtists(db: UrbanoDB, f: GenresFilter): UArtist[] {
+  const list = artistsIn(db, f.genres, f.era).sort((x, y) => y.f - x.f);
+  return f.level === 'facil' ? list.slice(0, Math.max(8, Math.ceil(list.length / 2))) : list;
 }
 
 function candidates(db: UrbanoDB, f: GenresFilter): UTrack[] {
   const era = ERAS.find((e) => e.id === f.era);
-  const inFilter = db.tracks.filter((t) => {
-    const a = db.artistById.get(t.a);
-    return a && f.genres.includes(a.g) && (!era || (t.y >= era.from && t.y <= era.to));
+  const [from, to] = SONGS[f.level ?? 'normal'];
+  const byArtist = new Map<number, UTrack[]>();
+  for (const t of db.tracks) byArtist.set(t.a, [...(byArtist.get(t.a) ?? []), t]);
+  return filterArtists(db, f).flatMap((a) => {
+    let songs = (byArtist.get(a.id) ?? []).sort((x, y) => y.r - x.r);
+    // De un artista de varias épocas, sus canciones de la época elegida (Anuel "antiguo" en la intermedia)
+    if (era) {
+      const inEra = songs.filter((t) => t.y >= era.from - 1 && t.y <= era.to + 1);
+      if (inEra.length >= 4) songs = inEra;
+    }
+    const slice = songs.slice(from, to);
+    return slice.length >= 3 ? slice : songs.slice(0, to);
   });
-  const sorted = inFilter.sort((x, y) => y.r - x.r);
-  const [from, to] = BANDS[f.level ?? 'normal'];
-  const band = sorted.slice(Math.floor(sorted.length * from), Math.ceil(sorted.length * to));
-  // Con una época muy corta puede no llegar: entonces usamos todo lo que haya
-  return band.length >= 60 ? band : sorted;
 }
 
 /** Reparte entre artistas: primero lo que no ha salido últimamente, como mucho perArtist de cada uno. */
@@ -142,9 +153,10 @@ export async function loadUrbanoPool(
   ).filter(nonNull);
   if (opts.signal.aborted) throw abortError();
 
-  // Opciones falsas: cualquier canción de la base (solo hace falta el título)
+  // Opciones falsas: canciones de artistas de la misma época (solo hace falta el título)
+  const eraIds = new Set(artistsIn(db, f.genres, f.era).map((a) => a.id));
   const labelTracks: Track[] = db.tracks
-    .filter((t) => f.genres.includes(db.artistById.get(t.a)?.g ?? ''))
+    .filter((t) => eraIds.has(t.a))
     .sort((x, y) => y.r - x.r)
     .map((t) => {
       const a = db.artistById.get(t.a)!;
@@ -169,6 +181,7 @@ export async function loadUrbanoPool(
     pool: { ...makePool(tracks, db), failed },
     labels: makePool(labelTracks, db),
     years: new Map(chosen.map((t) => [t.id, t.y])),
+    eraArtists: [...eraIds].map((id) => toRef(db, id)),
     db,
   };
 }

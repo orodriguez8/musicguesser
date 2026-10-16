@@ -87,7 +87,8 @@ export function Puzzle({ id, filter, onBack }: Props) {
     const urbano = isUrbanoFilter(filter);
     const genres = urbano ? filter.genres : ['reggaeton', 'trap-es'];
     const level = urbano ? (filter.level ?? 'normal') : 'normal';
-    return (): PuzzleOpts => ({ rng: seededRandom(seed), genres, level });
+    const era = urbano ? filter.era : undefined;
+    return (): PuzzleOpts => ({ rng: seededRandom(seed), genres, era, level });
   }, [daily, round, id, filter]);
 
   const saved = daily ? loadDaily<unknown>(id) : null;

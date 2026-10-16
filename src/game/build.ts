@@ -28,11 +28,13 @@ interface Ctx {
   years?: Map<number, number>;
   /** Urbano: la base de datos completa (para El infiltrado y AlbumLink). */
   db?: UrbanoDB;
+  /** Urbano: artistas de la época elegida (para que las opciones no mezclen épocas). */
+  eraArtists?: ArtistRef[];
 }
 
 function urbanoCtx(ctx: Ctx): UrbanoCtx | null {
   if (!ctx.db || ctx.filter.kind !== 'genres') return null;
-  return { db: ctx.db, pool: ctx.pool, genres: ctx.filter.genres, level: ctx.filter.level ?? 'normal', used: ctx.used };
+  return { db: ctx.db, pool: ctx.pool, genres: ctx.filter.genres, era: ctx.filter.era, level: ctx.filter.level ?? 'normal', used: ctx.used };
 }
 
 const artistMode = (ctx: Ctx) => ctx.filter.kind === 'artist';
@@ -129,7 +131,12 @@ async function genArtista(ctx: Ctx, count: number): Promise<Question[]> {
   const pool = await withRelated(ctx);
   if (pool.artists.length < 4) return [];
   const qs = spread(ctx, pool, count, 10).flatMap((t) => {
-    const candidates = artistMode(ctx) ? pool.artists : (genreById.get(t.genreId ?? '')?.artists ?? pool.artists);
+    const sameGenre = (list: ArtistRef[]) => list.filter((a) => a.genreId === t.genreId);
+    const candidates = artistMode(ctx)
+      ? pool.artists
+      : ctx.eraArtists && sameGenre(ctx.eraArtists).length >= 4
+        ? sameGenre(ctx.eraArtists)
+        : (ctx.eraArtists ?? genreById.get(t.genreId ?? '')?.artists ?? pool.artists);
     const distract = shuffle(
       candidates.filter((a) => a.id !== t.artistId && normText(a.name) !== normText(t.artistName)),
     )
@@ -451,7 +458,7 @@ export async function buildQuestions(
   if ((mode === 'infiltrado' || mode === 'albumlink') && !isUrbanoFilter(filter))
     throw new GameError('Este modo es solo para urbano: elige Reggaeton o Trap y rap en español.');
   // Géneros guardados que ya no existen en el catálogo: se ignoran (vacío = todos)
-  if (filter.kind === 'genres') filter = { kind: 'genres', genres: filter.genres.filter((g) => genreById.has(g)) };
+  if (filter.kind === 'genres') filter = { ...filter, genres: filter.genres.filter((g) => genreById.has(g)) };
 
   const recent = recentTracks();
   const onStep = (done: number, total: number) => progress({ label: 'Buscando canciones…', done, total });
@@ -489,7 +496,7 @@ export async function buildQuestions(
     );
   }
 
-  const ctx: Ctx = { filter, pool, signal, progress, recent, used: new Set(), labels: urbano?.labels, years: urbano?.years, db: urbano?.db };
+  const ctx: Ctx = { filter, pool, signal, progress, recent, used: new Set(), labels: urbano?.labels, years: urbano?.years, db: urbano?.db, eraArtists: urbano?.eraArtists };
 
   // Validaciones de un artista concreto: ¿tiene material suficiente para este modo?
   if (filter.kind === 'artist') {

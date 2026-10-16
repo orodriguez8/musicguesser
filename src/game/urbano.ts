@@ -30,6 +30,8 @@ export interface UArtist {
   d: number | null;
   /** nº de discos de estudio */
   na: number;
+  /** Época(s) del artista (puestas a mano en scripts/urbano-overrides.json) */
+  e?: Era[];
 }
 
 export interface UAlbum {
@@ -99,6 +101,11 @@ export const ERAS: { id: Era; label: string; from: number; to: number }[] = [
   { id: 'nueva', label: 'Nueva', from: 2021, to: 9999 },
 ];
 
+/** Artistas de los géneros elegidos y, si hay época, solo los de esa época. */
+export function artistsIn(db: UrbanoDB, genres: string[], era?: Era): UArtist[] {
+  return db.artists.filter((a) => genres.includes(a.g) && (!era || (a.e ?? []).includes(era)));
+}
+
 export function eraOf(year: number): Era {
   return ERAS.find((e) => year >= e.from && year <= e.to)?.id ?? 'nueva';
 }
@@ -110,7 +117,7 @@ export type Level = 'facil' | 'normal' | 'dificil';
 export const LEVELS: { id: Level; label: string; desc: string }[] = [
   { id: 'facil', label: 'Fácil', desc: 'Los temazos que conoce todo el mundo' },
   { id: 'normal', label: 'Normal', desc: 'De todo un poco' },
-  { id: 'dificil', label: 'Difícil', desc: 'Temas menos conocidos, artistas de culto y clásicos' },
+  { id: 'dificil', label: 'Difícil', desc: 'Temas conocidos pero no los de siempre, y artistas menos famosos' },
 ];
 
 // ---------- Imágenes ----------

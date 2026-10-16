@@ -228,7 +228,8 @@ async function mbArtist(name, deezerKeys) {
 
 const people = new Map(); // id → nombre de todos los que aparecen (también colaboradores de fuera)
 const catalogIds = new Set();
-const stats = { mbMiss: [] };
+const stats = { mbMiss: [], noEra: [] };
+const eraOverrides = new Map(Object.entries(overrides.eras ?? {}).map(([name, eras]) => [norm(name), eras]));
 
 async function buildArtist(a, genreId) {
   // Algunos artistas tienen el catálogo repartido en varios perfiles de Deezer (overrides.aliases)
@@ -369,7 +370,10 @@ async function buildArtist(a, genreId) {
     ...(mbInfo?.born ? { b: mbInfo.born } : {}),
     d: overrides.debut?.[a.id] ?? (years.length ? Math.min(...years) : null),
     na: albums.filter((al) => al.k === 'album').length,
+    // Época(s) del artista, puestas a mano en urbano-overrides.json
+    ...(eraOverrides.get(norm(a.name)) ? { e: eraOverrides.get(norm(a.name)) } : {}),
   };
+  if (!artistInfo.e) stats.noEra.push(a.name);
   return { artist: artistInfo, albums, tracks };
 }
 
@@ -410,4 +414,5 @@ if (only.length) {
 await writeFile(outPath, JSON.stringify(out) + '\n', 'utf8');
 const kb = (JSON.stringify(out).length / 1024).toFixed(0);
 console.log(`\nGuardado en ${outPath}: ${out.artists.length} artistas, ${out.albums.length} discos, ${out.tracks.length} canciones (${kb} KB)`);
+if (stats.noEra.length) console.log(`\nSin época asignada (añádelos en urbano-overrides.json): ${stats.noEra.join(', ')}`);
 if (stats.mbMiss.length) console.log(`\nSin datos de MusicBrainz (años solo de Deezer): ${stats.mbMiss.join(', ')}`);
