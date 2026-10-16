@@ -292,16 +292,11 @@ function AnioRound({ q, answered, onOutcome }: RoundProps<'anio'>) {
 }
 
 function PortadaRound({ q, answered, showOptions, onOutcome }: RoundProps<'portada'>) {
+  // La nitidez solo sube cuando el jugador la pide; cada paso vale menos
   const [level, setLevel] = useState(0);
   const elapsed = useElapsed();
   const max = PIXEL_LEVELS.length - 1;
-
-  // Se va enfocando sola cada pocos segundos
-  useEffect(() => {
-    if (answered || level >= max) return;
-    const t = setTimeout(() => setLevel((l) => Math.min(max, l + 1)), 3200);
-    return () => clearTimeout(t);
-  }, [level, answered, max]);
+  const nextWorth = Math.round((PIXEL_FACTORS[level + 1] ?? 0) * 100);
 
   const resolve = useCallback(
     ({ correct, typed }: { correct: boolean; typed: boolean }) => {
@@ -319,7 +314,8 @@ function PortadaRound({ q, answered, showOptions, onOutcome }: RoundProps<'porta
           <span className="muted-strong">Nitidez {Math.min(level + 1, max + 1)}/{max + 1}</span>
           {!answered && (
             <button className="btn-chip" onClick={() => setLevel((l) => Math.min(max, l + 1))} disabled={level >= max}>
-              <Icon name="eye" size={16} /> Más nítida
+              <Icon name="eye" size={16} />
+              {level >= max ? 'Ya está nítida' : <>Más nítida <span className="muted">· vale {nextWorth} %</span></>}
             </button>
           )}
         </div>

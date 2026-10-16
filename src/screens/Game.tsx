@@ -31,7 +31,7 @@ const MODE_RULES: Record<PlayMode, string> = {
   completa: 'Lee los versos y adivina cuál viene después.',
   misteriosa: 'Solo tienes la letra. ¿De qué canción es?',
   anio: 'Escucha y acierta el año de lanzamiento. A ±2 años cuenta como acierto.',
-  portada: 'La portada se irá enfocando. Acierta el disco cuanto antes.',
+  portada: 'La portada empieza pixelada. Pide más nitidez si la necesitas, pero cada paso vale menos.',
   intruso: 'Tres fragmentos son del mismo artista. Encuentra el que no.',
   subgenero: 'Escucha y adivina el subgénero. Para entendidos.',
 };

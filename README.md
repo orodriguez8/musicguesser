@@ -11,7 +11,7 @@ Juego web de adivinar música: del reggaeton al brutal death. 8 minijuegos de 10
 | Completa la letra | Elegir (o escribir) el verso que sigue |
 | Letra misteriosa | Adivinar la canción solo con dos versos |
 | Máquina del tiempo | Acertar el año de lanzamiento (±2 años cuenta como acierto) |
-| Portada pixelada | La portada se enfoca poco a poco: adivina el disco |
+| Portada pixelada | La portada empieza pixelada; pide más nitidez con el botón, pero cada paso vale menos |
 | El intruso | 3 fragmentos de un artista y 1 de otro: encuentra el que sobra |
 | ¿Qué subgénero? | Brutal death, deathcore, metalcore, black… para entendidos |
 

@@ -17,7 +17,7 @@ export const MODES: ModeInfo[] = [
   { id: 'completa', title: 'Completa la letra', desc: '¿Qué viene después?', icon: 'lines', tone: 'cyan' },
   { id: 'misteriosa', title: 'Letra misteriosa', desc: '¿De qué canción es?', icon: 'quote', tone: 'cyan' },
   { id: 'anio', title: 'Máquina del tiempo', desc: 'Acierta el año', icon: 'clock', tone: 'accent' },
-  { id: 'portada', title: 'Portada pixelada', desc: 'Se va enfocando', icon: 'grid', tone: 'cyan' },
+  { id: 'portada', title: 'Portada pixelada', desc: 'Enfócala tú', icon: 'grid', tone: 'cyan' },
   { id: 'intruso', title: 'El intruso', desc: 'Uno no encaja', icon: 'odd', tone: 'accent' },
   { id: 'subgenero', title: '¿Qué subgénero?', desc: 'Para entendidos', icon: 'layers', tone: 'accent', genresOnly: true },
 ];
