@@ -1,5 +1,5 @@
 {
-  "_comment": "Lista de artistas por género. Para añadir uno, escribe su nombre y ejecuta `npm run catalog`. Si Deezer elige un homónimo equivocado, fuerza su ID así: \"Nombre#123456\".",
+  "_comment": "Lista de artistas por género. Para añadir uno, escribe su nombre y ejecuta `npm run catalog`. Si Deezer elige un homónimo equivocado, fuerza su ID así: \"Nombre#123456\". Para fijar si es grupo o solista: \"Nombre|group\" o \"Nombre|person\".",
   "genres": [
     {
       "id": "reggaeton",
@@ -9,7 +9,7 @@
         "Bad Bunny", "Daddy Yankee", "J Balvin", "Karol G", "Ozuna", "Anuel AA", "Rauw Alejandro", "Feid",
         "Myke Towers", "Don Omar", "Wisin & Yandel", "Nicky Jam", "Farruko", "Arcángel", "Jhayco", "Sech",
         "Maluma", "Ivy Queen", "Tego Calderón", "Zion & Lennox", "Young Miko", "Bryant Myers", "Lunay",
-        "De La Ghetto", "Plan B", "Jowell & Randy", "Mora", "Ryan Castro", "Blessd"
+        "De La Ghetto", "Plan B|group", "Jowell & Randy", "Mora", "Ryan Castro", "Blessd"
       ]
     },
     {
@@ -82,7 +82,7 @@
       "label": "Rock y alternativo",
       "family": "otros",
       "artists": [
-        "Linkin Park", "System of a Down", "Slipknot", "Korn#1327", "Deftones", "Foo Fighters", "Red Hot Chili Peppers",
+        "Linkin Park", "System of a Down", "Slipknot", "Korn#1327|group", "Deftones", "Foo Fighters", "Red Hot Chili Peppers",
         "Nirvana", "Queen", "AC/DC", "Guns N' Roses", "Arctic Monkeys", "Muse", "Green Day", "Blink-182",
         "My Chemical Romance", "Paramore", "The Killers", "Radiohead", "Rammstein", "Evanescence", "Fall Out Boy",
         "Pearl Jam", "Soundgarden", "Måneskin", "Sleep Token", "Ghost#8506054"
@@ -96,7 +96,7 @@
         "Taylor Swift", "Dua Lipa", "The Weeknd", "Billie Eilish", "Ariana Grande", "Ed Sheeran", "Harry Styles",
         "Lady Gaga", "Rihanna", "Bruno Mars", "Olivia Rodrigo", "Sabrina Carpenter", "Shakira", "Rosalía",
         "Michael Jackson", "Madonna", "Beyoncé", "Justin Bieber", "Katy Perry", "Coldplay", "Imagine Dragons",
-        "Miley Cyrus", "Doja Cat", "Chappell Roan", "SZA", "Lana Del Rey", "Aitana"
+        "Miley Cyrus|person", "Doja Cat", "Chappell Roan", "SZA", "Lana Del Rey", "Aitana"
       ]
     },
     {

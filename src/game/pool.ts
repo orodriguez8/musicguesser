@@ -49,7 +49,8 @@ export function toTrack(t: DzTrack, album?: DzAlbumRef, genreId?: string): Track
 const trackCache = new Map<string, Promise<Track[]>>();
 
 async function loadArtistTracks(artist: ArtistRef, deep: boolean): Promise<Track[]> {
-  const top = (await artistTop(artist.id, 50).catch(() => []))
+  // Si falla el "top" dejamos que el error suba: así se distingue "sin red" de "sin canciones"
+  const top = (await artistTop(artist.id, 50))
     .map((t) => toTrack(t, undefined, artist.genreId))
     .filter(nonNull)
     .filter((t) => t.artistId === artist.id);
@@ -88,6 +89,8 @@ export interface Pool {
   tracks: Track[];
   byArtist: Map<number, Track[]>;
   artists: ArtistRef[];
+  /** Artistas cuya carga falló por red/API (no por no tener canciones). */
+  failed?: number;
 }
 
 export async function loadPool(
@@ -95,9 +98,13 @@ export async function loadPool(
   opts: { deep?: boolean; signal?: AbortSignal; onStep?: (done: number, total: number) => void } = {},
 ): Promise<Pool> {
   let done = 0;
+  let failed = 0;
   const lists = await mapLimit(artists, 4, async (a) => {
     if (opts.signal?.aborted) throw abortError();
-    const ts = await getArtistTracks(a, opts.deep).catch(() => [] as Track[]);
+    const ts = await getArtistTracks(a, opts.deep).catch(() => {
+      failed++;
+      return [] as Track[];
+    });
     opts.onStep?.(++done, artists.length);
     return ts;
   });
@@ -110,7 +117,7 @@ export async function loadPool(
       ok.push(a);
     }
   });
-  return { tracks: lists.flat(), byArtist, artists: ok };
+  return { tracks: lists.flat(), byArtist, artists: ok, failed };
 }
 
 export function mergePools(a: Pool, b: Pool): Pool {
@@ -127,4 +134,9 @@ export async function relatedRefs(artist: ArtistRef, n = 5): Promise<ArtistRef[]
     .filter((a) => a.id !== artist.id)
     .slice(0, n)
     .map((a) => ({ id: a.id, name: a.name, picture: a.picture_medium, genreId: artist.genreId }));
+}
+
+/** Nº de discos distintos en un conjunto de canciones. */
+export function albumCount(tracks: Track[]): number {
+  return new Set(tracks.map((t) => normText(t.albumTitle))).size;
 }

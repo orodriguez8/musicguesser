@@ -4,6 +4,7 @@ import { AnswerPanel } from '../components/AnswerPanel';
 import { AudioStage } from '../components/AudioStage';
 import { Icon } from '../components/Icon';
 import { PixelCover } from '../components/PixelCover';
+import { SafeImg } from '../components/SafeImg';
 import { HEARDLE_FACTORS, HEARDLE_STEPS, PIXEL_FACTORS, PIXEL_LEVELS, speedFactor, yearPoints } from '../game/scoring';
 import { answerMatches, lineMatches } from '../game/text';
 import type { Outcome, Question } from '../game/types';
@@ -15,10 +16,18 @@ interface RoundProps<K extends Question['kind']> {
   onOutcome: (o: Outcome) => void;
 }
 
-/** Cronómetro desde que empieza la prueba. */
-function useElapsed() {
-  const start = useRef(performance.now());
-  return useCallback(() => performance.now() - start.current, []);
+/**
+ * Cronómetro de la prueba. Si hay audio, empieza cuando el fragmento empieza a sonar de verdad:
+ * con una conexión lenta no es justo descontar puntos por los segundos de carga.
+ */
+function useElapsed(url?: string) {
+  const mounted = useRef(performance.now());
+  const start = useRef<number | null>(url ? null : mounted.current);
+  const { url: current, playing } = useAudio();
+  useEffect(() => {
+    if (url && start.current == null && playing && current === url) start.current = performance.now();
+  }, [url, current, playing]);
+  return useCallback(() => performance.now() - (start.current ?? mounted.current), []);
 }
 
 const secs = (ms: number) => Math.max(1, Math.round(ms / 1000));
@@ -81,23 +90,35 @@ function CancionRound({ q, answered, showOptions, onOutcome }: RoundProps<'canci
   );
 }
 
+const KIND_HINT = {
+  group: { icon: 'users', text: 'Es un grupo: escribe el nombre de la banda, no el de su cantante.', placeholder: 'Nombre del grupo (×2)' },
+  person: { icon: 'user', text: 'Es un artista en solitario.', placeholder: 'Nombre del artista (×2)' },
+  unknown: { icon: 'mic', text: 'Escribe el nombre del artista o de la banda, no el de su cantante.', placeholder: 'Artista o grupo (×2)' },
+} as const;
+
 function ArtistaRound({ q, answered, showOptions, onOutcome }: RoundProps<'artista'>) {
-  const elapsed = useElapsed();
+  const elapsed = useElapsed(q.track.preview);
+  const hint = KIND_HINT[q.artistType ?? 'unknown'];
+  const who = q.artistType === 'group' ? 'Eran' : 'Era';
   const resolve = useCallback(
     ({ correct, typed }: { correct: boolean; typed: boolean }) => {
       const ms = elapsed();
-      onOutcome({ correct, typed, factor: speedFactor(ms), seconds: ms / 1000, short: correct ? `${secs(ms)}s` : '—', reveal: `Era ${q.track.artistName}` });
+      onOutcome({ correct, typed, factor: speedFactor(ms), seconds: ms / 1000, short: correct ? `${secs(ms)}s` : '—', reveal: `${who} ${q.track.artistName}` });
     },
-    [elapsed, onOutcome, q.track.artistName],
+    [elapsed, onOutcome, q.track.artistName, who],
   );
   return (
     <>
       <AudioStage track={q.track} variant="full" answered={answered} />
+      <p className={q.artistType === 'group' ? 'kind-hint group' : 'kind-hint'}>
+        <Icon name={hint.icon} size={18} />
+        {hint.text}
+      </p>
       <AnswerPanel
         options={q.options}
         answer={q.answer}
         accept={(s) => answerMatches(s, q.accept)}
-        placeholder="Escribe el artista y gana ×2"
+        placeholder={hint.placeholder}
         locked={answered}
         startWithOptions={showOptions}
         onResolve={resolve}
@@ -107,7 +128,7 @@ function ArtistaRound({ q, answered, showOptions, onOutcome }: RoundProps<'artis
 }
 
 function SubgeneroRound({ q, answered, onOutcome }: RoundProps<'subgenero'>) {
-  const elapsed = useElapsed();
+  const elapsed = useElapsed(q.track.preview);
   const resolve = useCallback(
     ({ correct }: { correct: boolean }) => {
       const ms = elapsed();
@@ -127,7 +148,7 @@ function SubgeneroRound({ q, answered, onOutcome }: RoundProps<'subgenero'>) {
 function TrackHeader({ q }: { q: { track: { cover: string; title: string; artistName: string } } }) {
   return (
     <div className="track-head">
-      <img src={q.track.cover} alt="" width={56} height={56} />
+      <SafeImg src={q.track.cover} alt="" width={56} height={56} />
       <div>
         <strong>{q.track.title}</strong>
         <span>{q.track.artistName}</span>
@@ -137,7 +158,7 @@ function TrackHeader({ q }: { q: { track: { cover: string; title: string; artist
 }
 
 function CompletaRound({ q, answered, showOptions, onOutcome }: RoundProps<'completa'>) {
-  const elapsed = useElapsed();
+  const elapsed = useElapsed(q.track.preview);
   const line = q.options[q.answer].label;
   const resolve = useCallback(
     ({ correct, typed }: { correct: boolean; typed: boolean }) => {
@@ -337,7 +358,7 @@ function PortadaRound({ q, answered, showOptions, onOutcome }: RoundProps<'porta
 function IntrusoRound({ q, answered, onOutcome }: RoundProps<'intruso'>) {
   const { url, playing } = useAudio();
   const [picked, setPicked] = useState<number | null>(null);
-  const elapsed = useElapsed();
+  const elapsed = useElapsed(q.clips[0].preview);
 
   const playClip = (i: number) => {
     audio.unlock();
@@ -367,7 +388,7 @@ function IntrusoRound({ q, answered, onOutcome }: RoundProps<'intruso'>) {
   return (
     <div className="stage intruso-stage">
       <div className="intruso-head">
-        {q.host.picture && <img src={q.host.picture} alt="" width={52} height={52} />}
+        <SafeImg src={q.host.picture} alt="" width={52} height={52} />
         <div>
           <span className="eyebrow">¿Cuál NO es de…</span>
           <strong>{q.host.name}?</strong>

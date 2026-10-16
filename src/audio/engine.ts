@@ -26,8 +26,19 @@ class AudioEngine {
   private url = '';
   private failed = false;
 
+  private stopTimer = 0;
+
   constructor() {
     this.el = this.makeElement(true);
+    // iOS "interrumpe" el AudioContext al cambiar de app: al volver hay que reanudarlo
+    // o el audio (que pasa por él) sonaría mudo.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') this.resumeContext();
+    });
+  }
+
+  private resumeContext() {
+    if (this.ctx && this.ctx.state !== 'running') void this.ctx.resume().catch(() => {});
   }
 
   private makeElement(cors: boolean): HTMLAudioElement {
@@ -58,7 +69,7 @@ class AudioEngine {
         source.connect(this.analyser);
         this.analyser.connect(this.ctx.destination);
       }
-      if (this.ctx.state === 'suspended') void this.ctx.resume();
+      this.resumeContext();
     } catch {
       /* sin Web Audio: sonará igual, solo sin visualizador real */
     }
@@ -117,7 +128,7 @@ class AudioEngine {
       }
     }
     if (token !== this.token) return;
-    if (this.ctx?.state === 'suspended') void this.ctx.resume();
+    this.resumeContext();
     try {
       el.currentTime = start;
     } catch {
@@ -125,6 +136,18 @@ class AudioEngine {
     }
     await el.play();
     this.loop();
+    // Respaldo del corte por segundos: requestAnimationFrame se congela con la pestaña en
+    // segundo plano y se podría escuchar más de lo desbloqueado. El temporizador no.
+    clearTimeout(this.stopTimer);
+    if (end != null) {
+      this.stopTimer = window.setTimeout(() => {
+        if (token === this.token && this.stopAt != null) {
+          this.cur.pause();
+          this.stopAt = null;
+          this.emit();
+        }
+      }, (end - start) * 1000 + 120);
+    }
   }
 
   private loop() {
@@ -146,6 +169,7 @@ class AudioEngine {
     this.token++;
     this.cur.pause();
     this.stopAt = null;
+    clearTimeout(this.stopTimer);
   }
 
   /** Para del todo y olvida el fragmento actual. */

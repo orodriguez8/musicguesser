@@ -49,7 +49,23 @@ async function limited<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
+/** Para distinguir "no hay letra" de "el servicio no responde" al explicar un error. */
+export const lyricsHealth = { ok: 0, failed: 0 };
+
 async function fetchJson(url: string): Promise<unknown> {
+  const result = await fetchJsonRaw(url);
+  if (result === FAILED) {
+    lyricsHealth.failed++;
+    return null;
+  }
+  lyricsHealth.ok++;
+  return result;
+}
+
+const FAILED = Symbol('failed');
+
+async function fetchJsonRaw(url: string): Promise<unknown> {
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return FAILED;
   for (let attempt = 0; attempt < 4; attempt++) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 8000);
@@ -68,7 +84,7 @@ async function fetchJson(url: string): Promise<unknown> {
     }
     await sleep(retryAfter);
   }
-  return null;
+  return FAILED;
 }
 
 export function cleanLyrics(text: string): string[] {

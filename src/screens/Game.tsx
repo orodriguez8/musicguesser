@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type Ref } from 'react';
 import { audio } from '../audio/engine';
 import { Icon } from '../components/Icon';
-import { buildQuestions, questionTrack } from '../game/build';
+import { SafeImg } from '../components/SafeImg';
+import { buildQuestions, GameError, questionTrack } from '../game/build';
 import { filterLabel } from '../game/catalog';
 import { modeTitle } from '../game/modes';
 import { roundPoints, streakMultiplier } from '../game/scoring';
@@ -61,7 +62,13 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
         setPhase({ k: 'ready' });
       })
       .catch((e) => {
-        if (!isAbort(e)) setPhase({ k: 'error', msg: e instanceof Error ? e.message : 'Algo ha fallado' });
+        if (isAbort(e)) return;
+        // Los GameError traen un mensaje pensado para el jugador; el resto, mensaje genérico
+        if (!(e instanceof GameError)) console.error('[MusicGuesser] Error preparando la partida', e);
+        setPhase({
+          k: 'error',
+          msg: e instanceof GameError ? e.message : 'Algo ha fallado preparando la partida. Vuelve a intentarlo en un momento.',
+        });
       });
     return () => ctrl.abort();
   }, [mode, filter, attempt]);
@@ -266,7 +273,7 @@ function Banner({
 
   return (
     <div ref={ref} className={outcome.correct ? 'banner ok' : 'banner ko'} role="status">
-      <img src={t.coverSmall} alt="" width={48} height={48} />
+      <SafeImg src={t.coverSmall} alt="" width={48} height={48} />
       <div className="banner-text">
         <strong>{title}</strong>
         <span>{sub}</span>

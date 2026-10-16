@@ -1,9 +1,9 @@
 import { getAlbum, searchTracks, type DzAlbum } from '../api/deezer';
-import { getLyrics } from '../api/lrclib';
-import { firstReleaseYear } from '../api/musicbrainz';
-import { abortError, collect, range, sample, shuffle, uniqueBy } from '../lib/util';
-import { artistsOf, familyGenres, GENRES, genreById } from './catalog';
-import { displayTitle, loadPool, mergePools, relatedRefs, type Pool } from './pool';
+import { getLyrics, lyricsHealth } from '../api/lrclib';
+import { artistType, firstReleaseYear } from '../api/musicbrainz';
+import { abortError, collect, mapLimit, range, sample, shuffle, uniqueBy } from '../lib/util';
+import { artistsOf, catalogArtistType, familyGenres, GENRES, genreById } from './catalog';
+import { albumCount, displayTitle, loadPool, mergePools, relatedRefs, type Pool } from './pool';
 import { ROUNDS } from './scoring';
 import { normText, similarity, stripExtras } from './text';
 import type { ArtistRef, Filter, ModeId, Option, PlayMode, Progress, Question, Track } from './types';
@@ -17,6 +17,12 @@ interface Ctx {
 }
 
 const artistMode = (ctx: Ctx) => ctx.filter.kind === 'artist';
+
+/**
+ * De dónde sacar opciones falsas. Jugando con un solo artista, sus propias canciones pueden
+ * no llegar a 3 alternativas: entonces se completan con las de artistas parecidos.
+ */
+const distractorPool = (ctx: Ctx) => ctx.related ?? ctx.pool;
 
 /** Reparte las canciones entre artistas distintos, tirando de lo más conocido de cada uno. */
 function spread(pool: Pool, count: number, perArtist: number): Track[] {
@@ -58,9 +64,15 @@ async function withRelated(ctx: Ctx): Promise<Pool> {
   if (ctx.filter.kind !== 'artist') return ctx.pool;
   if (ctx.related) return ctx.related;
   ctx.progress({ label: 'Buscando artistas parecidos…' });
-  const refs = await relatedRefs(ctx.filter.artist, 5);
-  const rel = await loadPool(refs, { signal: ctx.signal });
-  ctx.related = mergePools(ctx.pool, rel);
+  try {
+    const refs = await relatedRefs(ctx.filter.artist, 5);
+    const rel = await loadPool(refs, { signal: ctx.signal });
+    ctx.related = mergePools(ctx.pool, rel);
+  } catch (e) {
+    if (ctx.signal.aborted) throw e;
+    // Sin artistas parecidos: los modos que los necesitan generarán menos preguntas
+    ctx.related = ctx.pool;
+  }
   return ctx.related;
 }
 
@@ -69,7 +81,7 @@ async function withRelated(ctx: Ctx): Promise<Pool> {
 async function genCancion(ctx: Ctx, count: number): Promise<Question[]> {
   return spread(ctx.pool, count, artistMode(ctx) ? 40 : 12)
     .map((t): Question => {
-      const { options, answer } = withOptions({ label: t.title }, titleDistractors(t, ctx.pool));
+      const { options, answer } = withOptions({ label: t.title }, titleDistractors(t, distractorPool(ctx)));
       return { kind: 'cancion', track: t, options, answer, accept: [t.title] };
     })
     .filter((q) => q.kind === 'cancion' && q.options.length === 4);
@@ -78,7 +90,7 @@ async function genCancion(ctx: Ctx, count: number): Promise<Question[]> {
 async function genArtista(ctx: Ctx, count: number): Promise<Question[]> {
   const pool = await withRelated(ctx);
   if (pool.artists.length < 4) return [];
-  return spread(pool, count, 10).flatMap((t): Question[] => {
+  const qs = spread(pool, count, 10).flatMap((t) => {
     const candidates = artistMode(ctx) ? pool.artists : (genreById.get(t.genreId ?? '')?.artists ?? pool.artists);
     const distract = shuffle(
       candidates.filter((a) => a.id !== t.artistId && normText(a.name) !== normText(t.artistName)),
@@ -87,8 +99,23 @@ async function genArtista(ctx: Ctx, count: number): Promise<Question[]> {
       .map((a) => ({ label: a.name }));
     if (distract.length < 3) return [];
     const { options, answer } = withOptions({ label: t.artistName }, distract);
-    return [{ kind: 'artista', track: t, options, answer, accept: [t.artistName] }];
+    const q: Extract<Question, { kind: 'artista' }> = { kind: 'artista', track: t, options, answer, accept: [t.artistName] };
+    return [q];
   });
+
+  // ¿Grupo o solista? Así nadie escribe el nombre del cantante cuando la respuesta es la banda.
+  // Catálogo: dato precalculado. Artistas de fuera (búsqueda, parecidos): MusicBrainz.
+  const unknown = uniqueBy(
+    qs.filter((q) => !catalogArtistType.has(q.track.artistId)),
+    (q) => q.track.artistId,
+  );
+  if (unknown.length) ctx.progress({ label: 'Comprobando si son grupos o solistas…' });
+  const looked = new Map<number, Awaited<ReturnType<typeof artistType>>>();
+  await mapLimit(unknown, 2, async (q) => {
+    looked.set(q.track.artistId, await artistType(q.track.artistName).catch(() => undefined));
+  });
+  for (const q of qs) q.artistType = catalogArtistType.get(q.track.artistId) ?? looked.get(q.track.artistId);
+  return qs;
 }
 
 async function genSubgenero(ctx: Ctx, count: number): Promise<Question[]> {
@@ -149,11 +176,16 @@ function makeCompleta(t: Track, lines: string[]): Question | null {
 
 function makeMisteriosa(t: Track, lines: string[], pool: Pool): Question | null {
   const title = normText(t.title);
+  const artist = normText(t.artistName);
+  const gives = (line: string) => {
+    const n = normText(line);
+    return (title.length >= 3 && n.includes(title)) || (artist.length >= 4 && n.includes(artist));
+  };
   const usable = (i: number) => {
     const [a, b] = [lines[i], lines[i + 1]];
     if (!okLine(a) || !okLine(b) || normText(a) === normText(b)) return false;
-    // Que la frase no chive el título
-    return !(title.length >= 3 && (normText(a).includes(title) || normText(b).includes(title)));
+    // Que la frase no chive el título ni el artista ("Bad Bunny, baby")
+    return !gives(a) && !gives(b);
   };
   const idxs = shuffle(range(0, lines.length - 1)).filter(usable);
   // Preferimos versos con chicha: dos frases cortas ("hasta abajo") no hay quien las adivine
@@ -175,7 +207,7 @@ async function genLyrics(ctx: Ctx, count: number, kind: 'completa' | 'misteriosa
     async (t) => {
       const lines = await getLyrics(t);
       if (!lines) return null;
-      const q = kind === 'completa' ? makeCompleta(t, lines) : makeMisteriosa(t, lines, ctx.pool);
+      const q = kind === 'completa' ? makeCompleta(t, lines) : makeMisteriosa(t, lines, distractorPool(ctx));
       if (q) ctx.progress({ label: 'Buscando letras…', done: ++found, total: count });
       return q;
     },
@@ -243,7 +275,7 @@ const albumLabel = (t: Track) => stripExtras(t.albumTitle) || t.albumTitle;
 async function genPortada(ctx: Ctx, count: number): Promise<Question[]> {
   const tracks = spread(ctx.pool, count * 3, artistMode(ctx) ? 60 : 15);
   const albums = uniqueBy(tracks, (t) => `${t.artistId}:${normText(albumLabel(t))}`).slice(0, count);
-  const allAlbums = uniqueBy(ctx.pool.tracks, (t) => `${t.artistId}:${normText(albumLabel(t))}`);
+  const allAlbums = uniqueBy(distractorPool(ctx).tracks, (t) => `${t.artistId}:${normText(albumLabel(t))}`);
   return albums.flatMap((t): Question[] => {
     const key = normText(albumLabel(t));
     const same = shuffle(allAlbums.filter((x) => x.artistId === t.artistId));
@@ -333,13 +365,20 @@ function pickArtists(mode: PlayMode, filter: Filter): ArtistRef[] {
   return shuffle(artistsOf(filter.genres)).slice(0, mode === 'mezcla' ? 16 : 12);
 }
 
+/** Mínimo de pruebas para que una partida tenga sentido (si no llegamos a 10). */
+export const MIN_ROUNDS = 5;
+
 const NOT_ENOUGH: Partial<Record<PlayMode, string>> = {
   completa: 'No hemos encontrado suficientes letras para estos artistas. Prueba con otros géneros o con otro modo.',
   misteriosa: 'No hemos encontrado suficientes letras para estos artistas. Prueba con otros géneros o con otro modo.',
   anio: 'No hemos podido fechar suficientes canciones. Prueba con otro filtro.',
   artista: 'Hacen falta al menos 4 artistas distintos para este modo.',
-  subgenero: 'Este modo necesita canciones de varios géneros.',
+  intruso: 'No hay suficientes artistas parecidos para montar este modo. Prueba con otro.',
+  subgenero: 'Este modo necesita géneros, no un artista concreto.',
 };
+
+/** Los errores con este mensaje se enseñan tal cual al jugador. */
+export class GameError extends Error {}
 
 export async function buildQuestions(
   mode: PlayMode,
@@ -347,7 +386,11 @@ export async function buildQuestions(
   progress: (p: Progress) => void,
   signal: AbortSignal,
 ): Promise<Question[]> {
-  if (mode === 'subgenero' && filter.kind === 'artist') throw new Error(NOT_ENOUGH.subgenero);
+  if (navigator.onLine === false) throw new GameError('Parece que no tienes conexión a internet.');
+  if (mode === 'subgenero' && filter.kind === 'artist') throw new GameError(NOT_ENOUGH.subgenero!);
+  // Géneros guardados que ya no existen en el catálogo: se ignoran (vacío = todos)
+  if (filter.kind === 'genres') filter = { kind: 'genres', genres: filter.genres.filter((g) => genreById.has(g)) };
+
   const artists = pickArtists(mode, filter);
   progress({ label: 'Buscando canciones…', done: 0, total: artists.length });
   const pool = await loadPool(artists, {
@@ -355,13 +398,43 @@ export async function buildQuestions(
     signal,
     onStep: (done, total) => progress({ label: 'Buscando canciones…', done, total }),
   });
-  if (!pool.tracks.length) throw new Error('No hemos encontrado canciones con este filtro. Prueba con otro.');
+  if (!pool.tracks.length) {
+    if (pool.failed && pool.failed >= artists.length)
+      throw new GameError('Deezer no responde ahora mismo. Revisa tu conexión y vuelve a intentarlo en un momento.');
+    throw new GameError(
+      filter.kind === 'artist'
+        ? `No hemos encontrado canciones de ${filter.artist.name} con fragmento disponible en Deezer.`
+        : 'No hemos encontrado canciones con este filtro. Prueba con otro.',
+    );
+  }
 
   const ctx: Ctx = { filter, pool, signal, progress };
+
+  // Validaciones de un artista concreto: ¿tiene material suficiente para este modo?
+  if (filter.kind === 'artist') {
+    const name = filter.artist.name;
+    const songs = pool.tracks.length;
+    if (songs < MIN_ROUNDS)
+      throw new GameError(`${name} solo tiene ${songs} ${songs === 1 ? 'canción' : 'canciones'} con fragmento en Deezer. Hacen falta al menos ${MIN_ROUNDS}.`);
+    const albums = albumCount(pool.tracks);
+    if (mode === 'portada' && albums < MIN_ROUNDS)
+      throw new GameError(`${name} solo tiene ${albums} ${albums === 1 ? 'disco' : 'discos'} en Deezer y Portada pixelada necesita al menos ${MIN_ROUNDS}. Prueba otro modo.`);
+    // Opciones falsas de artistas parecidos por si las suyas no llegan
+    if (mode !== 'anio' && mode !== 'completa') await withRelated(ctx);
+  }
+
+  const healthBefore = { ...lyricsHealth };
   const qs = mode === 'mezcla' ? await genMezcla(ctx) : await GEN[mode](ctx, ROUNDS);
   if (signal.aborted) throw abortError();
   // Mejor una partida algo más corta que ninguna
-  if (qs.length < 5) throw new Error(NOT_ENOUGH[mode] ?? 'No hay suficientes canciones con este filtro.');
+  if (qs.length < MIN_ROUNDS) {
+    if (mode === 'completa' || mode === 'misteriosa') {
+      const ok = lyricsHealth.ok - healthBefore.ok;
+      const failed = lyricsHealth.failed - healthBefore.failed;
+      if (failed > ok) throw new GameError('El servicio de letras (LRCLIB) no responde ahora mismo. Prueba otro modo o vuelve en un rato.');
+    }
+    throw new GameError(NOT_ENOUGH[mode] ?? 'No hay suficientes canciones con este filtro.');
+  }
   return qs.slice(0, ROUNDS);
 }
 

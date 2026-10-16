@@ -1,5 +1,5 @@
 import data from '../data/catalog.json';
-import type { ArtistRef, Family, Filter } from './types';
+import type { ArtistKind, ArtistRef, Family, Filter } from './types';
 
 export interface Genre {
   id: string;
@@ -12,10 +12,21 @@ export const GENRES: Genre[] = data.genres.map((g) => ({
   id: g.id,
   label: g.label,
   family: g.family as Family,
-  artists: g.artists.map((a) => ({ id: a.id, name: a.name, picture: a.picture, genreId: g.id })),
+  artists: g.artists.map((a) => ({
+    id: a.id,
+    name: a.name,
+    picture: a.picture,
+    genreId: g.id,
+    type: ('type' in a ? a.type : undefined) as ArtistKind | undefined,
+  })),
 }));
 
 export const genreById = new Map(GENRES.map((g) => [g.id, g]));
+
+/** Grupo/solista de los artistas del catálogo, por ID de Deezer. */
+export const catalogArtistType = new Map(
+  GENRES.flatMap((g) => g.artists.filter((a) => a.type).map((a) => [a.id, a.type!] as const)),
+);
 
 export function selectedGenres(ids: string[]): Genre[] {
   return ids.length ? GENRES.filter((g) => ids.includes(g.id)) : GENRES;

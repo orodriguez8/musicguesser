@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
 import { audio, useAudio } from '../audio/engine';
 import { Icon } from '../components/Icon';
+import { RankingStatus } from '../components/RankingStatus';
+import { SafeImg } from '../components/SafeImg';
 import { questionTrack } from '../game/build';
 import { modeTitle } from '../game/modes';
 import { grade } from '../game/scoring';
-import type { RoundResult, Summary } from '../game/types';
+import type { Filter, RoundResult, Summary } from '../game/types';
 import { fmtDecimal, fmtInt } from '../lib/util';
 
 interface Props {
   summary: Summary;
+  filter: Filter;
   isRecord: boolean;
+  loggedIn: boolean;
   onReplay: () => void;
   onHome: () => void;
+  onLogin?: () => void;
+  onOpenRanking?: () => void;
 }
 
 function avg(xs: number[]): number {
@@ -37,7 +43,7 @@ function detail(r: RoundResult, mezcla: boolean): string {
   return mezcla ? `${modeTitle(q.kind)} · ${d}` : d;
 }
 
-export function Results({ summary, isRecord, onReplay, onHome }: Props) {
+export function Results({ summary, filter, isRecord, loggedIn, onReplay, onHome, onLogin, onOpenRanking }: Props) {
   const g = grade(summary.correct);
   const total = summary.results.length;
   const third = thirdStat(summary);
@@ -94,6 +100,8 @@ export function Results({ summary, isRecord, onReplay, onHome }: Props) {
         </p>
       </section>
 
+      <RankingStatus summary={summary} filter={filter} loggedIn={loggedIn} onLogin={onLogin} onOpenRanking={onOpenRanking} />
+
       <div className="stats">
         <div className="stat">
           <strong>
@@ -141,7 +149,7 @@ export function Results({ summary, isRecord, onReplay, onHome }: Props) {
                   }}
                   aria-label={`${on ? 'Pausar' : 'Escuchar'} ${t.title}`}
                 >
-                  <img src={t.coverSmall} alt="" width={48} height={48} loading="lazy" />
+                  <SafeImg src={t.coverSmall} alt="" width={48} height={48} loading="lazy" />
                   <span className="played-icon">
                     <Icon name={on ? 'pause' : 'play'} size={18} />
                   </span>

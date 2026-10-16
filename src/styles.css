@@ -801,6 +801,48 @@ h2 {
   color: var(--muted);
 }
 
+.credit {
+  align-self: flex-end;
+  margin-top: -6px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted-2);
+}
+
+.img-fallback {
+  display: block;
+  flex: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0 18%, transparent 19%),
+    var(--surface-2);
+}
+
+.kind-hint {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  color: var(--soft);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.kind-hint.group {
+  border-color: var(--accent-line);
+  background: rgba(255, 61, 154, 0.08);
+  color: var(--text);
+}
+
+.kind-hint .icon {
+  color: var(--accent-soft);
+}
+
 /* ---------- Partida ---------- */
 
 .game-head {
@@ -2000,6 +2042,179 @@ h2 {
 }
 
 .played-pts.ko {
+  color: var(--accent-soft);
+}
+
+/* ---------- Ranking ---------- */
+
+.ranking {
+  max-width: 640px;
+  gap: 14px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 4px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+}
+
+.segmented button {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.segmented button.on {
+  background: var(--cyan);
+  color: var(--cyan-ink);
+}
+
+.avatar {
+  flex: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #12091a;
+}
+
+.board {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.board-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 8px 14px 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.board-row.skeleton {
+  background: linear-gradient(90deg, var(--surface) 0%, #1c1532 50%, var(--surface) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.board-row.me {
+  border-color: var(--cyan);
+  background: rgba(61, 227, 255, 0.08);
+}
+
+.board-pos {
+  flex: none;
+  width: 30px;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.board-row.top1 .board-pos {
+  color: #ffd24d;
+  text-shadow: 0 0 14px rgba(255, 210, 77, 0.6);
+}
+
+.board-row.top2 .board-pos {
+  color: #dcd6ee;
+}
+
+.board-row.top3 .board-pos {
+  color: #e8a76a;
+}
+
+.board-row.top1 {
+  border-color: rgba(255, 210, 77, 0.45);
+}
+
+.board-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.board-name strong {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board-name span {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.board-score {
+  flex: none;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.my-rank {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--cyan);
+  background: var(--cyan-tint);
+  color: var(--cyan-pale);
+  font-weight: 600;
+}
+
+.rank-status {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rank-status > span:not(.spinner) {
+  flex: 1;
+  min-width: 160px;
+}
+
+.rank-status.ok {
+  border-color: var(--cyan);
+  background: var(--cyan-tint);
+  color: var(--cyan-pale);
+}
+
+.rank-status.ko {
+  border-color: var(--accent-line);
   color: var(--accent-soft);
 }
 

@@ -4,6 +4,7 @@ import { GENRES } from '../game/catalog';
 import type { ArtistRef } from '../game/types';
 import { fmtFans } from '../lib/util';
 import { Icon } from './Icon';
+import { SafeImg } from './SafeImg';
 
 const catalogGenre = new Map(GENRES.flatMap((g) => g.artists.map((a) => [a.id, g.id] as const)));
 
@@ -13,6 +14,7 @@ export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(-1);
+  const [failed, setFailed] = useState(false);
   const listId = useId();
 
   useEffect(() => {
@@ -20,6 +22,7 @@ export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
     if (term.length < 2) {
       setResults([]);
       setLoading(false);
+      setFailed(false);
       return;
     }
     let cancelled = false;
@@ -28,11 +31,17 @@ export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
       searchArtists(term)
         .then((r) => {
           if (cancelled) return;
-          setResults(r.slice(0, 6));
+          // Fuera perfiles sin fans (homónimos falsos, subidas de terceros)
+          setResults(r.filter((a) => a.nb_fan > 0).slice(0, 6));
+          setFailed(false);
           setOpen(true);
           setActive(-1);
         })
-        .catch(() => !cancelled && setResults([]))
+        .catch(() => {
+          if (cancelled) return;
+          setResults([]);
+          setFailed(true);
+        })
         .finally(() => !cancelled && setLoading(false));
     }, 300);
     return () => {
@@ -95,7 +104,9 @@ export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
       </label>
       {showList && (
         <ul className="search-list" id={listId} role="listbox">
-          {!loading && !results.length && <li className="search-empty">Sin resultados</li>}
+          {!loading && !results.length && (
+            <li className="search-empty">{failed ? 'No hay conexión con Deezer. Inténtalo de nuevo.' : 'Sin resultados'}</li>
+          )}
           {results.map((a, i) => (
             <li
               key={a.id}
@@ -108,7 +119,7 @@ export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
                 choose(a);
               }}
             >
-              <img src={a.picture_medium} alt="" width={40} height={40} loading="lazy" />
+              <SafeImg src={a.picture_medium} alt="" width={40} height={40} loading="lazy" />
               <span className="search-name">{a.name}</span>
               <span className="search-fans">{fmtFans(a.nb_fan)}</span>
             </li>

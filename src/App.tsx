@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { audio } from './audio/engine';
 import { Icon } from './components/Icon';
 import { Modal } from './components/Modal';
@@ -7,7 +7,10 @@ import type { Filter, PlayMode, Summary } from './game/types';
 import { fmtInt } from './lib/util';
 import { Game } from './screens/Game';
 import { Home } from './screens/Home';
+import { Ranking } from './screens/Ranking';
 import { Results } from './screens/Results';
+import { useAuth } from './auth/auth';
+import { onlineEnabled } from './lib/supabase';
 import {
   clearRecords,
   loadFilter,
@@ -22,11 +25,13 @@ import {
 
 type View =
   | { name: 'home' }
+  | { name: 'ranking' }
   | { name: 'game'; mode: PlayMode; filter: Filter; key: number }
   | { name: 'results'; mode: PlayMode; filter: Filter; summary: Summary; isRecord: boolean };
 
 export default function App() {
   const [view, setView] = useState<View>({ name: 'home' });
+  const auth = useAuth();
   const [filter, setFilter] = useState<Filter>(loadFilter);
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [records, setRecords] = useState<Records>(loadRecords);
@@ -34,9 +39,20 @@ export default function App() {
 
   useEffect(() => audio.setVolume(settings.volume), [settings.volume]);
 
-  // El botón "atrás" del navegador (o del móvil) vuelve al inicio
+  const viewRef = useRef(view);
+  viewRef.current = view;
+  const leavingRef = useRef(false);
+
+  // El botón "atrás" del navegador (o del móvil) vuelve al inicio; en mitad de una
+  // partida pregunta antes, para no perderla por un toque sin querer.
   useEffect(() => {
     const onPop = () => {
+      const fromApp = leavingRef.current;
+      leavingRef.current = false;
+      if (!fromApp && viewRef.current.name === 'game' && !window.confirm('¿Salir de la partida? Se perderá el progreso.')) {
+        history.pushState({ mg: true }, '');
+        return;
+      }
       audio.stop();
       setView({ name: 'home' });
     };
@@ -59,10 +75,19 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  const openRanking = () => {
+    if (view.name === 'home') history.pushState({ mg: true }, '');
+    audio.stop();
+    setView({ name: 'ranking' });
+    window.scrollTo(0, 0);
+  };
+
   const goHome = () => {
     audio.stop();
-    if (history.state?.mg) history.back();
-    else setView({ name: 'home' });
+    if (history.state?.mg) {
+      leavingRef.current = true;
+      history.back();
+    } else setView({ name: 'home' });
   };
 
   const finish = (mode: PlayMode, f: Filter) => (summary: Summary) => {
@@ -83,8 +108,10 @@ export default function App() {
           onPlay={play}
           onOpenSettings={() => setModal('settings')}
           onOpenRecords={() => setModal('records')}
+          onOpenRanking={onlineEnabled ? openRanking : undefined}
         />
       )}
+      {view.name === 'ranking' && <Ranking myId={auth.session?.user.id ?? null} onBack={goHome} />}
       {view.name === 'game' && (
         <Game
           key={view.key}
@@ -98,7 +125,10 @@ export default function App() {
       {view.name === 'results' && (
         <Results
           summary={view.summary}
+          filter={view.filter}
           isRecord={view.isRecord}
+          loggedIn={!!auth.session}
+          onOpenRanking={onlineEnabled ? openRanking : undefined}
           onHome={goHome}
           onReplay={() => setView({ name: 'game', mode: view.mode, filter: view.filter, key: Date.now() })}
         />

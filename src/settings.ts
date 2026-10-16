@@ -1,6 +1,7 @@
 import { load, save } from './lib/storage';
 import type { Filter, PlayMode, Summary } from './game/types';
 import { grade } from './game/scoring';
+import { genreById } from './game/catalog';
 
 export interface Settings {
   volume: number;
@@ -13,7 +14,13 @@ export const DEFAULT_SETTINGS: Settings = { volume: 0.8, showOptions: false };
 export const loadSettings = (): Settings => ({ ...DEFAULT_SETTINGS, ...load<Partial<Settings>>('settings', {}) });
 export const saveSettings = (s: Settings) => save('settings', s);
 
-export const loadFilter = (): Filter => load<Filter>('filter', { kind: 'genres', genres: [] });
+export function loadFilter(): Filter {
+  const f = load<Filter>('filter', { kind: 'genres', genres: [] });
+  // Datos guardados por versiones anteriores o manipulados: si no cuadran, filtro por defecto
+  if (f?.kind === 'artist' && typeof f.artist?.id === 'number' && typeof f.artist.name === 'string') return f;
+  if (f?.kind === 'genres' && Array.isArray(f.genres)) return { kind: 'genres', genres: f.genres.filter((g) => genreById.has(g)) };
+  return { kind: 'genres', genres: [] };
+}
 export const saveFilter = (f: Filter) => save('filter', f);
 
 export interface RecordEntry {

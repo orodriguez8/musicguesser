@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-10-16T11:06:33.142Z",
+ "generatedAt": "2026-10-16T13:54:53.212Z",
  "genres": [
   {
    "id": "reggaeton",
@@ -10,175 +10,204 @@
      "id": 10583405,
      "name": "Bad Bunny",
      "picture": "https://cdn-images.dzcdn.net/images/artist/044a3f315b041864887a8dd8709e6926/250x250-000000-80-0-0.jpg",
-     "fans": 8040559
+     "fans": 8040703,
+     "type": "person"
     },
     {
      "id": 3839,
      "name": "Daddy Yankee",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a4f77d40d68cf544e74883b2bd904fce/250x250-000000-80-0-0.jpg",
-     "fans": 7166923
+     "fans": 7166939,
+     "type": "person"
     },
     {
      "id": 4860761,
      "name": "J Balvin",
      "picture": "https://cdn-images.dzcdn.net/images/artist/325eaa46bc25052d0e3d549d60cc8225/250x250-000000-80-0-0.jpg",
-     "fans": 10346052
+     "fans": 10346071,
+     "type": "person"
     },
     {
      "id": 5297021,
      "name": "KAROL G",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5b0aab23f8d2856951a92f3a9faf70e3/250x250-000000-80-0-0.jpg",
-     "fans": 3417906
+     "fans": 3417927,
+     "type": "person"
     },
     {
      "id": 4937383,
      "name": "Ozuna",
      "picture": "https://cdn-images.dzcdn.net/images/artist/df2030b9e796f55f58d2c4b68aecb18f/250x250-000000-80-0-0.jpg",
-     "fans": 4737653
+     "fans": 4737676,
+     "type": "person"
     },
     {
      "id": 7961888,
      "name": "Anuel AA",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d128822eb60817b362b9d6e8c696e933/250x250-000000-80-0-0.jpg",
-     "fans": 2483893
+     "fans": 2483912,
+     "type": "person"
     },
     {
      "id": 11289472,
      "name": "Rauw Alejandro",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0e7b2b93b91789a054bc3f08bb3df3a8/250x250-000000-80-0-0.jpg",
-     "fans": 2141138
+     "fans": 2141150,
+     "type": "person"
     },
     {
      "id": 1166311,
      "name": "Feid",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e629c93e03b3c225d8d52a42bae71537/250x250-000000-80-0-0.jpg",
-     "fans": 908801
+     "fans": 908813,
+     "type": "person"
     },
     {
      "id": 12029862,
      "name": "Myke Towers",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d3a7418b4e44bf8ee3ae268067a86f09/250x250-000000-80-0-0.jpg",
-     "fans": 1709866
+     "fans": 1709879,
+     "type": "person"
     },
     {
      "id": 725,
      "name": "Don Omar",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3edb52cebe741e547363a093e26d4655/250x250-000000-80-0-0.jpg",
-     "fans": 4038916
+     "fans": 4038928,
+     "type": "person"
     },
     {
      "id": 75156,
      "name": "Wisin & Yandel",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c66afc8b2577dc7356e43422e5138ad0/250x250-000000-80-0-0.jpg",
-     "fans": 3347750
+     "fans": 3347754,
+     "type": "group"
     },
     {
      "id": 15691,
      "name": "Nicky Jam",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b1fb6dc2c446495917b88a1c63b4a0e3/250x250-000000-80-0-0.jpg",
-     "fans": 6433094
+     "fans": 6433104,
+     "type": "person"
     },
     {
      "id": 614223,
      "name": "Farruko",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c93e2234f65ba85d2bce80f82f3ffdc6/250x250-000000-80-0-0.jpg",
-     "fans": 3312067
+     "fans": 3312076,
+     "type": "person"
     },
     {
      "id": 5536564,
      "name": "Arcangel",
      "picture": "https://cdn-images.dzcdn.net/images/artist/100cfefb7a2040b4db01f90fbf969392/250x250-000000-80-0-0.jpg",
-     "fans": 1707245
+     "fans": 1707250,
+     "type": "person"
     },
     {
      "id": 105047672,
      "name": "JHAYCO",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1a0fe1045c59bee3cc8eb2f04d01840a/250x250-000000-80-0-0.jpg",
-     "fans": 245632
+     "fans": 245640,
+     "type": "person"
     },
     {
      "id": 5412407,
      "name": "Sech",
      "picture": "https://cdn-images.dzcdn.net/images/artist/df603ce80d18e234c1cfc66a14c1713e/250x250-000000-80-0-0.jpg",
-     "fans": 1580034
+     "fans": 1580036,
+     "type": "person"
     },
     {
      "id": 1424602,
      "name": "Maluma",
      "picture": "https://cdn-images.dzcdn.net/images/artist/69defce1be19bb2abf80cb7b1d936cdc/250x250-000000-80-0-0.jpg",
-     "fans": 8078873
+     "fans": 8078891,
+     "type": "person"
     },
     {
      "id": 9019,
      "name": "Ivy Queen",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b580cce5db9caa748ae7f48b7d0b081c/250x250-000000-80-0-0.jpg",
-     "fans": 128404
+     "fans": 128405,
+     "type": "person"
     },
     {
      "id": 6729,
      "name": "Tego Calderón",
      "picture": "https://cdn-images.dzcdn.net/images/artist/6a4852db71d87cf14ec502a782a026c4/250x250-000000-80-0-0.jpg",
-     "fans": 831588
+     "fans": 831590,
+     "type": "person"
     },
     {
      "id": 1217914,
      "name": "Zion & Lennox",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4223b15e5797287af11cb1f31f2c3b09/250x250-000000-80-0-0.jpg",
-     "fans": 1755403
+     "fans": 1755404,
+     "type": "group"
     },
     {
      "id": 139171932,
      "name": "Young Miko",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5912325ca89e72e925de22d05001ed4a/250x250-000000-80-0-0.jpg",
-     "fans": 137190
+     "fans": 137192,
+     "type": "person"
     },
     {
      "id": 9945206,
      "name": "Bryant Myers",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b6a774c46f158cf8f03c45a8f32c220b/250x250-000000-80-0-0.jpg",
-     "fans": 1021954
+     "fans": 1021956,
+     "type": "person"
     },
     {
      "id": 7029627,
      "name": "Lunay",
      "picture": "https://cdn-images.dzcdn.net/images/artist/64a8c64dffc35edcbd11ebaebc39d54d/250x250-000000-80-0-0.jpg",
-     "fans": 888869
+     "fans": 888869,
+     "type": "person"
     },
     {
      "id": 1020198,
      "name": "De La Ghetto",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a1fd71019eef5edd9015efc4027da59d/250x250-000000-80-0-0.jpg",
-     "fans": 1052621
+     "fans": 1052623,
+     "type": "person"
     },
     {
      "id": 65838,
      "name": "Plan B",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b6ff20889f2ec45154ccaee509cf508b/250x250-000000-80-0-0.jpg",
-     "fans": 2269847
+     "fans": 2269852,
+     "type": "group"
     },
     {
      "id": 265175,
      "name": "Jowell & Randy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9f5ea3cedfa2c8e9b7a35bf366b117dd/250x250-000000-80-0-0.jpg",
-     "fans": 1025189
+     "fans": 1025189,
+     "type": "group"
     },
     {
      "id": 3922661,
      "name": "Mora",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f44bb8e98463bc41d195c63c43768701/250x250-000000-80-0-0.jpg",
-     "fans": 244359
+     "fans": 244363,
+     "type": "person"
     },
     {
      "id": 11815065,
      "name": "Ryan Castro",
      "picture": "https://cdn-images.dzcdn.net/images/artist/85e4705e8cab0354605581abd89c703d/250x250-000000-80-0-0.jpg",
-     "fans": 312132
+     "fans": 312141,
+     "type": "person"
     },
     {
      "id": 106632,
      "name": "Blessd",
      "picture": "https://cdn-images.dzcdn.net/images/artist/69b88c2b62f4380bce18095beb96527c/250x250-000000-80-0-0.jpg",
-     "fans": 266687
+     "fans": 266692,
+     "type": "person"
     }
    ]
   },
@@ -191,157 +220,183 @@
      "id": 11190156,
      "name": "Clarent",
      "picture": "https://cdn-images.dzcdn.net/images/artist/24c86cb838c69f0302d7c3dd3a82951d/250x250-000000-80-0-0.jpg",
-     "fans": 8895
+     "fans": 8896,
+     "type": "person"
     },
     {
      "id": 6705223,
      "name": "Quevedo",
      "picture": "https://cdn-images.dzcdn.net/images/artist/79880cc1b999b15567e332203464c34e/250x250-000000-80-0-0.jpg",
-     "fans": 303713
+     "fans": 303721,
+     "type": "person"
     },
     {
      "id": 4902904,
      "name": "DUKI",
      "picture": "https://cdn-images.dzcdn.net/images/artist/795d09a17bc833425e4b88639bb931af/250x250-000000-80-0-0.jpg",
-     "fans": 823770
+     "fans": 823772,
+     "type": "person"
     },
     {
      "id": 1333264,
      "name": "Trueno",
      "picture": "https://cdn-images.dzcdn.net/images/artist/40817904aa568c1b2a7335076ca7099b/250x250-000000-80-0-0.jpg",
-     "fans": 517262
+     "fans": 517263,
+     "type": "person"
     },
     {
      "id": 10580067,
      "name": "Rels B",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d504648fd4842cfa7c89d9f835dac4e8/250x250-000000-80-0-0.jpg",
-     "fans": 945472
+     "fans": 945474,
+     "type": "person"
     },
     {
      "id": 111130212,
      "name": "Morad",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4c4e5e8049c0d7ff36e9fb8924dff724/250x250-000000-80-0-0.jpg",
-     "fans": 343837
+     "fans": 343852,
+     "type": "person"
     },
     {
      "id": 3340,
      "name": "SAIKO",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3043a18022677b1fd95cb043d00bab63/250x250-000000-80-0-0.jpg",
-     "fans": 54244
+     "fans": 54246,
+     "type": "person"
     },
     {
      "id": 8613614,
      "name": "Eladio Carrion",
      "picture": "https://cdn-images.dzcdn.net/images/artist/98a7d648d71fca1e24ecd3b48866b017/250x250-000000-80-0-0.jpg",
-     "fans": 617251
+     "fans": 617252,
+     "type": "person"
     },
     {
      "id": 12487862,
      "name": "Bizarrap",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e121c1ef9b1135e6a5b71c1e65ab10b4/250x250-000000-80-0-0.jpg",
-     "fans": 1126267
+     "fans": 1126271,
+     "type": "person"
     },
     {
      "id": 12637039,
      "name": "Paulo Londra",
      "picture": "https://cdn-images.dzcdn.net/images/artist/26fbc79599d2ed0f3629fa74df3e489a/250x250-000000-80-0-0.jpg",
-     "fans": 1855129
+     "fans": 1855132,
+     "type": "person"
     },
     {
      "id": 13299379,
      "name": "Nicki Nicole",
      "picture": "https://cdn-images.dzcdn.net/images/artist/7b4261dc1d0a02c4437d8cd418bea481/250x250-000000-80-0-0.jpg",
-     "fans": 609597
+     "fans": 609598,
+     "type": "person"
     },
     {
      "id": 5620251,
      "name": "C. Tangana",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0e48ef0b911fe883e0eaa67350c85c46/250x250-000000-80-0-0.jpg",
-     "fans": 184332
+     "fans": 184334,
+     "type": "person"
     },
     {
      "id": 11359554,
      "name": "Bad Gyal",
      "picture": "https://cdn-images.dzcdn.net/images/artist/056708ba55ab92f5c4a9e12d81f5deeb/250x250-000000-80-0-0.jpg",
-     "fans": 106921
+     "fans": 106924,
+     "type": "person"
     },
     {
      "id": 6367732,
      "name": "Yung Beef",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5693c50f070e70676b9b291d71b7a1c8/250x250-000000-80-0-0.jpg",
-     "fans": 18223
+     "fans": 18225,
+     "type": "person"
     },
     {
      "id": 10125390,
      "name": "Cruz Cafuné",
      "picture": "https://cdn-images.dzcdn.net/images/artist/bb773f14fbb13df8c06ec91cb8b936d9/250x250-000000-80-0-0.jpg",
-     "fans": 14953
+     "fans": 14953,
+     "type": "person"
     },
     {
      "id": 11237527,
      "name": "Kidd Keo",
      "picture": "https://cdn-images.dzcdn.net/images/artist/846062a5e6109691dc53663cfdf85253/250x250-000000-80-0-0.jpg",
-     "fans": 340564
+     "fans": 340565,
+     "type": "person"
     },
     {
      "id": 14002639,
      "name": "DELAOSSA",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f55ce8c46aed50971f90f399a795e008/250x250-000000-80-0-0.jpg",
-     "fans": 12803
+     "fans": 12803,
+     "type": "person"
     },
     {
      "id": 7842146,
      "name": "Natos y Waor",
      "picture": "https://cdn-images.dzcdn.net/images/artist/44ff8212b62a35236bf7619ca49a4d33/250x250-000000-80-0-0.jpg",
-     "fans": 41849
+     "fans": 41849,
+     "type": "group"
     },
     {
      "id": 13877079,
      "name": "Hoke",
      "picture": "https://cdn-images.dzcdn.net/images/artist/674576c6c494e542c10e7adc158b3f0f/250x250-000000-80-0-0.jpg",
-     "fans": 2717
+     "fans": 2717,
+     "type": "person"
     },
     {
      "id": 8676992,
      "name": "Recycled J",
      "picture": "https://cdn-images.dzcdn.net/images/artist/bc8fe73223c918547614526fb9655ee3/250x250-000000-80-0-0.jpg",
-     "fans": 11513
+     "fans": 11513,
+     "type": "person"
     },
     {
      "id": 64519042,
      "name": "Beny Jr",
      "picture": "https://cdn-images.dzcdn.net/images/artist/88b8d4e991dd61bbaf94be372114fabb/250x250-000000-80-0-0.jpg",
-     "fans": 83808
+     "fans": 83813,
+     "type": "person"
     },
     {
      "id": 81719632,
      "name": "Ptazeta",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d0bf43f1e03fb10cd4a390d0e02c6f0d/250x250-000000-80-0-0.jpg",
-     "fans": 16273
+     "fans": 16273,
+     "type": "person"
     },
     {
      "id": 12816283,
      "name": "LIT killah",
      "picture": "https://cdn-images.dzcdn.net/images/artist/6511df0466760077e97133010eed2837/250x250-000000-80-0-0.jpg",
-     "fans": 375388
+     "fans": 375388,
+     "type": "person"
     },
     {
      "id": 13028375,
      "name": "KHEA",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8b4c0720dfcfabdb457adc965132b1e3/250x250-000000-80-0-0.jpg",
-     "fans": 589841
+     "fans": 589841,
+     "type": "person"
     },
     {
      "id": 12268072,
      "name": "Cazzu",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d4cb1c4b1f2524bbf40b0fa98c77e055/250x250-000000-80-0-0.jpg",
-     "fans": 601679
+     "fans": 601679,
+     "type": "person"
     },
     {
      "id": 12991285,
      "name": "YSY A",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f3f39a56afeeb780a495f4aa2b8062d6/250x250-000000-80-0-0.jpg",
-     "fans": 164988
+     "fans": 164989,
+     "type": "person"
     }
    ]
   },
@@ -354,223 +409,260 @@
      "id": 1346116,
      "name": "Falling In Reverse",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fe5bb6ce3b5b3b7501c56b68efef1ddb/250x250-000000-80-0-0.jpg",
-     "fans": 535441
+     "fans": 535457,
+     "type": "group"
     },
     {
      "id": 131886,
      "name": "Motionless In White",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d6b1e08b3eb0452dd2f10416ac3c5903/250x250-000000-80-0-0.jpg",
-     "fans": 282895
+     "fans": 282903,
+     "type": "group"
     },
     {
      "id": 12874,
      "name": "Bring Me the Horizon",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d159e783c1f419ae27fd2deca5b89b54/250x250-000000-80-0-0.jpg",
-     "fans": 1316005
+     "fans": 1316023,
+     "type": "group"
     },
     {
      "id": 159126,
      "name": "Architects",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f2bc249c0c60684f12532c72959c9392/250x250-000000-80-0-0.jpg",
-     "fans": 223934
+     "fans": 223939,
+     "type": "group"
     },
     {
      "id": 16410,
      "name": "Parkway Drive",
      "picture": "https://cdn-images.dzcdn.net/images/artist/03b7d39d9c89b87ea9a2f92f0f461a13/250x250-000000-80-0-0.jpg",
-     "fans": 249730
+     "fans": 249734,
+     "type": "group"
     },
     {
      "id": 2124,
      "name": "Killswitch Engage",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8800181c3030f494ab13ae43a9699b5f/250x250-000000-80-0-0.jpg",
-     "fans": 350603
+     "fans": 350602,
+     "type": "group"
     },
     {
      "id": 14046,
      "name": "August Burns Red",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d8cefacc7795fd93956d2cda81dd7934/250x250-000000-80-0-0.jpg",
-     "fans": 135653
+     "fans": 135653,
+     "type": "group"
     },
     {
      "id": 3823,
      "name": "As I Lay Dying",
      "picture": "https://cdn-images.dzcdn.net/images/artist/cfdc9597ad843b83c501172c94b0ca7c/250x250-000000-80-0-0.jpg",
-     "fans": 122280
+     "fans": 122281,
+     "type": "group"
     },
     {
      "id": 327,
      "name": "Bullet for My Valentine",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d674260922fbe570f53e3e4790c3895c/250x250-000000-80-0-0.jpg",
-     "fans": 1342067
+     "fans": 1342074,
+     "type": "group"
     },
     {
      "id": 8182062,
      "name": "Wage War",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e2807c5023e302801ce3bf94e4b0c2b9/250x250-000000-80-0-0.jpg",
-     "fans": 41786
+     "fans": 41787,
+     "type": "group"
     },
     {
      "id": 468724,
      "name": "Of Mice & Men",
      "picture": "https://cdn-images.dzcdn.net/images/artist/325dfa098293175d68febb7b1b36904c/250x250-000000-80-0-0.jpg",
-     "fans": 180310
+     "fans": 180312,
+     "type": "group"
     },
     {
      "id": 288567,
      "name": "Asking Alexandria",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8b4e3a39848be8ecac941e0ce5639d5d/250x250-000000-80-0-0.jpg",
-     "fans": 632048
+     "fans": 632049,
+     "type": "group"
     },
     {
      "id": 14095,
      "name": "Polaris",
      "picture": "https://cdn-images.dzcdn.net/images/artist/498225dd0dc589425d25e331b6921019/250x250-000000-80-0-0.jpg",
-     "fans": 26934
+     "fans": 26936,
+     "type": "group"
     },
     {
      "id": 2388521,
      "name": "Silent Planet",
      "picture": "https://cdn-images.dzcdn.net/images/artist/51faffc0713f7b76086b6a866f0765f2/250x250-000000-80-0-0.jpg",
-     "fans": 16565
+     "fans": 16566,
+     "type": "group"
     },
     {
      "id": 412538,
      "name": "Currents",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1bdd67845bcd168210e099e139e9381a/250x250-000000-80-0-0.jpg",
-     "fans": 20843
+     "fans": 20845,
+     "type": "group"
     },
     {
      "id": 995453,
      "name": "ERRA",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b7ffa0e67bf16893bb627809a631e0f1/250x250-000000-80-0-0.jpg",
-     "fans": 26416
+     "fans": 26417,
+     "type": "group"
     },
     {
      "id": 5587323,
      "name": "Invent, Animate",
      "picture": "https://cdn-images.dzcdn.net/images/artist/002aeaaf18236b42bb719365bdf7b87a/250x250-000000-80-0-0.jpg",
-     "fans": 8434
+     "fans": 8436,
+     "type": "group"
     },
     {
      "id": 13321745,
      "name": "Spiritbox",
      "picture": "https://cdn-images.dzcdn.net/images/artist/52727a5b5ac0ec49a0857e08ce4417c1/250x250-000000-80-0-0.jpg",
-     "fans": 76937
+     "fans": 76941,
+     "type": "group"
     },
     {
      "id": 275743,
      "name": "Memphis May Fire",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1b6b1b451cf3cbd76ff8b30bb327a820/250x250-000000-80-0-0.jpg",
-     "fans": 129340
+     "fans": 129340,
+     "type": "group"
     },
     {
      "id": 356815,
      "name": "We Came As Romans",
      "picture": "https://cdn-images.dzcdn.net/images/artist/724efa2a1f1b75a487e330d40c347207/250x250-000000-80-0-0.jpg",
-     "fans": 136529
+     "fans": 136529,
+     "type": "group"
     },
     {
      "id": 390124,
      "name": "Ice Nine Kills",
      "picture": "https://cdn-images.dzcdn.net/images/artist/454fe4fc251566ea1e1f0ed692985213/250x250-000000-80-0-0.jpg",
-     "fans": 82714
+     "fans": 82718,
+     "type": "group"
     },
     {
      "id": 7185748,
      "name": "I Prevail",
      "picture": "https://cdn-images.dzcdn.net/images/artist/23b9fca5abb1791a572f052d98943f50/250x250-000000-80-0-0.jpg",
-     "fans": 181858
+     "fans": 181862,
+     "type": "group"
     },
     {
      "id": 522946,
      "name": "Fit For A King",
      "picture": "https://cdn-images.dzcdn.net/images/artist/2c57df0a1ce196a690d9971d4e8a0fba/250x250-000000-80-0-0.jpg",
-     "fans": 47744
+     "fans": 47746,
+     "type": "group"
     },
     {
      "id": 560902,
      "name": "NORTHLANE",
      "picture": "https://cdn-images.dzcdn.net/images/artist/94f6c3defe7b03e87ac838c8842f1fe9/250x250-000000-80-0-0.jpg",
-     "fans": 41973
+     "fans": 41974,
+     "type": "group"
     },
     {
      "id": 4039184,
      "name": "Crown The Empire",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9634d3929f91ce04192ec44bed3a58db/250x250-000000-80-0-0.jpg",
-     "fans": 84539
+     "fans": 84539,
+     "type": "group"
     },
     {
      "id": 12340,
      "name": "Attila",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e21cf41ff13d5fceaef415717f310509/250x250-000000-80-0-0.jpg",
-     "fans": 53925
+     "fans": 53925,
+     "type": "group"
     },
     {
      "id": 403781,
      "name": "While She Sleeps",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9f5451b5a88b280a948c7bfbfef45db6/250x250-000000-80-0-0.jpg",
-     "fans": 93322
+     "fans": 93323,
+     "type": "group"
     },
     {
      "id": 4501,
      "name": "Atreyu",
      "picture": "https://cdn-images.dzcdn.net/images/artist/ee54ec076a076866f34e5a8da04f9907/250x250-000000-80-0-0.jpg",
-     "fans": 123609
+     "fans": 123609,
+     "type": "group"
     },
     {
      "id": 4338,
      "name": "Underoath",
      "picture": "https://cdn-images.dzcdn.net/images/artist/62af962d6a8e28e7a4feaa72f7be36bb/250x250-000000-80-0-0.jpg",
-     "fans": 97576
+     "fans": 97577,
+     "type": "group"
     },
     {
      "id": 68213,
      "name": "The Devil Wears Prada",
      "picture": "https://cdn-images.dzcdn.net/images/artist/ce8738d5e5bfbfa515d9ba9ec4a0c62a/250x250-000000-80-0-0.jpg",
-     "fans": 91379
+     "fans": 91379,
+     "type": "group"
     },
     {
      "id": 5010303,
      "name": "Beartooth",
      "picture": "https://cdn-images.dzcdn.net/images/artist/2bee3391656b303f94dc857a3a3b19b7/250x250-000000-80-0-0.jpg",
-     "fans": 81786
+     "fans": 81788,
+     "type": "group"
     },
     {
      "id": 2148551,
      "name": "Make Them Suffer",
      "picture": "https://cdn-images.dzcdn.net/images/artist/12cd1cebbce7d2a8d3d00554e8737f18/250x250-000000-80-0-0.jpg",
-     "fans": 27329
+     "fans": 27330,
+     "type": "group"
     },
     {
      "id": 9220788,
      "name": "Alpha Wolf",
      "picture": "https://cdn-images.dzcdn.net/images/artist/894217f997bade7a85327080e723fa62/250x250-000000-80-0-0.jpg",
-     "fans": 8082
+     "fans": 8083,
+     "type": "group"
     },
     {
      "id": 9700940,
      "name": "Bad Omens",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8a185a7bd12ca20bb8d9e01ea699467d/250x250-000000-80-0-0.jpg",
-     "fans": 168361
+     "fans": 168375,
+     "type": "group"
     },
     {
      "id": 1004734,
      "name": "Imminence",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9aabcc9f2e8b8033ca2a715dec56d5cc/250x250-000000-80-0-0.jpg",
-     "fans": 33933
+     "fans": 33940,
+     "type": "group"
     },
     {
      "id": 9985838,
      "name": "LANDMVRKS",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e7e1c784c57c2a82775eb227650df791/250x250-000000-80-0-0.jpg",
-     "fans": 59290
+     "fans": 59293,
+     "type": "group"
     },
     {
      "id": 5289615,
      "name": "Dayseeker",
      "picture": "https://cdn-images.dzcdn.net/images/artist/6ad6cadeb02aa7e423c17d1b6c914b22/250x250-000000-80-0-0.jpg",
-     "fans": 20238
+     "fans": 20238,
+     "type": "group"
     }
    ]
   },
@@ -583,139 +675,162 @@
      "id": 8011234,
      "name": "Slaughter to Prevail",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e67f3245e493709edeb73a1c50efb0e2/250x250-000000-80-0-0.jpg",
-     "fans": 76377
+     "fans": 76378,
+     "type": "group"
     },
     {
      "id": 170672,
      "name": "Suicide Silence",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4650083eb25b840cf7a7ea977916c820/250x250-000000-80-0-0.jpg",
-     "fans": 326249
+     "fans": 326250,
+     "type": "group"
     },
     {
      "id": 482260,
      "name": "Lorna Shore",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5d670c3280ab0a80c80d39e50ce5cb85/250x250-000000-80-0-0.jpg",
-     "fans": 70085
+     "fans": 70087,
+     "type": "group"
     },
     {
      "id": 123972,
      "name": "Whitechapel",
      "picture": "https://cdn-images.dzcdn.net/images/artist/53917a918d9d65b25a65706418adf338/250x250-000000-80-0-0.jpg",
-     "fans": 96087
+     "fans": 96088,
+     "type": "group"
     },
     {
      "id": 507954,
      "name": "Thy Art Is Murder",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8dbab4b06e62aa13db17a06a6356b654/250x250-000000-80-0-0.jpg",
-     "fans": 65102
+     "fans": 65103,
+     "type": "group"
     },
     {
      "id": 389545,
      "name": "Chelsea Grin",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e594fd1a90fca0d49be47724e3d3bd3c/250x250-000000-80-0-0.jpg",
-     "fans": 93992
+     "fans": 93994,
+     "type": "group"
     },
     {
      "id": 73453,
      "name": "Carnifex",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c8f25d19462588d0683571b2130e3d7e/250x250-000000-80-0-0.jpg",
-     "fans": 54529
+     "fans": 54529,
+     "type": "group"
     },
     {
      "id": 161182,
      "name": "Despised Icon",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d8d79c85ac656a3db1b1a9560f63c2c5/250x250-000000-80-0-0.jpg",
-     "fans": 22120
+     "fans": 22120,
+     "type": "group"
     },
     {
      "id": 9521234,
      "name": "Shadow of Intent",
      "picture": "https://cdn-images.dzcdn.net/images/artist/dc157b137f6334cfa261ad76205a55c6/250x250-000000-80-0-0.jpg",
-     "fans": 25155
+     "fans": 25155,
+     "type": "group"
     },
     {
      "id": 10285590,
      "name": "Signs of the Swarm",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3fe6c9b253604645534e1b723e9be0a1/250x250-000000-80-0-0.jpg",
-     "fans": 13405
+     "fans": 13406,
+     "type": "group"
     },
     {
      "id": 4935542,
      "name": "Infant Annihilator",
      "picture": "https://cdn-images.dzcdn.net/images/artist/940596570cb03e443a74e16637826919/250x250-000000-80-0-0.jpg",
-     "fans": 35480
+     "fans": 35480,
+     "type": "group"
     },
     {
      "id": 11503899,
      "name": "Mental Cruelty",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1a36be6db2f2f0053265a5be57450110/250x250-000000-80-0-0.jpg",
-     "fans": 6931
+     "fans": 6931,
+     "type": "group"
     },
     {
      "id": 294380,
      "name": "Bodysnatcher",
      "picture": "https://cdn-images.dzcdn.net/images/artist/6b4959d06d31d3241b61d07a2751cf0d/250x250-000000-80-0-0.jpg",
-     "fans": 4355
+     "fans": 4355,
+     "type": "group"
     },
     {
      "id": 3677551,
      "name": "Within Destruction",
      "picture": "https://cdn-images.dzcdn.net/images/artist/804086cd462a428e5dd6a889bee25968/250x250-000000-80-0-0.jpg",
-     "fans": 10419
+     "fans": 10419,
+     "type": "group"
     },
     {
      "id": 587155,
      "name": "Rings Of Saturn",
      "picture": "https://cdn-images.dzcdn.net/images/artist/53c1e63636ea2e9d61bd69157ac6ed19/250x250-000000-80-0-0.jpg",
-     "fans": 25518
+     "fans": 25518,
+     "type": "group"
     },
     {
      "id": 1531645,
      "name": "Distant",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c7a93aa509dbe16bd7a9cd9dd012c367/250x250-000000-80-0-0.jpg",
-     "fans": 7095
+     "fans": 7095,
+     "type": "group"
     },
     {
      "id": 7853236,
      "name": "Angelmaker",
      "picture": "https://cdn-images.dzcdn.net/images/artist/7c2886f87f373e091274d1e9043df1ec/250x250-000000-80-0-0.jpg",
-     "fans": 12112
+     "fans": 12112,
+     "type": "group"
     },
     {
      "id": 647800,
      "name": "Fit For An Autopsy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c1ac9cfc76caa63408824a9513d7941c/250x250-000000-80-0-0.jpg",
-     "fans": 25132
+     "fans": 25134,
+     "type": "group"
     },
     {
      "id": 12906449,
      "name": "Oceano",
      "picture": "https://cdn-images.dzcdn.net/images/artist/68526b594bc647dea90845bf08c4dd67/250x250-000000-80-0-0.jpg",
-     "fans": 2392
+     "fans": 2392,
+     "type": "group"
     },
     {
      "id": 12210,
      "name": "Job for a Cowboy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/83acf5eb4ae99eeb5040fee11178c914/250x250-000000-80-0-0.jpg",
-     "fans": 48844
+     "fans": 48845,
+     "type": "group"
     },
     {
      "id": 6760563,
      "name": "Enterprise Earth",
      "picture": "https://cdn-images.dzcdn.net/images/artist/7dec4affe793b237bcfe3a5ed6499703/250x250-000000-80-0-0.jpg",
-     "fans": 8023
+     "fans": 8023,
+     "type": "group"
     },
     {
      "id": 161369,
      "name": "Winds Of Plague",
      "picture": "https://cdn-images.dzcdn.net/images/artist/2a53ecdaae2b59d10b6542a91977d903/250x250-000000-80-0-0.jpg",
-     "fans": 16425
+     "fans": 16425,
+     "type": "group"
     },
     {
      "id": 67792,
      "name": "Born Of Osiris",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1cfb2cb0b0097be98136f0c6ea531686/250x250-000000-80-0-0.jpg",
-     "fans": 56941
+     "fans": 56942,
+     "type": "group"
     }
    ]
   },
@@ -728,181 +843,211 @@
      "id": 65989,
      "name": "Suffocation",
      "picture": "https://cdn-images.dzcdn.net/images/artist/76fa448cdf8d807182eb7bd54e0c04ce/250x250-000000-80-0-0.jpg",
-     "fans": 68989
+     "fans": 68989,
+     "type": "group"
     },
     {
      "id": 5513,
      "name": "Dying Fetus",
      "picture": "https://cdn-images.dzcdn.net/images/artist/33ca59febc234e7d825d5565aef47e91/250x250-000000-80-0-0.jpg",
-     "fans": 78051
+     "fans": 78051,
+     "type": "group"
     },
     {
      "id": 6460,
      "name": "Devourment",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d63958026b411e44ac376c5569ba6d30/250x250-000000-80-0-0.jpg",
-     "fans": 11911
+     "fans": 11911,
+     "type": "group"
     },
     {
      "id": 10290,
      "name": "Cryptopsy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fb1a347e7e0dcfbb6416353a3e4c4e99/250x250-000000-80-0-0.jpg",
-     "fans": 28694
+     "fans": 28696,
+     "type": "group"
     },
     {
      "id": 380399,
      "name": "Defeated Sanity",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3aa4ea819b1afde9f53be664dff67d10/250x250-000000-80-0-0.jpg",
-     "fans": 3568
+     "fans": 3569,
+     "type": "group"
     },
     {
      "id": 131906,
      "name": "Disgorge",
      "picture": "https://cdn-images.dzcdn.net/images/artist/531d7faefc209e12d695da0aa7147881/250x250-000000-80-0-0.jpg",
-     "fans": 1626
+     "fans": 1627,
+     "type": "group"
     },
     {
      "id": 343348041,
      "name": "Origin",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3d3030603a0661e38a23617a13cca924/250x250-000000-80-0-0.jpg",
-     "fans": 695
+     "fans": 695,
+     "type": "group"
     },
     {
      "id": 324196,
      "name": "Wormed",
      "picture": "https://cdn-images.dzcdn.net/images/artist/254ac55e2362a7e298c7fa4923d8dca3/250x250-000000-80-0-0.jpg",
-     "fans": 3466
+     "fans": 3467,
+     "type": "group"
     },
     {
      "id": 1702013,
      "name": "Cerebral Bore",
      "picture": "https://cdn-images.dzcdn.net/images/artist/ad2064dbd3f87ed89ac06cc01d3e5adf/250x250-000000-80-0-0.jpg",
-     "fans": 6318
+     "fans": 6318,
+     "type": "group"
     },
     {
      "id": 73384,
      "name": "Abominable Putridity",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c6caec57cd2e2c16b3f32b77b1536e1d/250x250-000000-80-0-0.jpg",
-     "fans": 4916
+     "fans": 4916,
+     "type": "group"
     },
     {
      "id": 4699686,
      "name": "Disentomb",
      "picture": "https://cdn-images.dzcdn.net/images/artist/de2af23384f1b5c38498bfaee348ff5c/250x250-000000-80-0-0.jpg",
-     "fans": 4465
+     "fans": 4465,
+     "type": "group"
     },
     {
      "id": 409785,
      "name": "Ingested",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4fa04619fd743033a1cb3d6724e0ab18/250x250-000000-80-0-0.jpg",
-     "fans": 12121
+     "fans": 12121,
+     "type": "group"
     },
     {
      "id": 2608331,
      "name": "Kraanium",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0263807e73693817f1484073628794a4/250x250-000000-80-0-0.jpg",
-     "fans": 6667
+     "fans": 6667,
+     "type": "group"
     },
     {
      "id": 7903776,
      "name": "Analepsy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/700d2ea642444eb89306bd81cb7a2ee6/250x250-000000-80-0-0.jpg",
-     "fans": 4306
+     "fans": 4308,
+     "type": "group"
     },
     {
      "id": 8745730,
      "name": "Vulvodynia",
      "picture": "https://cdn-images.dzcdn.net/images/artist/02b7303c8ed86235f27b19168b79451f/250x250-000000-80-0-0.jpg",
-     "fans": 9749
+     "fans": 9749,
+     "type": "group"
     },
     {
      "id": 160077,
      "name": "Pyrexia",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f44c23ec050836c8b99fc7cbebc4efc2/250x250-000000-80-0-0.jpg",
-     "fans": 3205
+     "fans": 3205,
+     "type": "group"
     },
     {
      "id": 107312,
      "name": "Internal Bleeding",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e741b39f726854ebb5f1399680545b3f/250x250-000000-80-0-0.jpg",
-     "fans": 1458
+     "fans": 1458,
+     "type": "group"
     },
     {
      "id": 7710,
      "name": "Skinless",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a6fb0d89072955fad4073d22bbe1a815/250x250-000000-80-0-0.jpg",
-     "fans": 8427
+     "fans": 8427,
+     "type": "group"
     },
     {
      "id": 131905,
      "name": "Deeds Of Flesh",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b8e4e6b813a8de99798355831debf6d2/250x250-000000-80-0-0.jpg",
-     "fans": 10248
+     "fans": 10248,
+     "type": "group"
     },
     {
      "id": 655934,
      "name": "Putridity",
      "picture": "https://cdn-images.dzcdn.net/images/artist/15822d691e903bc676f83868704c6dc8/250x250-000000-80-0-0.jpg",
-     "fans": 1909
+     "fans": 1909,
+     "type": "group"
     },
     {
      "id": 2999,
      "name": "Cannibal Corpse",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fc6fcb215102ac1df0d0442464fb88a9/250x250-000000-80-0-0.jpg",
-     "fans": 330921
+     "fans": 330925,
+     "type": "group"
     },
     {
      "id": 10328,
      "name": "Benighted",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d8a47ccc97d3e782c3294e9404b653b6/250x250-000000-80-0-0.jpg",
-     "fans": 15147
+     "fans": 15147,
+     "type": "group"
     },
     {
      "id": 3273,
      "name": "Aborted",
      "picture": "https://cdn-images.dzcdn.net/images/artist/2c3c034ff544427113a950d5569bf2b8/250x250-000000-80-0-0.jpg",
-     "fans": 35279
+     "fans": 35279,
+     "type": "group"
     },
     {
      "id": 4530054,
      "name": "Visceral Disgorge",
      "picture": "https://cdn-images.dzcdn.net/images/artist/397cd0b81e08533b9ffb313653e85f79/250x250-000000-80-0-0.jpg",
-     "fans": 6999
+     "fans": 6999,
+     "type": "group"
     },
     {
      "id": 1155705,
      "name": "Guttural Secrete",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0c55f517e0e9a4bbfba5b7b12b8fc405/250x250-000000-80-0-0.jpg",
-     "fans": 1096
+     "fans": 1096,
+     "type": "group"
     },
     {
      "id": 197321,
      "name": "Katalepsy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e2b2d7fdfd49ef586fe175e6ac226e6a/250x250-000000-80-0-0.jpg",
-     "fans": 4607
+     "fans": 4607,
+     "type": "group"
     },
     {
      "id": 81468,
      "name": "Inveracity",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a4551f6b78c7435c3cac889b9951c158/250x250-000000-80-0-0.jpg",
-     "fans": 1094
+     "fans": 1094,
+     "type": "group"
     },
     {
      "id": 10540415,
      "name": "Brodequin",
      "picture": "https://cdn-images.dzcdn.net/images/artist/60704ffe8fde757f5e01220e54dbd014/250x250-000000-80-0-0.jpg",
-     "fans": 1252
+     "fans": 1252,
+     "type": "group"
     },
     {
      "id": 5606,
      "name": "Severe Torture",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3c97ce90f57e851e56fce9dcbe63d2d1/250x250-000000-80-0-0.jpg",
-     "fans": 7229
+     "fans": 7229,
+     "type": "group"
     },
     {
      "id": 15506,
      "name": "Gorgasm",
      "picture": "https://cdn-images.dzcdn.net/images/artist/96d56e7f48b1dd072811d72f5a3786cf/250x250-000000-80-0-0.jpg",
-     "fans": 1578
+     "fans": 1578,
+     "type": "group"
     }
    ]
   },
@@ -915,151 +1060,176 @@
      "id": 6696,
      "name": "Mayhem",
      "picture": "https://cdn-images.dzcdn.net/images/artist/692740363a69140523824a0f28bc2ab6/250x250-000000-80-0-0.jpg",
-     "fans": 84871
+     "fans": 84874,
+     "type": "group"
     },
     {
      "id": 7641,
      "name": "Darkthrone",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fb9c34a86ffd36ef200e18745c738f5a/250x250-000000-80-0-0.jpg",
-     "fans": 78316
+     "fans": 78316,
+     "type": "group"
     },
     {
      "id": 5175,
      "name": "Emperor",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4f129cee8a902b169de52937c60b0a9a/250x250-000000-80-0-0.jpg",
-     "fans": 59281
+     "fans": 59284,
+     "type": "group"
     },
     {
      "id": 11030,
      "name": "Gorgoroth",
      "picture": "https://cdn-images.dzcdn.net/images/artist/802caca4d7d51bd8e8f28c33d6f74745/250x250-000000-80-0-0.jpg",
-     "fans": 61089
+     "fans": 61090,
+     "type": "group"
     },
     {
      "id": 7702,
      "name": "Immortal",
      "picture": "https://cdn-images.dzcdn.net/images/artist/6348d0e5828f44fa91962b51e132feb5/250x250-000000-80-0-0.jpg",
-     "fans": 124588
+     "fans": 124591,
+     "type": "group"
     },
     {
      "id": 7372,
      "name": "Dissection",
      "picture": "https://cdn-images.dzcdn.net/images/artist/32ff804035e83a65c5871b2554eca717/250x250-000000-80-0-0.jpg",
-     "fans": 43245
+     "fans": 43246,
+     "type": "group"
     },
     {
      "id": 7390,
      "name": "Marduk",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b843d6f6c2cf5ca26d4bf4aed8bc0dac/250x250-000000-80-0-0.jpg",
-     "fans": 51736
+     "fans": 51736,
+     "type": "group"
     },
     {
      "id": 57711,
      "name": "Watain",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3ec96b29648b68f9c195867b45404c42/250x250-000000-80-0-0.jpg",
-     "fans": 37124
+     "fans": 37124,
+     "type": "group"
     },
     {
      "id": 6456,
      "name": "Behemoth",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e097259a5df35a95ea9daee49f5d8af8/250x250-000000-80-0-0.jpg",
-     "fans": 200650
+     "fans": 200655,
+     "type": "group"
     },
     {
      "id": 123,
      "name": "Dimmu Borgir",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0d14e2011ccb0daaf31fefb95e496e9e/250x250-000000-80-0-0.jpg",
-     "fans": 202471
+     "fans": 202471,
+     "type": "group"
     },
     {
      "id": 121,
      "name": "Cradle of Filth",
      "picture": "https://cdn-images.dzcdn.net/images/artist/32b9edd679f85b1de0576ae923d02850/250x250-000000-80-0-0.jpg",
-     "fans": 274260
+     "fans": 274263,
+     "type": "group"
     },
     {
      "id": 62316192,
      "name": "Mgła",
      "picture": "https://cdn-images.dzcdn.net/images/artist/68d21f42fd88ce17f5910eafb78d87e4/250x250-000000-80-0-0.jpg",
-     "fans": 21021
+     "fans": 21021,
+     "type": "group"
     },
     {
      "id": 522414,
      "name": "deafheaven",
      "picture": "https://cdn-images.dzcdn.net/images/artist/38d467b24c73696609511ddf27adfe13/250x250-000000-80-0-0.jpg",
-     "fans": 27620
+     "fans": 27620,
+     "type": "group"
     },
     {
      "id": 337283,
      "name": "Wolves In The Throne Room",
      "picture": "https://cdn-images.dzcdn.net/images/artist/48c9f3327d2052b7343d16c46e480a90/250x250-000000-80-0-0.jpg",
-     "fans": 12274
+     "fans": 12274,
+     "type": "group"
     },
     {
      "id": 4805,
      "name": "Satyricon",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fea6b8d6fcea40456cc02b59ecc7a445/250x250-000000-80-0-0.jpg",
-     "fans": 98011
+     "fans": 98011,
+     "type": "group"
     },
     {
      "id": 11054,
      "name": "Bathory",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f8e2bf625b47e4ea065d12b65dafe031/250x250-000000-80-0-0.jpg",
-     "fans": 74961
+     "fans": 74961,
+     "type": "group"
     },
     {
      "id": 10673,
      "name": "1349",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f36522a16333bc2296f801ae0f4b885b/250x250-000000-80-0-0.jpg",
-     "fans": 11637
+     "fans": 11637,
+     "type": "group"
     },
     {
      "id": 7714,
      "name": "Dark Funeral",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f177f944fac0055966511d28d80d24d4/250x250-000000-80-0-0.jpg",
-     "fans": 108730
+     "fans": 108731,
+     "type": "group"
     },
     {
      "id": 10446,
      "name": "Agalloch",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b8ccdd7f799a2a10df16b2ee5c6c82d9/250x250-000000-80-0-0.jpg",
-     "fans": 24528
+     "fans": 24528,
+     "type": "group"
     },
     {
      "id": 16329,
      "name": "Alcest",
      "picture": "https://cdn-images.dzcdn.net/images/artist/805173e4252b7683effb529a6081480e/250x250-000000-80-0-0.jpg",
-     "fans": 49651
+     "fans": 49653,
+     "type": "group"
     },
     {
      "id": 257491,
      "name": "Carach Angren",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1b1199b0675605f0cca7532eb6908e32/250x250-000000-80-0-0.jpg",
-     "fans": 20898
+     "fans": 20899,
+     "type": "group"
     },
     {
      "id": 10674,
      "name": "Belphegor",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3aec08f8215cceb7d6f35af0de83570f/250x250-000000-80-0-0.jpg",
-     "fans": 61730
+     "fans": 61730,
+     "type": "group"
     },
     {
      "id": 5602,
      "name": "Rotting Christ",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5f812ff7324a611c1bf23cabfa3a5f29/250x250-000000-80-0-0.jpg",
-     "fans": 56321
+     "fans": 56321,
+     "type": "group"
     },
     {
      "id": 7683228,
      "name": "Abbath",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c81de8ebf5b3c5a5130c7caeee90b746/250x250-000000-80-0-0.jpg",
-     "fans": 12220
+     "fans": 12221,
+     "type": "group"
     },
     {
      "id": 10166380,
      "name": "Uada",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b418947371e808ebf010a05ca4ad3959/250x250-000000-80-0-0.jpg",
-     "fans": 8036
+     "fans": 8036,
+     "type": "group"
     }
    ]
   },
@@ -1072,157 +1242,183 @@
      "id": 119,
      "name": "Metallica",
      "picture": "https://cdn-images.dzcdn.net/images/artist/056578a9c2007f69ce198c81875eca41/250x250-000000-80-0-0.jpg",
-     "fans": 8169956
+     "fans": 8170022,
+     "type": "group"
     },
     {
      "id": 931,
      "name": "Iron Maiden",
      "picture": "https://cdn-images.dzcdn.net/images/artist/497e5e47668e13a3fb1312a4754eaa65/250x250-000000-80-0-0.jpg",
-     "fans": 3791854
+     "fans": 3791889,
+     "type": "group"
     },
     {
      "id": 647,
      "name": "Black Sabbath",
      "picture": "https://cdn-images.dzcdn.net/images/artist/91ab912207e1dc0b20ef53dc751e4aff/250x250-000000-80-0-0.jpg",
-     "fans": 3040661
+     "fans": 3040691,
+     "type": "group"
     },
     {
      "id": 533,
      "name": "Judas Priest",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3780a546a18503f1ca1e67358750847e/250x250-000000-80-0-0.jpg",
-     "fans": 1252329
+     "fans": 1252342,
+     "type": "group"
     },
     {
      "id": 3048,
      "name": "Slayer",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1417e7db6c37490103a23197228c2c4f/250x250-000000-80-0-0.jpg",
-     "fans": 936295
+     "fans": 936312,
+     "type": "group"
     },
     {
      "id": 3487,
      "name": "Megadeth",
      "picture": "https://cdn-images.dzcdn.net/images/artist/cff12b4ef973a62d886d69bf056941ec/250x250-000000-80-0-0.jpg",
-     "fans": 1801529
+     "fans": 1801553,
+     "type": "group"
     },
     {
      "id": 3580,
      "name": "Anthrax",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8c76c63ca77b162345d6c51c46787a0d/250x250-000000-80-0-0.jpg",
-     "fans": 508210
+     "fans": 508218,
+     "type": "group"
     },
     {
      "id": 2969,
      "name": "Pantera",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f4ee6ca8f9cd27a944de0476776fee50/250x250-000000-80-0-0.jpg",
-     "fans": 1621322
+     "fans": 1621335,
+     "type": "group"
     },
     {
      "id": 2996,
      "name": "Motörhead",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a090dbddedf12db9d8caa9bd7b0bda4b/250x250-000000-80-0-0.jpg",
-     "fans": 1120142
+     "fans": 1120151,
+     "type": "group"
     },
     {
      "id": 3038,
      "name": "Dio",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f2686067818d0f31031f37c290e253b3/250x250-000000-80-0-0.jpg",
-     "fans": 350573
+     "fans": 350574,
+     "type": "group"
     },
     {
      "id": 823,
      "name": "Ozzy Osbourne",
      "picture": "https://cdn-images.dzcdn.net/images/artist/e18bac5143c6764b58096640b7a93f06/250x250-000000-80-0-0.jpg",
-     "fans": 2608821
+     "fans": 2608854,
+     "type": "person"
     },
     {
      "id": 632,
      "name": "Sepultura",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d6235a4eb71bc1a80028c277dea91331/250x250-000000-80-0-0.jpg",
-     "fans": 915775
+     "fans": 915782,
+     "type": "group"
     },
     {
      "id": 13193,
      "name": "Testament",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a6a259e07e25495cea9edcf9250d8a39/250x250-000000-80-0-0.jpg",
-     "fans": 277576
+     "fans": 277578,
+     "type": "group"
     },
     {
      "id": 16737,
      "name": "Exodus",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0ba5a02857b163ab31642ea5381525fa/250x250-000000-80-0-0.jpg",
-     "fans": 213372
+     "fans": 213373,
+     "type": "group"
     },
     {
      "id": 6067,
      "name": "Kreator",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b23f41720aee8e53918ed594ee3d56cd/250x250-000000-80-0-0.jpg",
-     "fans": 189733
+     "fans": 189737,
+     "type": "group"
     },
     {
      "id": 14703,
      "name": "Sodom",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f0a6f793b03e44df09e6e5204791de63/250x250-000000-80-0-0.jpg",
-     "fans": 139256
+     "fans": 139260,
+     "type": "group"
     },
     {
      "id": 5584,
      "name": "Overkill",
      "picture": "https://cdn-images.dzcdn.net/images/artist/daa67f2d4181ebfea35c0732641bae53/250x250-000000-80-0-0.jpg",
-     "fans": 112920
+     "fans": 112922,
+     "type": "group"
     },
     {
      "id": 3936,
      "name": "Annihilator",
      "picture": "https://cdn-images.dzcdn.net/images/artist/18cd279e844567c663811bf436551c66/250x250-000000-80-0-0.jpg",
-     "fans": 83438
+     "fans": 83438,
+     "type": "group"
     },
     {
      "id": 2582,
      "name": "Helloween",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8b6315773337100076cb8d4139efa6a8/250x250-000000-80-0-0.jpg",
-     "fans": 479680
+     "fans": 479684,
+     "type": "group"
     },
     {
      "id": 5761,
      "name": "Accept",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1b100b8e86f0915afadae1a84c8d0a98/250x250-000000-80-0-0.jpg",
-     "fans": 253688
+     "fans": 253691,
+     "type": "group"
     },
     {
      "id": 8552,
      "name": "Saxon",
      "picture": "https://cdn-images.dzcdn.net/images/artist/cd5c867d3e8f25693093109101b86c82/250x250-000000-80-0-0.jpg",
-     "fans": 138082
+     "fans": 138084,
+     "type": "group"
     },
     {
      "id": 5530,
      "name": "Manowar",
      "picture": "https://cdn-images.dzcdn.net/images/artist/84f3a53d96d03f301284ca597085c07b/250x250-000000-80-0-0.jpg",
-     "fans": 266950
+     "fans": 266952,
+     "type": "group"
     },
     {
      "id": 1067,
      "name": "Mercyful Fate",
      "picture": "https://cdn-images.dzcdn.net/images/artist/57cc5162cda13393c744efbe62dc2eac/250x250-000000-80-0-0.jpg",
-     "fans": 54119
+     "fans": 54119,
+     "type": "group"
     },
     {
      "id": 5831,
      "name": "King Diamond",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9d231997ba2002048435bd5c37024dd1/250x250-000000-80-0-0.jpg",
-     "fans": 54258
+     "fans": 54259,
+     "type": "group"
     },
     {
      "id": 536,
      "name": "Machine Head",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9ecbf9e8245cdc63a8763280b93d7424/250x250-000000-80-0-0.jpg",
-     "fans": 300282
+     "fans": 300285,
+     "type": "group"
     },
     {
      "id": 2216,
      "name": "Lamb of God",
      "picture": "https://cdn-images.dzcdn.net/images/artist/061f81e80e8e59f7144873f5391ea5da/250x250-000000-80-0-0.jpg",
-     "fans": 490286
+     "fans": 490291,
+     "type": "group"
     }
    ]
   },
@@ -1235,163 +1431,190 @@
      "id": 92,
      "name": "Linkin Park",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4886905210739af3438990897bad3a98/250x250-000000-80-0-0.jpg",
-     "fans": 12251086
+     "fans": 12251199,
+     "type": "group"
     },
     {
      "id": 458,
      "name": "System of a Down",
      "picture": "https://cdn-images.dzcdn.net/images/artist/67460cdb0b52bfde1b807650958058d6/250x250-000000-80-0-0.jpg",
-     "fans": 5814208
+     "fans": 5814254,
+     "type": "group"
     },
     {
      "id": 117,
      "name": "Slipknot",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d1a3db36015dd98615f42a5441dcf2f5/250x250-000000-80-0-0.jpg",
-     "fans": 4150611
+     "fans": 4150645,
+     "type": "group"
     },
     {
      "id": 1327,
      "name": "KoЯn",
      "picture": "https://cdn-images.dzcdn.net/images/artist/77c9598025a4f29d7c4d070fbde6a0c8/250x250-000000-80-0-0.jpg",
-     "fans": 2627993
+     "fans": 2628011,
+     "type": "group"
     },
     {
      "id": 535,
      "name": "Deftones",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a4fab59f82dc48f2c636ce8497282e67/250x250-000000-80-0-0.jpg",
-     "fans": 1050108
+     "fans": 1050122,
+     "type": "group"
     },
     {
      "id": 566,
      "name": "Foo Fighters",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c2a443972cacf77896f91a66b30bfd9e/250x250-000000-80-0-0.jpg",
-     "fans": 4596165
+     "fans": 4596192,
+     "type": "group"
     },
     {
      "id": 182,
      "name": "Red Hot Chili Peppers",
      "picture": "https://cdn-images.dzcdn.net/images/artist/238f5524a401dfdd5cac685f0f7989bd/250x250-000000-80-0-0.jpg",
-     "fans": 7714259
+     "fans": 7714354,
+     "type": "group"
     },
     {
      "id": 415,
      "name": "Nirvana",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3ec5542ff520ee74e2befdaba32ef2ef/250x250-000000-80-0-0.jpg",
-     "fans": 10089045
+     "fans": 10089126,
+     "type": "group"
     },
     {
      "id": 412,
      "name": "Queen",
      "picture": "https://cdn-images.dzcdn.net/images/artist/71eeb9e2eeb375df35a3c0654a5a01ab/250x250-000000-80-0-0.jpg",
-     "fans": 12835080
+     "fans": 12835205,
+     "type": "group"
     },
     {
      "id": 115,
      "name": "AC/DC",
      "picture": "https://cdn-images.dzcdn.net/images/artist/7dbc950be70f997ba0cd2b39de7f2aa7/250x250-000000-80-0-0.jpg",
-     "fans": 9953852
+     "fans": 9953936,
+     "type": "group"
     },
     {
      "id": 663,
      "name": "Guns N' Roses",
      "picture": "https://cdn-images.dzcdn.net/images/artist/c62989722e38d7a2ab18afde3c19bc5c/250x250-000000-80-0-0.jpg",
-     "fans": 8612837
+     "fans": 8612906,
+     "type": "group"
     },
     {
      "id": 1182,
      "name": "Arctic Monkeys",
      "picture": "https://cdn-images.dzcdn.net/images/artist/6c03e4c7c36800897fd468633286db24/250x250-000000-80-0-0.jpg",
-     "fans": 4970334
+     "fans": 4970394,
+     "type": "group"
     },
     {
      "id": 705,
      "name": "Muse",
      "picture": "https://cdn-images.dzcdn.net/images/artist/cd7c5861be0009d3b75d4d3c069317a7/250x250-000000-80-0-0.jpg",
-     "fans": 5050213
+     "fans": 5050253,
+     "type": "group"
     },
     {
      "id": 52,
      "name": "Green Day",
      "picture": "https://cdn-images.dzcdn.net/images/artist/690381cc69a21802b5d95b0460afb6a3/250x250-000000-80-0-0.jpg",
-     "fans": 5245597
+     "fans": 5245634,
+     "type": "group"
     },
     {
      "id": 409,
      "name": "blink-182",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3c60337b3a7cf8d3740bcea4c277f4e1/250x250-000000-80-0-0.jpg",
-     "fans": 2337789
+     "fans": 2337803,
+     "type": "group"
     },
     {
      "id": 599,
      "name": "My Chemical Romance",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8c78e78c01bbdc0c80fb4556c762d3bb/250x250-000000-80-0-0.jpg",
-     "fans": 1841663
+     "fans": 1841682,
+     "type": "group"
     },
     {
      "id": 10977,
      "name": "Paramore",
      "picture": "https://cdn-images.dzcdn.net/images/artist/60dc1956a36a5e552384b4a32b0cbf9b/250x250-000000-80-0-0.jpg",
-     "fans": 3152014
+     "fans": 3152034,
+     "type": "group"
     },
     {
      "id": 897,
      "name": "The Killers",
      "picture": "https://cdn-images.dzcdn.net/images/artist/979d671d4b391bc07747bd1569e51997/250x250-000000-80-0-0.jpg",
-     "fans": 2241327
+     "fans": 2241346,
+     "type": "group"
     },
     {
      "id": 399,
      "name": "Radiohead",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0d58cfbc90f2e776608bcdc0c45a4711/250x250-000000-80-0-0.jpg",
-     "fans": 4105586
+     "fans": 4105659,
+     "type": "group"
     },
     {
      "id": 464,
      "name": "Rammstein",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f22cac6a41e838f54d2c7b4ea47b5f94/250x250-000000-80-0-0.jpg",
-     "fans": 2730824
+     "fans": 2730863,
+     "type": "group"
     },
     {
      "id": 98,
      "name": "Evanescence",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0c993f8104879b99b1a952005a8c2426/250x250-000000-80-0-0.jpg",
-     "fans": 3788580
+     "fans": 3788602,
+     "type": "group"
     },
     {
      "id": 404,
      "name": "Fall Out Boy",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f53434390dd76ef724cdc26df7a0b64d/250x250-000000-80-0-0.jpg",
-     "fans": 2617323
+     "fans": 2617337,
+     "type": "group"
     },
     {
      "id": 1319,
      "name": "Pearl Jam",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3e279f4e0269fdb2733474ddfa074a91/250x250-000000-80-0-0.jpg",
-     "fans": 3549132
+     "fans": 3549170,
+     "type": "group"
     },
     {
      "id": 1865,
      "name": "Soundgarden",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b930cedb94fd49695baa3f39281bd804/250x250-000000-80-0-0.jpg",
-     "fans": 1334368
+     "fans": 1334376,
+     "type": "group"
     },
     {
      "id": 13612387,
      "name": "Måneskin",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b5ee25137476918b7660f80529981436/250x250-000000-80-0-0.jpg",
-     "fans": 1009248
+     "fans": 1009272,
+     "type": "group"
     },
     {
      "id": 11025166,
      "name": "Sleep Token",
      "picture": "https://cdn-images.dzcdn.net/images/artist/530a9539e6b159f1c70826292ae788f0/250x250-000000-80-0-0.jpg",
-     "fans": 143930
+     "fans": 143939,
+     "type": "group"
     },
     {
      "id": 8506054,
      "name": "Ghost",
      "picture": "https://cdn-images.dzcdn.net/images/artist/da23d5c8a0b40adefa6424ec4b357fd1/250x250-000000-80-0-0.jpg",
-     "fans": 614221
+     "fans": 614235,
+     "type": "group"
     }
    ]
   },
@@ -1404,163 +1627,190 @@
      "id": 12246,
      "name": "Taylor Swift",
      "picture": "https://cdn-images.dzcdn.net/images/artist/cc2495870fe1a792ad0cdb05501ad5ec/250x250-000000-80-0-0.jpg",
-     "fans": 12750209
+     "fans": 12750310,
+     "type": "person"
     },
     {
      "id": 8706544,
      "name": "Dua Lipa",
      "picture": "https://cdn-images.dzcdn.net/images/artist/877872aaf75694f11d53c318700ab2b5/250x250-000000-80-0-0.jpg",
-     "fans": 8795240
+     "fans": 8795321,
+     "type": "person"
     },
     {
      "id": 4050205,
      "name": "The Weeknd",
      "picture": "https://cdn-images.dzcdn.net/images/artist/581693b4724a7fcfa754455101e13a44/250x250-000000-80-0-0.jpg",
-     "fans": 14740980
+     "fans": 14741251,
+     "type": "person"
     },
     {
      "id": 9635624,
      "name": "Billie Eilish",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8eab1a9a644889aabaca1e193e05f984/250x250-000000-80-0-0.jpg",
-     "fans": 9277042
+     "fans": 9277154,
+     "type": "person"
     },
     {
      "id": 1562681,
      "name": "Ariana Grande",
      "picture": "https://cdn-images.dzcdn.net/images/artist/721d8fab84b315502de422b8d0901509/250x250-000000-80-0-0.jpg",
-     "fans": 13446671
+     "fans": 13446761,
+     "type": "person"
     },
     {
      "id": 384236,
      "name": "Ed Sheeran",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d6bb84390641d8ae9118228d9544e53d/250x250-000000-80-0-0.jpg",
-     "fans": 20937313
+     "fans": 20937445,
+     "type": "person"
     },
     {
      "id": 5313805,
      "name": "Harry Styles",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1151dba9b3edc0633adf35b64c21713f/250x250-000000-80-0-0.jpg",
-     "fans": 2204658
+     "fans": 2204695,
+     "type": "person"
     },
     {
      "id": 75491,
      "name": "Lady Gaga",
      "picture": "https://cdn-images.dzcdn.net/images/artist/7565262f7661b0d762621a8d69ba6f49/250x250-000000-80-0-0.jpg",
-     "fans": 9314543
+     "fans": 9314712,
+     "type": "person"
     },
     {
      "id": 564,
      "name": "Rihanna",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b78cdc205fae2641b89208e78b30e1b3/250x250-000000-80-0-0.jpg",
-     "fans": 18108185
+     "fans": 18108436,
+     "type": "person"
     },
     {
      "id": 429675,
      "name": "Bruno Mars",
      "picture": "https://cdn-images.dzcdn.net/images/artist/90f0b5b11df4f87ee878f38569b5995b/250x250-000000-80-0-0.jpg",
-     "fans": 12824820
+     "fans": 12824997,
+     "type": "person"
     },
     {
      "id": 11152580,
      "name": "Olivia Rodrigo",
      "picture": "https://cdn-images.dzcdn.net/images/artist/2c9e480317183c037eaebcd7ba96daf4/250x250-000000-80-0-0.jpg",
-     "fans": 1838458
+     "fans": 1838526,
+     "type": "person"
     },
     {
      "id": 1176900,
      "name": "Sabrina Carpenter",
      "picture": "https://cdn-images.dzcdn.net/images/artist/4a9cdc7737e2a0e59b4917b47884b859/250x250-000000-80-0-0.jpg",
-     "fans": 1826542
+     "fans": 1826583,
+     "type": "person"
     },
     {
      "id": 160,
      "name": "Shakira",
      "picture": "https://cdn-images.dzcdn.net/images/artist/69c569506a8ff6ab0edfecbd1adf94b0/250x250-000000-80-0-0.jpg",
-     "fans": 11760840
+     "fans": 11761030,
+     "type": "person"
     },
     {
      "id": 554792,
      "name": "ROSALÍA",
      "picture": "https://cdn-images.dzcdn.net/images/artist/96636156440182f1e7db3f77d39e6545/250x250-000000-80-0-0.jpg",
-     "fans": 1064850
+     "fans": 1064879,
+     "type": "person"
     },
     {
      "id": 259,
      "name": "Michael Jackson",
      "picture": "https://cdn-images.dzcdn.net/images/artist/97fae13b2b30e4aec2e8c9e0c7839d92/250x250-000000-80-0-0.jpg",
-     "fans": 13199886
+     "fans": 13200208,
+     "type": "person"
     },
     {
      "id": 290,
      "name": "Madonna",
      "picture": "https://cdn-images.dzcdn.net/images/artist/62896581ffe80588d00fdf89667adb02/250x250-000000-80-0-0.jpg",
-     "fans": 4919806
+     "fans": 4919866,
+     "type": "person"
     },
     {
      "id": 145,
      "name": "Beyoncé",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0aa9d669be4e7310b8647afae37ffaab/250x250-000000-80-0-0.jpg",
-     "fans": 12854774
+     "fans": 12854862,
+     "type": "person"
     },
     {
      "id": 288166,
      "name": "Justin Bieber",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fe097f693cebf1f882e3da79e99e3bf9/250x250-000000-80-0-0.jpg",
-     "fans": 11170808
+     "fans": 11170881,
+     "type": "person"
     },
     {
      "id": 144227,
      "name": "Katy Perry",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9c144bd1ed91b2a59c826cf1d1cde633/250x250-000000-80-0-0.jpg",
-     "fans": 9803724
+     "fans": 9803813,
+     "type": "person"
     },
     {
      "id": 892,
      "name": "Coldplay",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3087954bca22f306324912e5ac8375c3/250x250-000000-80-0-0.jpg",
-     "fans": 18421433
+     "fans": 18421596,
+     "type": "group"
     },
     {
      "id": 416239,
      "name": "Imagine Dragons",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1ba025c23cae3dee14b51152990285fc/250x250-000000-80-0-0.jpg",
-     "fans": 9545426
+     "fans": 9545504,
+     "type": "group"
     },
     {
      "id": 12436,
      "name": "Miley Cyrus",
      "picture": "https://cdn-images.dzcdn.net/images/artist/fbf2cc06f54eb5d925983be756289836/250x250-000000-80-0-0.jpg",
-     "fans": 7248207
+     "fans": 7248235,
+     "type": "person"
     },
     {
      "id": 5578942,
      "name": "Doja Cat",
      "picture": "https://cdn-images.dzcdn.net/images/artist/9e3a3b8792a04c4578da7b905ffeaf2b/250x250-000000-80-0-0.jpg",
-     "fans": 2511625
+     "fans": 2511657,
+     "type": "person"
     },
     {
      "id": 12945219,
      "name": "Chappell Roan",
      "picture": "https://cdn-images.dzcdn.net/images/artist/14ca3aea25950189f30efe0fa79ac4f9/250x250-000000-80-0-0.jpg",
-     "fans": 315542
+     "fans": 315578,
+     "type": "person"
     },
     {
      "id": 5531258,
      "name": "SZA",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8ced041da2bed70d5715f0860956169b/250x250-000000-80-0-0.jpg",
-     "fans": 1337703
+     "fans": 1337738,
+     "type": "person"
     },
     {
      "id": 1424821,
      "name": "Lana Del Rey",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8994d3be1a59a72f887f1f8afd2d4c6c/250x250-000000-80-0-0.jpg",
-     "fans": 5825711
+     "fans": 5825787,
+     "type": "person"
     },
     {
      "id": 11928391,
      "name": "Aitana",
      "picture": "https://cdn-images.dzcdn.net/images/artist/41a75229e7fb63066c6b8be08ff0dbce/250x250-000000-80-0-0.jpg",
-     "fans": 348879
+     "fans": 348880,
+     "type": "person"
     }
    ]
   },
@@ -1573,175 +1823,204 @@
      "id": 13,
      "name": "Eminem",
      "picture": "https://cdn-images.dzcdn.net/images/artist/0f30bbd33a680030054af004d698d6ac/250x250-000000-80-0-0.jpg",
-     "fans": 19144492
+     "fans": 19144638,
+     "type": "person"
     },
     {
      "id": 525046,
      "name": "Kendrick Lamar",
      "picture": "https://cdn-images.dzcdn.net/images/artist/be0a7c550567f4af0ed202d7235b74d6/250x250-000000-80-0-0.jpg",
-     "fans": 6186693
+     "fans": 6186759,
+     "type": "person"
     },
     {
      "id": 246791,
      "name": "Drake",
      "picture": "https://cdn-images.dzcdn.net/images/artist/eb0ed5b21d1ea5af021fc074ded0e91f/250x250-000000-80-0-0.jpg",
-     "fans": 24108858
+     "fans": 24108972,
+     "type": "person"
     },
     {
      "id": 4495513,
      "name": "Travis Scott",
      "picture": "https://cdn-images.dzcdn.net/images/artist/8d8316146026d7e6ce377e314536df62/250x250-000000-80-0-0.jpg",
-     "fans": 3150058
+     "fans": 3150106,
+     "type": "person"
     },
     {
      "id": 1309,
      "name": "JAY Z",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a59aabd18e84d732ce3b9f6f5c4e5f50/250x250-000000-80-0-0.jpg",
-     "fans": 3579473
+     "fans": 3579483,
+     "type": "person"
     },
     {
      "id": 73,
      "name": "Nas",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f6e4f9d1f6be43c36339a9a96dcee725/250x250-000000-80-0-0.jpg",
-     "fans": 1214856
+     "fans": 1214869,
+     "type": "person"
     },
     {
      "id": 167095,
      "name": "2Pac",
      "picture": "https://cdn-images.dzcdn.net/images/artist/dc2743d871b5935004292eed2cd55f68/250x250-000000-80-0-0.jpg",
-     "fans": 4137518
+     "fans": 4137555,
+     "type": "person"
     },
     {
      "id": 2519,
      "name": "The Notorious B.I.G.",
      "picture": "https://cdn-images.dzcdn.net/images/artist/87e928a899c183eb10f1da14db7485dd/250x250-000000-80-0-0.jpg",
-     "fans": 1965570
+     "fans": 1965590,
+     "type": "person"
     },
     {
      "id": 3,
      "name": "Snoop Dogg",
      "picture": "https://cdn-images.dzcdn.net/images/artist/ecee555cd9f4af2617272852ff8562d2/250x250-000000-80-0-0.jpg",
-     "fans": 7979524
+     "fans": 7979586,
+     "type": "person"
     },
     {
      "id": 763,
      "name": "Dr. Dre",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5af98b093efb7b818e4e084621c76b85/250x250-000000-80-0-0.jpg",
-     "fans": 4493250
+     "fans": 4493287,
+     "type": "person"
     },
     {
      "id": 66,
      "name": "50 Cent",
      "picture": "https://cdn-images.dzcdn.net/images/artist/58da3cca2d598e43c7a7823cf75277e5/250x250-000000-80-0-0.jpg",
-     "fans": 7877471
+     "fans": 7877544,
+     "type": "person"
     },
     {
      "id": 74309,
      "name": "Lil Wayne",
      "picture": "https://cdn-images.dzcdn.net/images/artist/3ced6f5ba94b771cf704fec83c58c798/250x250-000000-80-0-0.jpg",
-     "fans": 5843046
+     "fans": 5843077,
+     "type": "person"
     },
     {
      "id": 382937,
      "name": "Nicki Minaj",
      "picture": "https://cdn-images.dzcdn.net/images/artist/cf30ba4b709168aee196dcf16f259f22/250x250-000000-80-0-0.jpg",
-     "fans": 7414365
+     "fans": 7414395,
+     "type": "person"
     },
     {
      "id": 9064930,
      "name": "Cardi B",
      "picture": "https://cdn-images.dzcdn.net/images/artist/af776cd99efbc010c3782030df0e7e1e/250x250-000000-80-0-0.jpg",
-     "fans": 2603458
+     "fans": 2603474,
+     "type": "person"
     },
     {
      "id": 339209,
      "name": "J. Cole",
      "picture": "https://cdn-images.dzcdn.net/images/artist/dc8d97f19855c8ea3f15ee6db784198e/250x250-000000-80-0-0.jpg",
-     "fans": 2747643
+     "fans": 2747662,
+     "type": "person"
     },
     {
      "id": 1194083,
      "name": "Tyler, The Creator",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5eceecd683beab6dd901a7931294a121/250x250-000000-80-0-0.jpg",
-     "fans": 1386655
+     "fans": 1386695,
+     "type": "person"
     },
     {
      "id": 1518490,
      "name": "A$AP Rocky",
      "picture": "https://cdn-images.dzcdn.net/images/artist/5eebb137c5f4d0eb8fb5f9227e1b6288/250x250-000000-80-0-0.jpg",
-     "fans": 2113079
+     "fans": 2113107,
+     "type": "person"
     },
     {
      "id": 7543848,
      "name": "Post Malone",
      "picture": "https://cdn-images.dzcdn.net/images/artist/a5a8cca44e7eab2db7d44e039bed2574/250x250-000000-80-0-0.jpg",
-     "fans": 4210099
+     "fans": 4210147,
+     "type": "person"
     },
     {
      "id": 165930,
      "name": "Future",
      "picture": "https://cdn-images.dzcdn.net/images/artist/1a695ee9c2cb49fab81d408836100ff3/250x250-000000-80-0-0.jpg",
-     "fans": 3992294
+     "fans": 3992314,
+     "type": "person"
     },
     {
      "id": 7101343,
      "name": "Lil Uzi Vert",
      "picture": "https://cdn-images.dzcdn.net/images/artist/aee2db9a69abb62ae05b644d0ea68055/250x250-000000-80-0-0.jpg",
-     "fans": 1251527
+     "fans": 1251549,
+     "type": "person"
     },
     {
      "id": 10002824,
      "name": "Playboi Carti",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b90097972a60d9d8598a79a786be1a3a/250x250-000000-80-0-0.jpg",
-     "fans": 844272
+     "fans": 844309,
+     "type": "person"
     },
     {
      "id": 6853403,
      "name": "21 Savage",
      "picture": "https://cdn-images.dzcdn.net/images/artist/76b4cd56c7e94e8d2bdc3e2157e1080f/250x250-000000-80-0-0.jpg",
-     "fans": 1530807
+     "fans": 1530834,
+     "type": "person"
     },
     {
      "id": 12816021,
      "name": "Megan Thee Stallion",
      "picture": "https://cdn-images.dzcdn.net/images/artist/55a20b812fec74d0a72d870545fc2123/250x250-000000-80-0-0.jpg",
-     "fans": 937163
+     "fans": 937170,
+     "type": "person"
     },
     {
      "id": 158706,
      "name": "Kid Cudi",
      "picture": "https://cdn-images.dzcdn.net/images/artist/b963abc4bdf0a24b68529bdfb517a1fe/250x250-000000-80-0-0.jpg",
-     "fans": 1385864
+     "fans": 1385872,
+     "type": "person"
     },
     {
      "id": 632926,
      "name": "MAC MILLER",
      "picture": "https://cdn-images.dzcdn.net/images/artist/d868d87e47d0597e6ba36d49eadec848/250x250-000000-80-0-0.jpg",
-     "fans": 1287855
+     "fans": 1287872,
+     "type": "person"
     },
     {
      "id": 14456487,
      "name": "Juice Wrld",
      "picture": "https://cdn-images.dzcdn.net/images/artist/2ecf2968fbbc8eb042b241b8e60e5d7e/250x250-000000-80-0-0.jpg",
-     "fans": 2509614
+     "fans": 2509644,
+     "type": "person"
     },
     {
      "id": 9,
      "name": "Outkast",
      "picture": "https://cdn-images.dzcdn.net/images/artist/32b909447841adfe4fd4770b1c1530ed/250x250-000000-80-0-0.jpg",
-     "fans": 923064
+     "fans": 923073,
+     "type": "group"
     },
     {
      "id": 273,
      "name": "Wu-Tang Clan",
      "picture": "https://cdn-images.dzcdn.net/images/artist/103e32678e5f4e8d53bd3e5224f13df1/250x250-000000-80-0-0.jpg",
-     "fans": 1259519
+     "fans": 1259530,
+     "type": "group"
     },
     {
      "id": 1222,
      "name": "Cypress Hill",
      "picture": "https://cdn-images.dzcdn.net/images/artist/f144a9ad6702752986ebb5185aa0fc07/250x250-000000-80-0-0.jpg",
-     "fans": 1082074
+     "fans": 1082085,
+     "type": "group"
     }
    ]
   }

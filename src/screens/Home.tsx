@@ -14,9 +14,11 @@ interface Props {
   onPlay: (mode: PlayMode) => void;
   onOpenSettings: () => void;
   onOpenRecords: () => void;
+  /** Solo existe si hay ranking online configurado. */
+  onOpenRanking?: () => void;
 }
 
-export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpenRecords }: Props) {
+export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpenRecords, onOpenRanking }: Props) {
   const genres = filter.kind === 'genres' ? filter.genres : [];
   const artistMode = filter.kind === 'artist';
 
@@ -30,6 +32,11 @@ export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpen
       <header className="home-head">
         <Logo />
         <div className="head-actions">
+          {onOpenRanking && (
+            <button className="btn-square" onClick={onOpenRanking} aria-label="Ranking">
+              <Icon name="podium" size={20} />
+            </button>
+          )}
           <button className="btn-square" onClick={onOpenRecords} aria-label="Récords">
             <Icon name="trophy" size={20} />
           </button>
@@ -133,6 +140,7 @@ export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpen
         </a>{' '}
         · Proyecto sin ánimo de lucro
       </footer>
+      <span className="credit">made by Raksoda</span>
     </main>
   );
 }

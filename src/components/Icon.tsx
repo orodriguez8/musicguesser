@@ -151,6 +151,53 @@ const PATHS = {
       <path d="M6 10v10h12V10" />
     </>
   ),
+  users: (
+    <>
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+      <path d="M16 4.6a3.5 3.5 0 0 1 0 6.8" />
+      <path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0" />
+    </>
+  ),
+  headphones: (
+    <>
+      <path d="M3 14v-2a9 9 0 0 1 18 0v2" />
+      <rect x="3" y="14" width="4" height="7" rx="1.5" />
+      <rect x="17" y="14" width="4" height="7" rx="1.5" />
+    </>
+  ),
+  crown: <path d="M3 18h18l1-11-5.5 4.5L12 4l-4.5 7.5L2 7z" fill="currentColor" stroke="none" />,
+  bolt: <path d="M13.5 2L4 14h7l-1.5 8L19 10h-7z" fill="currentColor" stroke="none" />,
+  heart: <path d="M12 21s-7.5-4.6-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2 4.4-9.5 9-9.5 9z" fill="currentColor" stroke="none" />,
+  glasses: (
+    <>
+      <path d="M2 9h20" />
+      <path d="M3 9h7.5v3.2a3.3 3.3 0 0 1-6.6 0z" fill="currentColor" />
+      <path d="M13.5 9H21v3.2a3.3 3.3 0 0 1-6.6 0z" fill="currentColor" />
+    </>
+  ),
+  podium: (
+    <>
+      <rect x="9" y="6" width="6" height="15" rx="1" />
+      <rect x="2.5" y="11" width="6.5" height="10" rx="1" />
+      <rect x="15" y="14" width="6.5" height="7" rx="1" />
+    </>
+  ),
+  wifiOff: (
+    <>
+      <path d="M3 3l18 18" />
+      <path d="M8.5 16.5a5 5 0 0 1 7 0" />
+      <path d="M5 12.5a10 10 0 0 1 5-2.8" />
+      <path d="M14 9.8a10 10 0 0 1 5 2.7" />
+      <circle cx="12" cy="20" r="1" />
+    </>
+  ),
 } satisfies Record<string, ReactNode>;
 
 export type IconName = keyof typeof PATHS;

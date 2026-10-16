@@ -1,10 +1,14 @@
 export type Family = 'urbano' | 'metal' | 'otros';
 
+/** Grupo o solista (según MusicBrainz). */
+export type ArtistKind = 'group' | 'person';
+
 export interface ArtistRef {
   id: number;
   name: string;
   picture: string;
   genreId?: string;
+  type?: ArtistKind;
 }
 
 export interface Track {
@@ -44,7 +48,7 @@ export interface Option {
 
 export type Question =
   | { kind: 'cancion'; track: Track; options: Option[]; answer: number; accept: string[] }
-  | { kind: 'artista'; track: Track; options: Option[]; answer: number; accept: string[] }
+  | { kind: 'artista'; track: Track; options: Option[]; answer: number; accept: string[]; artistType?: ArtistKind }
   | { kind: 'subgenero'; track: Track; options: Option[]; answer: number }
   | { kind: 'completa'; track: Track; context: string[]; options: Option[]; answer: number }
   | { kind: 'misteriosa'; track: Track; lines: string[]; options: Option[]; answer: number; accept: string[] }
