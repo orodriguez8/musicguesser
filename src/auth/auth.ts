@@ -26,6 +26,8 @@ export function authMessage(raw: string): string {
   if (m.includes('rate limit') || m.includes('too many')) return 'Demasiados intentos seguidos. Espera un minuto.';
   if (m.includes('provider is not enabled') || m.includes('unsupported provider')) return 'El acceso con Google todavía no está activado.';
   if (m.includes('email not confirmed')) return 'Falta confirmar el email.';
+  // El SMTP gratuito de Supabase solo envía a miembros del proyecto
+  if (m.includes('not authorized') || m.includes('error sending')) return 'Ahora mismo no podemos enviar emails. Prueba más tarde.';
   if (m.includes('invalid email') || m.includes('unable to validate email')) return 'Ese email no parece válido.';
   if (m.includes('failed to fetch') || m.includes('network')) return 'Sin conexión. Inténtalo de nuevo.';
   return 'No se ha podido completar. Inténtalo de nuevo.';

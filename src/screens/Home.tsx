@@ -1,4 +1,6 @@
+import type { Profile } from '../auth/auth';
 import { ArtistSearch } from '../components/ArtistSearch';
+import { Avatar } from '../components/Avatar';
 import { Icon } from '../components/Icon';
 import { Logo } from '../components/Logo';
 import { filterLabel, GENRES } from '../game/catalog';
@@ -16,9 +18,11 @@ interface Props {
   onOpenRecords: () => void;
   /** Solo existe si hay ranking online configurado. */
   onOpenRanking?: () => void;
+  /** Botón de cuenta (solo con cuentas online configuradas). */
+  account?: { profile: Profile | null; onClick: () => void };
 }
 
-export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpenRecords, onOpenRanking }: Props) {
+export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpenRecords, onOpenRanking, account }: Props) {
   const genres = filter.kind === 'genres' ? filter.genres : [];
   const artistMode = filter.kind === 'artist';
 
@@ -32,17 +36,30 @@ export function Home({ filter, onFilter, records, onPlay, onOpenSettings, onOpen
       <header className="home-head">
         <Logo />
         <div className="head-actions">
-          {onOpenRanking && (
+          {/* Con ranking online, "mis récords" pasa a Ajustes para no saturar la cabecera en móvil */}
+          {onOpenRanking ? (
             <button className="btn-square" onClick={onOpenRanking} aria-label="Ranking">
               <Icon name="podium" size={20} />
             </button>
+          ) : (
+            <button className="btn-square" onClick={onOpenRecords} aria-label="Récords">
+              <Icon name="trophy" size={20} />
+            </button>
           )}
-          <button className="btn-square" onClick={onOpenRecords} aria-label="Récords">
-            <Icon name="trophy" size={20} />
-          </button>
           <button className="btn-square" onClick={onOpenSettings} aria-label="Ajustes">
             <Icon name="settings" size={20} />
           </button>
+          {account &&
+            (account.profile ? (
+              <button className="account-btn" onClick={account.onClick} aria-label={`Tu cuenta: ${account.profile.username}`}>
+                <Avatar id={account.profile.avatar} name={account.profile.username} size={36} />
+              </button>
+            ) : (
+              <button className="btn-enter" onClick={account.onClick} aria-label="Entrar">
+                <Icon name="user" size={18} />
+                <span className="btn-enter-text">Entrar</span>
+              </button>
+            ))}
         </div>
       </header>
 

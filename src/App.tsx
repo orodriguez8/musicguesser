@@ -11,6 +11,9 @@ import { Ranking } from './screens/Ranking';
 import { Results } from './screens/Results';
 import { useAuth } from './auth/auth';
 import { onlineEnabled } from './lib/supabase';
+import { load, save } from './lib/storage';
+import { Account } from './screens/Account';
+import { Login, NewPassword } from './screens/Login';
 import {
   clearRecords,
   loadFilter,
@@ -23,15 +26,22 @@ import {
   type Settings,
 } from './settings';
 
+type ResultsView = { name: 'results'; mode: PlayMode; filter: Filter; summary: Summary; isRecord: boolean };
 type View =
   | { name: 'home' }
   | { name: 'ranking' }
+  | { name: 'account' }
+  | { name: 'login'; initial: 'login' | 'signup'; back: ResultsView | null }
   | { name: 'game'; mode: PlayMode; filter: Filter; key: number }
-  | { name: 'results'; mode: PlayMode; filter: Filter; summary: Summary; isRecord: boolean };
+  | ResultsView;
 
 export default function App() {
   const [view, setView] = useState<View>({ name: 'home' });
   const auth = useAuth();
+  const [setupDone, setSetupDone] = useState(() => load<Record<string, boolean>>('setup-done', {}));
+  // Quien entra por primera vez con Google tiene un nombre provisional: le pedimos el suyo
+  const needsSetup =
+    !!auth.profile && auth.session?.user.app_metadata?.provider === 'google' && !setupDone[auth.profile.id];
   const [filter, setFilter] = useState<Filter>(loadFilter);
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [records, setRecords] = useState<Records>(loadRecords);
@@ -90,12 +100,56 @@ export default function App() {
     } else setView({ name: 'home' });
   };
 
+  const openLogin = (initial: 'login' | 'signup' = 'login') => {
+    if (view.name === 'home') history.pushState({ mg: true }, '');
+    audio.stop();
+    // Desde la pantalla final volvemos a ella tras entrar, para subir la partida al ranking
+    setView({ name: 'login', initial, back: view.name === 'results' ? view : null });
+    window.scrollTo(0, 0);
+  };
+
+  const openAccount = () => {
+    if (view.name === 'home') history.pushState({ mg: true }, '');
+    setView({ name: 'account' });
+    window.scrollTo(0, 0);
+  };
+
+  // Si cierras sesión (o caduca) estando en "Tu cuenta", al inicio en vez de pantalla en blanco
+  useEffect(() => {
+    if (view.name === 'account' && auth.ready && !auth.session) setView({ name: 'home' });
+  }, [view.name, auth.ready, auth.session]);
+
+  const finishSetup = () => {
+    if (!auth.profile) return;
+    const next = { ...setupDone, [auth.profile.id]: true };
+    setSetupDone(next);
+    save('setup-done', next);
+  };
+
   const finish = (mode: PlayMode, f: Filter) => (summary: Summary) => {
     const { records: next, isRecord } = recordGame(summary);
     setRecords({ ...next });
     setView({ name: 'results', mode, filter: f, summary, isRecord });
     window.scrollTo(0, 0);
   };
+
+  if (auth.recovering) {
+    return (
+      <div className="app">
+        <div className="glow" aria-hidden="true" />
+        <NewPassword onDone={() => setView({ name: 'home' })} />
+      </div>
+    );
+  }
+
+  if (needsSetup && auth.profile) {
+    return (
+      <div className="app">
+        <div className="glow" aria-hidden="true" />
+        <Account profile={auth.profile} email={auth.session?.user.email} setup onSaved={auth.refreshProfile} onClose={finishSetup} />
+      </div>
+    );
+  }
 
   return (
     <div className="app">
@@ -109,9 +163,27 @@ export default function App() {
           onOpenSettings={() => setModal('settings')}
           onOpenRecords={() => setModal('records')}
           onOpenRanking={onlineEnabled ? openRanking : undefined}
+          account={
+            onlineEnabled && auth.ready
+              ? { profile: auth.profile, onClick: auth.session ? openAccount : () => openLogin('login') }
+              : undefined
+          }
         />
       )}
       {view.name === 'ranking' && <Ranking myId={auth.session?.user.id ?? null} onBack={goHome} />}
+      {view.name === 'login' && (
+        <Login
+          initial={view.initial}
+          onBack={goHome}
+          onDone={() => {
+            if (view.back) setView(view.back);
+            else goHome();
+          }}
+        />
+      )}
+      {view.name === 'account' && auth.profile && (
+        <Account profile={auth.profile} email={auth.session?.user.email} onSaved={auth.refreshProfile} onClose={goHome} />
+      )}
       {view.name === 'game' && (
         <Game
           key={view.key}
@@ -128,6 +200,7 @@ export default function App() {
           filter={view.filter}
           isRecord={view.isRecord}
           loggedIn={!!auth.session}
+          onLogin={() => openLogin('login')}
           onOpenRanking={onlineEnabled ? openRanking : undefined}
           onHome={goHome}
           onReplay={() => setView({ name: 'game', mode: view.mode, filter: view.filter, key: Date.now() })}
@@ -163,7 +236,10 @@ export default function App() {
             onChange={(e) => updateSettings({ ...settings, showOptions: e.target.checked })}
           />
         </label>
-        <div className="setting">
+        <div className="setting row">
+          <button className="btn-ghost" onClick={() => setModal('records')}>
+            <Icon name="trophy" /> Mis récords
+          </button>
           <button
             className="btn-ghost"
             onClick={() => {
