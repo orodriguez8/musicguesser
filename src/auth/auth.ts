@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 
-// Las cuentas de "solo usuario" usan por dentro un email inventado en un dominio reservado
-// (.invalid nunca existe), así no hace falta email real. Contrapartida: no hay recuperación.
-const USERNAME_DOMAIN = 'usuarios.musicguesser.invalid';
+// Las cuentas de "solo usuario" usan por dentro un email inventado, así no hace falta email real.
+// Supabase rechaza dominios que no existen (.invalid), así que usamos el propio subdominio de
+// GitHub Pages: existe, pero no recibe correo, de modo que nadie puede pedir un cambio de
+// contraseña de una cuenta ajena. Contrapartida: estas cuentas no pueden recuperar la contraseña.
+const USERNAME_DOMAIN = 'orodriguez8.github.io';
 export const usernameEmail = (username: string) => `${username.trim().toLowerCase()}@${USERNAME_DOMAIN}`;
 export const isUsernameAccount = (email?: string | null) => !!email?.endsWith(`@${USERNAME_DOMAIN}`);
 
