@@ -126,22 +126,19 @@ export function useAuth(): AuthState {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [recovering, setRecovering] = useState(false);
 
+  // 1) La sesión: solo se guarda lo que dice Supabase, sin hacer más llamadas dentro del
+  //    aviso (llamar a Supabase desde onAuthStateChange puede dejarlo bloqueado).
   useEffect(() => {
     if (!supabase) return;
     let alive = true;
-    const load = async (s: Session | null) => {
-      setSession(s);
-      setProfile(s ? await fetchProfile(s.user.id) : null);
-      if (alive) setReady(true);
-    };
     supabase.auth.getSession().then(({ data }) => {
-      if (alive) void load(data.session);
+      if (alive) setSession(data.session);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
+      if (!alive) return;
       if (event === 'PASSWORD_RECOVERY') setRecovering(true);
       if (event === 'USER_UPDATED') setRecovering(false);
-      // No await dentro del callback (lo recomienda Supabase para evitar bloqueos)
-      setTimeout(() => alive && load(s), 0);
+      setSession(s);
     });
     return () => {
       alive = false;
@@ -149,13 +146,34 @@ export function useAuth(): AuthState {
     };
   }, []);
 
+  // 2) El perfil: se pide aparte cada vez que cambia el usuario.
+  const userId = session?.user.id ?? null;
+  useEffect(() => {
+    if (!supabase) return;
+    let alive = true;
+    if (!userId) {
+      setProfile(null);
+      // Primera comprobación hecha (sin sesión): ya se puede pintar el botón de Entrar
+      supabase.auth.getSession().then(() => alive && setReady(true));
+      return;
+    }
+    fetchProfile(userId).then((p) => {
+      if (!alive) return;
+      setProfile(p);
+      setReady(true);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [userId]);
+
   return {
     ready,
     session,
     profile,
     recovering,
     refreshProfile: async () => {
-      if (session) setProfile(await fetchProfile(session.user.id));
+      if (userId) setProfile(await fetchProfile(userId));
     },
   };
 }
