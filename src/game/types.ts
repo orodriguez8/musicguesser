@@ -1,3 +1,5 @@
+import type { Era, Level } from './urbano';
+
 export type Family = 'urbano' | 'metal' | 'otros';
 
 /** Grupo o solista (según MusicBrainz). */
@@ -27,7 +29,15 @@ export interface Track {
   genreId?: string;
 }
 
-export type Filter = { kind: 'genres'; genres: string[] } | { kind: 'artist'; artist: ArtistRef };
+/**
+ * Jugar con géneros o con uno o varios artistas concretos (hasta MAX_ARTISTS).
+ * Época y dificultad solo existen con géneros urbanos.
+ */
+export type Filter =
+  | { kind: 'genres'; genres: string[]; era?: Era; level?: Level }
+  | { kind: 'artist'; artists: ArtistRef[] };
+
+export const MAX_ARTISTS = 5;
 
 export type ModeId =
   | 'cancion'
@@ -37,7 +47,9 @@ export type ModeId =
   | 'anio'
   | 'portada'
   | 'intruso'
-  | 'subgenero';
+  | 'subgenero'
+  | 'infiltrado'
+  | 'albumlink';
 
 export type PlayMode = ModeId | 'mezcla';
 
@@ -47,14 +59,34 @@ export interface Option {
 }
 
 export type Question =
-  | { kind: 'cancion'; track: Track; options: Option[]; answer: number; accept: string[] }
-  | { kind: 'artista'; track: Track; options: Option[]; answer: number; accept: string[]; artistType?: ArtistKind }
+  | { kind: 'cancion'; track: Track; options: Option[]; answer: number; accept: string[]; suggest?: string[] }
+  | { kind: 'artista'; track: Track; options: Option[]; answer: number; accept: string[]; artistType?: ArtistKind; suggest?: string[] }
   | { kind: 'subgenero'; track: Track; options: Option[]; answer: number }
   | { kind: 'completa'; track: Track; context: string[]; options: Option[]; answer: number }
-  | { kind: 'misteriosa'; track: Track; lines: string[]; options: Option[]; answer: number; accept: string[] }
+  | { kind: 'misteriosa'; track: Track; lines: string[]; options: Option[]; answer: number; accept: string[]; suggest?: string[] }
   | { kind: 'anio'; track: Track; year: number }
-  | { kind: 'portada'; track: Track; options: Option[]; answer: number; accept: string[] }
-  | { kind: 'intruso'; host: { name: string; picture?: string }; clips: Track[]; answer: number };
+  | { kind: 'portada'; track: Track; options: Option[]; answer: number; accept: string[]; suggest?: string[] }
+  | { kind: 'intruso'; host: { name: string; picture?: string }; clips: Track[]; answer: number }
+  /** 4 artistas y una condición que cumplen todos menos uno. track = una canción del infiltrado. */
+  | { kind: 'infiltrado'; track: Track; rule: string; artists: InfiltradoArtist[]; answer: number; why: string }
+  /** Adivina el disco por sus colaboraciones. track = una canción de ese disco. */
+  | {
+      kind: 'albumlink';
+      track: Track;
+      album: { title: string; artist: string; year: number | null; cover: string };
+      feats: string[];
+      options: Option[];
+      answer: number;
+      accept: string[];
+      suggest?: string[];
+    };
+
+export interface InfiltradoArtist {
+  name: string;
+  picture: string;
+  /** Dato que se enseña al resolver ("Colombia", "debutó en 2016"…) */
+  detail: string;
+}
 
 export interface Outcome {
   correct: boolean;

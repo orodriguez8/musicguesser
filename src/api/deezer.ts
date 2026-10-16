@@ -129,3 +129,4 @@ export const albumTracks = (id: number) => list<DzTrack>(`/album/${id}/tracks?li
 export const relatedArtists = (id: number) => list<DzArtist>(`/artist/${id}/related?limit=20`);
 export const searchTracks = (q: string) => list<DzTrack>(`/search?q=${encodeURIComponent(q)}&limit=15`);
 export const getAlbum = (id: number) => dz<DzAlbum>(`/album/${id}`);
+export const getTrack = (id: number) => dz<DzTrack>(`/track/${id}`);

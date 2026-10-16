@@ -1,0 +1,7 @@
+{
+  "_comment": "Correcciones a mano para npm run urbano. aliases: perfiles extra de Deezer de un mismo artista. tracks/albums: \"idArtista:Título\": año. debut: idArtista: año.",
+  "aliases": { "75355": [4277041] },
+  "tracks": {},
+  "albums": {},
+  "debut": {}
+}

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { isUsernameAccount, signOut, updateProfile, USERNAME_RE, type Profile } from '../auth/auth';
+import { deleteAccount, isUsernameAccount, signOut, updateProfile, USERNAME_RE, type Profile } from '../auth/auth';
 import { Icon } from '../components/Icon';
 import { BigCassette, TapeArt, TAPES } from '../components/Tapes';
 
@@ -18,6 +18,19 @@ export function Account({ profile, email, setup, onSaved, onClose }: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
+
+  const removeAccount = async () => {
+    if (!window.confirm('¿Borrar tu cuenta? Se eliminarán tu perfil y todas tus partidas del ranking. No se puede deshacer.')) return;
+    setError('');
+    setBusy(true);
+    try {
+      await deleteAccount();
+      onClose();
+    } catch (err) {
+      setError((err as Error).message);
+      setBusy(false);
+    }
+  };
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -117,9 +130,14 @@ export function Account({ profile, email, setup, onSaved, onClose }: Props) {
           >
             Cerrar sesión
           </button>
+          <button className="btn-delete-account" onClick={removeAccount} disabled={busy}>
+            Borrar mi cuenta
+          </button>
         </>
       )}
-      <span className="credit login-credit">made by Raksoda</span>
+      <span className="credit login-credit">
+        <a href="privacidad.html">Privacidad</a> · made by Raksoda
+      </span>
     </main>
   );
 }

@@ -101,6 +101,14 @@ export async function updateProfile(id: string, changes: { username?: string; av
   if (error) throw new Error(error.code === '23505' ? 'Ese nombre de usuario ya está cogido.' : authMessage(error.message));
 }
 
+/** Borra la cuenta con su perfil y todas sus partidas, y cierra la sesión. */
+export async function deleteAccount() {
+  const { error } = await need().rpc('delete_my_account');
+  if (error) throw new Error(authMessage(error.message));
+  // La sesión ya no vale: se limpia solo en este dispositivo
+  await need().auth.signOut({ scope: 'local' });
+}
+
 export async function signOut() {
   await supabase?.auth.signOut();
 }

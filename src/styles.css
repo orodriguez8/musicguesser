@@ -44,6 +44,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
   font-family: var(--body);
@@ -145,6 +146,7 @@ h2 {
 .app {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .glow {
@@ -807,6 +809,10 @@ h2 {
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--muted-2);
+}
+
+.credit a {
+  color: inherit;
 }
 
 .img-fallback {
@@ -2294,6 +2300,7 @@ h2 {
   max-width: 440px;
   gap: 14px;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .login-head {
@@ -2583,6 +2590,22 @@ h2 {
   color: var(--cyan-pale);
 }
 
+.btn-delete-account {
+  align-self: center;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: #ff8a9b;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn-delete-account:disabled {
+  opacity: 0.5;
+}
+
 .center-link {
   align-self: center;
   padding: 10px;
@@ -2683,6 +2706,7 @@ h2 {
 .modal {
   width: min(460px, calc(100vw - 32px));
   max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
   padding: 0;
   border-radius: 24px;
   border: 1px solid var(--line-2);
@@ -2897,4 +2921,910 @@ h2 {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Autocompletado de respuestas: la lista sale encima de la caja para que el teclado del móvil no la tape */
+.suggest-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.suggest-wrap > .field {
+  flex: 1;
+}
+
+.suggest-list {
+  top: auto;
+  bottom: calc(100% + 6px);
+  max-height: min(300px, 45vh);
+  overflow-y: auto;
+}
+
+.suggest-list .search-item {
+  min-height: 44px;
+}
+
+.suggest-list .search-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.artist-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Urbano: época y dificultad */
+.urbano-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.opt-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.opt-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.segmented.seg-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.segmented.seg-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.segmented.seg-4 button {
+  font-size: 13px;
+}
+
+.opt-hint {
+  margin: 0;
+}
+
+/* El infiltrado */
+.infiltrado-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.infiltrado-rule {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.infiltrado-rule strong {
+  font-family: var(--display);
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.infiltrado-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.infiltrado-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  transition: transform 0.12s, border-color 0.12s;
+}
+
+.infiltrado-card:not([aria-disabled='true']):active {
+  transform: scale(0.97);
+}
+
+.infiltrado-card img {
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.infiltrado-name {
+  font-weight: 800;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.infiltrado-detail {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* El infiltrado de verdad, al resolver */
+.infiltrado-card.wrong-one {
+  border-color: var(--cyan);
+  background: var(--cyan-tint);
+}
+
+.infiltrado-card.wrong {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+
+.infiltrado-card.dim {
+  opacity: 0.55;
+}
+
+/* AlbumLink */
+.albumlink-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.feat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feat-chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.albumlink-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.albumlink-reveal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.albumlink-reveal img {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+}
+
+.albumlink-reveal > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- Puzles (Clásico, Wordle, Album Quiz, Top 10, Pirámide) ---------- */
+.puzzle-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.puzzle-body > p {
+  margin: 0;
+}
+
+.guess-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.guess-wrap > .field {
+  flex: 1;
+}
+
+/* Colores de pista: verde = igual, ámbar = cerca, gris = no */
+:root {
+  --hit: #36d399;
+  --hit-tint: rgba(54, 211, 153, 0.18);
+  --near: #ffb547;
+  --near-tint: rgba(255, 181, 71, 0.18);
+}
+
+.clasico-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clasico-row {
+  padding: 10px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--surface-3);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: enter 0.3s ease both;
+}
+
+.clasico-row.win {
+  border-color: var(--hit);
+}
+
+.clasico-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clasico-who img {
+  border-radius: 999px;
+}
+
+.clasico-cells {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.clasico-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+}
+
+.clasico-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.clasico-value {
+  font-size: 13px;
+  font-weight: 800;
+  overflow-wrap: break-word;
+}
+
+.clasico-cell.h-ok {
+  background: var(--hit-tint);
+  border-color: var(--hit);
+}
+
+.clasico-cell.h-near-up,
+.clasico-cell.h-near-down {
+  background: var(--near-tint);
+  border-color: var(--near);
+}
+
+.puzzle-reveal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.puzzle-reveal img {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.puzzle-reveal img.round {
+  border-radius: 999px;
+}
+
+.puzzle-reveal div {
+  display: flex;
+  flex-direction: column;
+}
+
+.puzzle-reveal strong {
+  font-family: var(--display);
+  font-size: 18px;
+}
+
+/* Wordle */
+.wordle-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.wordle-row {
+  display: flex;
+  gap: 6px;
+}
+
+.wordle-row.shake {
+  animation: shake 0.35s;
+}
+
+.wordle-tile {
+  width: var(--tile);
+  height: var(--tile);
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 2px solid var(--line-2);
+  font-family: var(--display);
+  font-size: calc(var(--tile) * 0.45);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.wordle-tile.filled {
+  border-color: var(--line-3);
+}
+
+.wordle-tile.ok {
+  background: var(--hit);
+  border-color: var(--hit);
+  color: #062417;
+}
+
+.wordle-tile.near {
+  background: var(--near);
+  border-color: var(--near);
+  color: #2a1700;
+}
+
+.wordle-tile.no {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: transparent;
+  color: var(--muted);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.key {
+  flex: 1;
+  max-width: 40px;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.key.wide {
+  flex: 1.6;
+  max-width: 64px;
+  font-size: 11px;
+}
+
+.key.ok {
+  background: var(--hit);
+  color: #062417;
+}
+
+.key.near {
+  background: var(--near);
+  color: #2a1700;
+}
+
+.key.no {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted-2);
+}
+
+/* Album Quiz y Top 10 */
+.album-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.album-head img {
+  flex: none;
+  border-radius: 14px;
+}
+
+.album-head div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.album-head strong {
+  font-family: var(--display);
+  font-size: 18px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.slots {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.slot img {
+  flex: none;
+  border-radius: 6px;
+}
+
+.slot.ok {
+  border-color: var(--hit);
+  background: var(--hit-tint);
+}
+
+.slot.missed {
+  border-color: var(--accent-line);
+}
+
+.slot-num {
+  flex: none;
+  width: 22px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.slot-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.slot-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.btn-chip.small {
+  padding: 4px 10px;
+  min-height: 30px;
+  font-size: 12px;
+}
+
+/* Pirámide */
+.pyramid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pyramid-slot {
+  width: var(--w);
+  position: relative;
+}
+
+.pyramid-slot button {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--line-3);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  text-align: left;
+}
+
+.pyramid-slot.ok button {
+  border: 1px solid var(--hit);
+  background: var(--hit-tint);
+}
+
+.pyramid-slot.ko button {
+  border: 1px solid var(--accent);
+  background: var(--accent-tint);
+}
+
+.pyramid-pos {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--cyan-tint);
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pyramid-song {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pyramid-song strong {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pyramid-song span {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pyramid-rank {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.pyramid-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pyramid-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line-2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  text-align: left;
+}
+
+.pyramid-card img {
+  flex: none;
+  border-radius: 8px;
+}
+
+.pyramid-card:disabled {
+  opacity: 0.3;
+}
+
+/* Resultado del puzle */
+.puzzle-result {
+  gap: 10px;
+}
+
+.puzzle-result.ok {
+  border-color: var(--hit);
+}
+
+.puzzle-result.ko {
+  border-color: var(--accent-line);
+}
+
+.puzzle-result-title {
+  font-family: var(--display);
+  font-size: 22px;
+}
+
+.puzzle-result-score {
+  font-family: var(--display);
+  font-size: 34px;
+  color: var(--cyan);
+}
+
+.puzzle-stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.puzzle-stats strong {
+  display: block;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.puzzle-result .row-actions {
+  width: 100%;
+}
+
+/* ---------- Online: salas en directo y retos ---------- */
+.online-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--cyan);
+  background: var(--cyan-tint);
+  color: var(--text);
+  text-align: left;
+}
+
+.online-cta > span:nth-child(2) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.online-cta .mode-icon {
+  background: rgba(61, 227, 255, 0.2);
+  color: var(--cyan);
+}
+
+.online-card {
+  gap: 12px;
+}
+
+.online-card.win {
+  border-color: var(--cyan);
+}
+
+.online-card .answer-form {
+  width: 100%;
+}
+
+.code-input {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.room-code {
+  font-family: var(--display);
+  font-size: 40px;
+  letter-spacing: 0.18em;
+  color: var(--cyan);
+}
+
+.room-players {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.room-players li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--surface-3);
+  animation: enter 0.3s ease both;
+}
+
+.room-players strong {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.scoreboard {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.scoreboard li {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-3);
+  font-size: 13px;
+}
+
+.scoreboard li.me {
+  border-color: var(--accent-line);
+}
+
+.scoreboard li .icon {
+  color: var(--hit, #36d399);
+}
+
+.sb-pos {
+  width: 18px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.sb-name {
+  font-weight: 700;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sb-score {
+  font-weight: 800;
+  color: var(--cyan);
+}
+
+/* En el podio, en columna y más grande */
+.scoreboard.podium {
+  flex-direction: column;
+  overflow: visible;
+}
+
+.scoreboard.podium li {
+  padding: 8px 14px 8px 8px;
+  border-radius: var(--r-md);
+  font-size: 15px;
+}
+
+.scoreboard.podium .sb-name {
+  flex: 1;
+  max-width: none;
+}
+
+.scoreboard.podium li:first-child {
+  border-color: var(--cyan);
+  background: var(--cyan-tint);
+}
+
+.live-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.round-timer,
+.countdown-bar {
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: timer linear forwards;
+}
+
+.countdown-bar {
+  width: 100%;
+  background: var(--cyan);
+}
+
+@keyframes timer {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.challenge-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--cyan);
+  background: var(--cyan-tint);
+}
+
+.challenge-cta > div {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.challenge-cta .btn-light {
+  flex: none;
+}
+
+.versus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.versus > span:not(.muted) {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.versus strong {
+  font-family: var(--display);
+  font-size: 26px;
+  color: var(--text);
+}
+
+.form-error {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-soft);
 }

@@ -3,3 +3,9 @@ dist
 *.log
 .DS_Store
 .env.local
+
+# Claves de firma de Android: NUNCA al repositorio (guárdalas aparte, sin ellas no se puede actualizar la app)
+*.keystore
+*.jks
+android/pwabuilder/
+scripts/.cache

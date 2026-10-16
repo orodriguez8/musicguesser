@@ -7,7 +7,13 @@ import type { Filter, PlayMode, Summary } from './game/types';
 import { fmtInt } from './lib/util';
 import { Game } from './screens/Game';
 import { Home } from './screens/Home';
+import { Puzzle } from './screens/Puzzle';
+import { Online } from './screens/Online';
+import { Challenge } from './screens/Challenge';
+import { validChallengeId } from './online/challenges';
+import { validCode } from './online/room';
 import { Ranking } from './screens/Ranking';
+import type { PuzzleId } from './game/daily';
 import { Results } from './screens/Results';
 import { useAuth } from './auth/auth';
 import { onlineEnabled } from './lib/supabase';
@@ -30,13 +36,30 @@ type ResultsView = { name: 'results'; mode: PlayMode; filter: Filter; summary: S
 type View =
   | { name: 'home' }
   | { name: 'ranking' }
+  | { name: 'puzzle'; id: PuzzleId }
+  | { name: 'online'; code?: string }
+  | { name: 'challenge'; id: string }
   | { name: 'account' }
-  | { name: 'login'; initial: 'login' | 'signup'; back: ResultsView | null }
+  | { name: 'login'; initial: 'login' | 'signup'; back: View | null }
   | { name: 'game'; mode: PlayMode; filter: Filter; key: number }
   | ResultsView;
 
+/** Enlaces compartidos: ?sala=CODIGO (sala en directo) o ?reto=CODIGO (reto de un amigo). */
+function initialView(): View {
+  const params = new URLSearchParams(window.location.search);
+  const sala = params.get('sala')?.toUpperCase() ?? '';
+  const reto = params.get('reto')?.toUpperCase() ?? '';
+  if (sala || reto) {
+    // Quitamos el parámetro para que al recargar no vuelva a entrar
+    history.replaceState(null, '', window.location.pathname);
+    if (onlineEnabled && validChallengeId(reto)) return { name: 'challenge', id: reto };
+    if (onlineEnabled && validCode(sala)) return { name: 'online', code: sala };
+  }
+  return { name: 'home' };
+}
+
 export default function App() {
-  const [view, setView] = useState<View>({ name: 'home' });
+  const [view, setView] = useState<View>(initialView);
   const auth = useAuth();
   const [setupDone, setSetupDone] = useState(() => load<Record<string, boolean>>('setup-done', {}));
   // Quien entra por primera vez con Google tiene un nombre provisional: le pedimos el suyo
@@ -103,8 +126,23 @@ export default function App() {
   const openLogin = (initial: 'login' | 'signup' = 'login') => {
     if (view.name === 'home') history.pushState({ mg: true }, '');
     audio.stop();
-    // Desde la pantalla final volvemos a ella tras entrar, para subir la partida al ranking
-    setView({ name: 'login', initial, back: view.name === 'results' ? view : null });
+    // Desde la pantalla final volvemos a ella tras entrar (para subir la partida al ranking);
+    // desde las salas y los retos, también
+    setView({ name: 'login', initial, back: ['results', 'online', 'challenge'].includes(view.name) ? view : null });
+    window.scrollTo(0, 0);
+  };
+
+  const openPuzzle = (id: PuzzleId) => {
+    if (view.name === 'home') history.pushState({ mg: true }, '');
+    audio.stop();
+    setView({ name: 'puzzle', id });
+    window.scrollTo(0, 0);
+  };
+
+  const openOnline = () => {
+    if (view.name === 'home') history.pushState({ mg: true }, '');
+    audio.stop();
+    setView({ name: 'online' });
     window.scrollTo(0, 0);
   };
 
@@ -160,6 +198,8 @@ export default function App() {
           onFilter={updateFilter}
           records={records}
           onPlay={play}
+          onPuzzle={openPuzzle}
+          onOnline={onlineEnabled ? openOnline : undefined}
           onOpenSettings={() => setModal('settings')}
           onOpenRecords={() => setModal('records')}
           onOpenRanking={onlineEnabled ? openRanking : undefined}
@@ -171,6 +211,20 @@ export default function App() {
         />
       )}
       {view.name === 'ranking' && <Ranking myId={auth.session?.user.id ?? null} onBack={goHome} />}
+      {view.name === 'puzzle' && <Puzzle key={view.id} id={view.id} filter={filter} onBack={goHome} />}
+      {view.name === 'online' && (
+        <Online
+          me={auth.profile}
+          filter={filter}
+          settings={settings}
+          initialCode={view.code}
+          onBack={goHome}
+          onLogin={() => openLogin('login')}
+        />
+      )}
+      {view.name === 'challenge' && (
+        <Challenge id={view.id} settings={settings} loggedIn={!!auth.session} onBack={goHome} onLogin={() => openLogin('login')} />
+      )}
       {view.name === 'login' && (
         <Login
           initial={view.initial}
@@ -227,7 +281,7 @@ export default function App() {
         <label className="setting toggle">
           <span>
             <span className="setting-label">Mostrar las opciones desde el principio</span>
-            <span className="muted small">Si escribes la respuesta sin verlas, vale el doble.</span>
+            <span className="muted small">Si escribes la respuesta sin verlas, vale ×1,5.</span>
           </span>
           <input
             type="checkbox"

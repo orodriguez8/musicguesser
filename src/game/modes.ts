@@ -9,6 +9,8 @@ export interface ModeInfo {
   tone: 'accent' | 'cyan';
   /** Solo tiene sentido filtrando por géneros (no por un artista). */
   genresOnly?: boolean;
+  /** Solo con géneros urbanos (usa la base de datos del urbano). */
+  urbanoOnly?: boolean;
 }
 
 export const MODES: ModeInfo[] = [
@@ -20,6 +22,8 @@ export const MODES: ModeInfo[] = [
   { id: 'portada', title: 'Portada pixelada', desc: 'Enfócala tú', icon: 'grid', tone: 'cyan' },
   { id: 'intruso', title: 'El intruso', desc: 'Uno no encaja', icon: 'odd', tone: 'accent' },
   { id: 'subgenero', title: '¿Qué subgénero?', desc: 'Para entendidos', icon: 'layers', tone: 'accent', genresOnly: true },
+  { id: 'infiltrado', title: 'El infiltrado', desc: 'Uno no cumple la condición', icon: 'glasses', tone: 'cyan', urbanoOnly: true },
+  { id: 'albumlink', title: 'AlbumLink', desc: 'El disco por sus colaboraciones', icon: 'users', tone: 'accent', urbanoOnly: true },
 ];
 
 export const modeById = new Map(MODES.map((m) => [m.id, m]));

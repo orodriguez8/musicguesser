@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.github.orodriguez8.musicguesser",
+      "sha256_cert_fingerprints": [
+        "HUELLA_DE_TU_CLAVE_DE_SUBIDA",
+        "HUELLA_DE_LA_CLAVE_DE_FIRMA_DE_GOOGLE_PLAY"
+      ]
+    }
+  }
+]

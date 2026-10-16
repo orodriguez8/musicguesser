@@ -7,7 +7,10 @@ import { questionTrack } from '../game/build';
 import { modeTitle } from '../game/modes';
 import { grade } from '../game/scoring';
 import type { Filter, RoundResult, Summary } from '../game/types';
+import { isUrbanoFilter } from '../game/urbano';
+import { onlineEnabled } from '../lib/supabase';
 import { fmtDecimal, fmtInt } from '../lib/util';
+import { challengeLink, createChallenge } from '../online/challenges';
 
 interface Props {
   summary: Summary;
@@ -39,6 +42,7 @@ function detail(r: RoundResult, mezcla: boolean): string {
     d = `${q.year} · ${diff === 0 ? '¡exacto!' : `te fuiste ${diff} ${diff === 1 ? 'año' : 'años'}`}`;
   } else if (q.kind === 'subgenero') d = q.options[q.answer].label;
   else if (q.kind === 'intruso') d = `intruso entre ${q.host.name}`;
+  else if (q.kind === 'infiltrado') d = `infiltrado en «${q.rule}»`;
   else d = questionTrack(q).albumTitle;
   return mezcla ? `${modeTitle(q.kind)} · ${d}` : d;
 }
@@ -101,6 +105,8 @@ export function Results({ summary, filter, isRecord, loggedIn, onReplay, onHome,
       </section>
 
       <RankingStatus summary={summary} filter={filter} loggedIn={loggedIn} onLogin={onLogin} onOpenRanking={onOpenRanking} />
+
+      {onlineEnabled && summary.results.length === 10 && <ChallengeButton summary={summary} filter={filter} loggedIn={loggedIn} onLogin={onLogin} />}
 
       <div className="stats">
         <div className="stat">
@@ -181,5 +187,50 @@ export function Results({ summary, filter, isRecord, loggedIn, onReplay, onHome,
         </button>
       </div>
     </main>
+  );
+}
+
+/** Reto a un amigo: guarda estas 10 pruebas y comparte el enlace. */
+function ChallengeButton({ summary, filter, loggedIn, onLogin }: { summary: Summary; filter: Filter; loggedIn: boolean; onLogin?: () => void }) {
+  const [state, setState] = useState<{ k: 'idle' } | { k: 'busy' } | { k: 'done'; id: string; copied: boolean } | { k: 'error'; msg: string }>({ k: 'idle' });
+
+  const shareLink = async (id: string) => {
+    const link = challengeLink(id);
+    const text = `Te reto en MusicGuesser: ${modeTitle(summary.mode)} (${summary.filterLabel}). Yo he sacado ${fmtInt(summary.score)} puntos. ¿Me superas?`;
+    try {
+      if (navigator.share) await navigator.share({ text, url: link });
+      else {
+        await navigator.clipboard.writeText(`${text}\n${link}`);
+        setState({ k: 'done', id, copied: true });
+      }
+    } catch {
+      /* compartir cancelado */
+    }
+  };
+
+  const create = async () => {
+    if (!loggedIn) return onLogin?.();
+    setState({ k: 'busy' });
+    try {
+      const id = await createChallenge(summary, isUrbanoFilter(filter));
+      setState({ k: 'done', id, copied: false });
+      await shareLink(id);
+    } catch (e) {
+      setState({ k: 'error', msg: e instanceof Error ? e.message : 'No se ha podido crear el reto.' });
+    }
+  };
+
+  return (
+    <section className="challenge-cta">
+      <div>
+        <strong>Reta a un amigo</strong>
+        <span className="muted small">Jugará estas mismas 10 pruebas y compararéis puntos.</span>
+        {state.k === 'error' && <span className="form-error">{state.msg}</span>}
+        {state.k === 'done' && <span className="muted small">Código del reto: <strong>{state.id}</strong>{state.copied ? ' · enlace copiado' : ''}</span>}
+      </div>
+      <button className="btn-light" onClick={state.k === 'done' ? () => shareLink(state.id) : create} disabled={state.k === 'busy'}>
+        <Icon name="users" size={16} /> {state.k === 'busy' ? 'Creando…' : state.k === 'done' ? 'Compartir' : loggedIn ? 'Retar' : 'Entrar y retar'}
+      </button>
+    </section>
   );
 }

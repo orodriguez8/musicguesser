@@ -51,6 +51,10 @@ export function Round({ q, answered, showOptions, onOutcome }: RoundProps<Questi
       return <PortadaRound q={q} {...props} />;
     case 'intruso':
       return <IntrusoRound q={q} {...props} />;
+    case 'infiltrado':
+      return <InfiltradoRound q={q} {...props} />;
+    case 'albumlink':
+      return <AlbumLinkRound q={q} {...props} />;
   }
 }
 
@@ -81,7 +85,8 @@ function CancionRound({ q, answered, showOptions, onOutcome }: RoundProps<'canci
         options={q.options}
         answer={q.answer}
         accept={(s) => answerMatches(s, q.accept)}
-        placeholder="Escribe el título y gana ×2"
+        suggestions={q.suggest}
+        placeholder="Escribe el título y gana ×1,5"
         locked={answered}
         startWithOptions={showOptions}
         onResolve={resolve}
@@ -91,9 +96,9 @@ function CancionRound({ q, answered, showOptions, onOutcome }: RoundProps<'canci
 }
 
 const KIND_HINT = {
-  group: { icon: 'users', text: 'Es un grupo: escribe el nombre de la banda, no el de su cantante.', placeholder: 'Nombre del grupo (×2)' },
-  person: { icon: 'user', text: 'Es un artista en solitario.', placeholder: 'Nombre del artista (×2)' },
-  unknown: { icon: 'mic', text: 'Escribe el nombre del artista o de la banda, no el de su cantante.', placeholder: 'Artista o grupo (×2)' },
+  group: { icon: 'users', text: 'Es un grupo: escribe el nombre de la banda, no el de su cantante.', placeholder: 'Nombre del grupo (×1,5)' },
+  person: { icon: 'user', text: 'Es un artista en solitario.', placeholder: 'Nombre del artista (×1,5)' },
+  unknown: { icon: 'mic', text: 'Escribe el nombre del artista o de la banda, no el de su cantante.', placeholder: 'Artista o grupo (×1,5)' },
 } as const;
 
 function ArtistaRound({ q, answered, showOptions, onOutcome }: RoundProps<'artista'>) {
@@ -118,6 +123,7 @@ function ArtistaRound({ q, answered, showOptions, onOutcome }: RoundProps<'artis
         options={q.options}
         answer={q.answer}
         accept={(s) => answerMatches(s, q.accept)}
+        suggestions={q.suggest}
         placeholder={hint.placeholder}
         locked={answered}
         startWithOptions={showOptions}
@@ -182,7 +188,7 @@ function CompletaRound({ q, answered, showOptions, onOutcome }: RoundProps<'comp
         options={q.options}
         answer={q.answer}
         accept={(s) => lineMatches(s, line)}
-        placeholder="Escribe la siguiente frase (×2)"
+        placeholder="Escribe la siguiente frase (×1,5)"
         locked={answered}
         startWithOptions={showOptions}
         onResolve={resolve}
@@ -221,7 +227,8 @@ function MisteriosaRound({ q, answered, showOptions, onOutcome }: RoundProps<'mi
         options={q.options}
         answer={q.answer}
         accept={(s) => answerMatches(s, q.accept)}
-        placeholder="¿Qué canción es? (×2)"
+        suggestions={q.suggest}
+        placeholder="¿Qué canción es? (×1,5)"
         locked={answered}
         startWithOptions={showOptions}
         onResolve={resolve}
@@ -346,7 +353,8 @@ function PortadaRound({ q, answered, showOptions, onOutcome }: RoundProps<'porta
         options={q.options}
         answer={q.answer}
         accept={(s) => answerMatches(s, q.accept)}
-        placeholder="Nombre del disco (×2)"
+        suggestions={q.suggest}
+        placeholder="Nombre del disco (×1,5)"
         locked={answered}
         startWithOptions={showOptions}
         onResolve={resolve}
@@ -424,5 +432,110 @@ function IntrusoRound({ q, answered, onOutcome }: RoundProps<'intruso'>) {
         })}
       </div>
     </div>
+  );
+}
+
+function InfiltradoRound({ q, answered, onOutcome }: RoundProps<'infiltrado'>) {
+  const [picked, setPicked] = useState<number | null>(null);
+  const elapsed = useElapsed();
+
+  const choose = (i: number) => {
+    if (answered) return;
+    setPicked(i);
+    const ms = elapsed();
+    onOutcome({
+      correct: i === q.answer,
+      typed: false,
+      factor: speedFactor(ms),
+      seconds: ms / 1000,
+      short: i === q.answer ? `${secs(ms)}s` : '—',
+      reveal: q.why,
+    });
+  };
+
+  return (
+    <div className="stage infiltrado-stage">
+      <div className="infiltrado-rule">
+        <span className="eyebrow">Todos menos uno…</span>
+        <strong>{q.rule}</strong>
+      </div>
+      <div className="infiltrado-grid">
+        {q.artists.map((a, i) => {
+          const state = answered ? (i === q.answer ? 'wrong-one' : i === picked ? 'wrong' : 'dim') : '';
+          return (
+            <button key={a.name} className={`infiltrado-card ${state}`} onClick={() => choose(i)} aria-disabled={answered}>
+              <SafeImg src={a.picture} alt="" width={76} height={76} />
+              <span className="infiltrado-name">{a.name}</span>
+              {answered && <span className="infiltrado-detail">{a.detail}</span>}
+            </button>
+          );
+        })}
+      </div>
+      {!answered && <p className="muted center small">Toca al que no cumple la condición</p>}
+      {answered && <AudioStage track={q.track} variant="mini" answered caption={`${q.track.title} · ${q.track.artistName}`} />}
+    </div>
+  );
+}
+
+/** Ver el artista del disco cuesta un 30 % de la puntuación. */
+const ALBUMLINK_HINT = 0.7;
+
+function AlbumLinkRound({ q, answered, showOptions, onOutcome }: RoundProps<'albumlink'>) {
+  const [hint, setHint] = useState(false);
+  const elapsed = useElapsed();
+  const resolve = useCallback(
+    ({ correct, typed }: { correct: boolean; typed: boolean }) => {
+      const ms = elapsed();
+      onOutcome({
+        correct,
+        typed,
+        factor: hint ? ALBUMLINK_HINT : 1,
+        seconds: ms / 1000,
+        short: correct ? `${secs(ms)}s` : '—',
+        reveal: `Era «${q.album.title}» de ${q.album.artist}`,
+      });
+    },
+    [elapsed, onOutcome, hint, q.album],
+  );
+
+  return (
+    <>
+      <div className="stage albumlink-stage">
+        <span className="eyebrow">En este disco colaboran…</span>
+        <ul className="feat-list">
+          {q.feats.map((f) => (
+            <li key={f} className="feat-chip">
+              {f}
+            </li>
+          ))}
+        </ul>
+        <div className="albumlink-meta">
+          {q.album.year && <span className="tag">Año {q.album.year}</span>}
+          {hint || answered ? (
+            <span className="tag">De {q.album.artist}</span>
+          ) : (
+            <button className="btn-chip" onClick={() => setHint(true)}>
+              <Icon name="user" size={16} /> Ver artista <span className="muted">· vale {ALBUMLINK_HINT * 100} %</span>
+            </button>
+          )}
+        </div>
+        {answered && (
+          <div className="albumlink-reveal">
+            <SafeImg src={q.album.cover} alt="" width={72} height={72} />
+            <AudioStage track={q.track} variant="mini" answered caption={`${q.track.title} · ${q.track.artistName}`} />
+          </div>
+        )}
+      </div>
+      <AnswerPanel
+        options={q.options}
+        answer={q.answer}
+        accept={(s) => answerMatches(s, q.accept)}
+        suggestions={q.suggest}
+        placeholder="Nombre del disco (×1,5)"
+        locked={answered}
+        startWithOptions={showOptions}
+        onResolve={resolve}
+      />
+    </>
   );
 }

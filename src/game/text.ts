@@ -63,3 +63,43 @@ export function lineMatches(input: string, line: string): boolean {
   if (a.length < 4) return false;
   return similarity(a, b) >= 0.72;
 }
+
+interface Indexed {
+  label: string;
+  norm: string;
+  /** Inicio (normalizado) de cada palabra, para que "anim" encuentre "…Pa' Las Ánimas". */
+  words: string[];
+}
+
+const indexCache = new WeakMap<readonly string[], Indexed[]>();
+
+function indexOf(items: readonly string[]): Indexed[] {
+  let idx = indexCache.get(items);
+  if (!idx) {
+    idx = items.map((label) => ({ label, norm: normText(label), words: label.split(/[\s\-/.,&()'’]+/).map(normText).filter(Boolean) }));
+    indexCache.set(items, idx);
+  }
+  return idx;
+}
+
+/**
+ * Sugerencias para el autocompletado: primero lo que empieza por lo escrito, luego lo que tiene
+ * una palabra que empieza así y, por último, lo que lo contiene en cualquier sitio.
+ */
+export function suggestMatches(query: string, items: readonly string[], limit = 6): string[] {
+  const q = normText(query);
+  if (q.length < 2) return [];
+  const scored: { label: string; score: number }[] = [];
+  for (const it of indexOf(items)) {
+    let score: number;
+    if (it.norm.startsWith(q)) score = 0;
+    else if (it.words.some((w) => w.startsWith(q))) score = 1;
+    else if (it.norm.includes(q)) score = 2;
+    else continue;
+    scored.push({ label: it.label, score: score * 1000 + it.label.length });
+  }
+  return scored
+    .sort((a, b) => a.score - b.score)
+    .slice(0, limit)
+    .map((s) => s.label);
+}

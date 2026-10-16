@@ -23,6 +23,10 @@ interface Props {
   settings: Settings;
   onExit: () => void;
   onFinish: (s: Summary) => void;
+  /** Pruebas ya hechas (reto de un amigo): no se genera nada */
+  preset?: Question[];
+  /** Etiqueta del filtro (en los retos, la de quien lo creó) */
+  label?: string;
 }
 
 const MODE_RULES: Record<PlayMode, string> = {
@@ -35,11 +39,14 @@ const MODE_RULES: Record<PlayMode, string> = {
   portada: 'La portada empieza pixelada. Pide más nitidez si la necesitas, pero cada paso vale menos.',
   intruso: 'Tres fragmentos son del mismo artista. Encuentra el que no.',
   subgenero: 'Escucha y adivina el subgénero. Para entendidos.',
+  infiltrado: 'Cuatro artistas y una condición. Todos la cumplen menos uno: encuéntralo.',
+  albumlink: 'Te damos los artistas invitados de un disco. ¿Qué disco es?',
 };
 
-const TYPING_MODES = new Set<PlayMode>(['mezcla', 'cancion', 'artista', 'completa', 'misteriosa', 'portada']);
+const TYPING_MODES = new Set<PlayMode>(['mezcla', 'cancion', 'artista', 'completa', 'misteriosa', 'portada', 'albumlink']);
 
-export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
+export function Game({ mode, filter, settings, onExit, onFinish, preset, label }: Props) {
+  const tagLabel = label ?? filterLabel(filter);
   const [phase, setPhase] = useState<Phase>({ k: 'loading', p: { label: 'Preparando…' } });
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
@@ -52,7 +59,7 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
   useEffect(() => {
     const ctrl = new AbortController();
     setPhase({ k: 'loading', p: { label: 'Preparando…' } });
-    buildQuestions(mode, filter, (p) => !ctrl.signal.aborted && setPhase({ k: 'loading', p }), ctrl.signal)
+    (preset ? Promise.resolve(preset) : buildQuestions(mode, filter, (p) => !ctrl.signal.aborted && setPhase({ k: 'loading', p }), ctrl.signal))
       .then((qs) => {
         setQuestions(qs);
         setIndex(0);
@@ -71,7 +78,7 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
         });
       });
     return () => ctrl.abort();
-  }, [mode, filter, attempt]);
+  }, [mode, filter, attempt, preset]);
 
   useEffect(() => () => audio.stop(), []);
 
@@ -115,7 +122,7 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
       }
       onFinish({
         mode,
-        filterLabel: filterLabel(filter),
+        filterLabel: tagLabel,
         results: all,
         score: all.reduce((a, r) => a + r.points, 0),
         correct: all.filter((r) => r.outcome.correct).length,
@@ -148,7 +155,7 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
           <span className="game-sub">
             {phase.k === 'play'
               ? `${mode === 'mezcla' ? `${modeTitle(roundMode)} · ` : ''}Prueba ${index + 1} de ${total}`
-              : filterLabel(filter)}
+              : tagLabel}
           </span>
         </div>
         <div className={shownStreak >= 2 ? 'streak hot' : 'streak'} aria-label={`Racha de ${shownStreak} aciertos`}>
@@ -165,7 +172,7 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
       </div>
 
       <div className="tag-row">
-        <span className="tag">{filterLabel(filter)}</span>
+        <span className="tag">{tagLabel}</span>
         <span className="score">
           {fmtInt(score)} <small>pts</small>
         </span>
@@ -209,7 +216,7 @@ export function Game({ mode, filter, settings, onExit, onFinish }: Props) {
           <p className="state-title">pruebas listas</p>
           <p className="muted center">{MODE_RULES[mode]}</p>
           {TYPING_MODES.has(mode) && !settings.showOptions && (
-            <p className="muted center small">Escribir la respuesta vale el doble que elegirla entre las opciones.</p>
+            <p className="muted center small">Escribir la respuesta vale ×1,5 frente a elegirla entre las opciones.</p>
           )}
           <button
             className="btn-primary big"
@@ -257,7 +264,7 @@ function Banner({
   const t = questionTrack(question);
   let title: string;
   if (question.kind === 'anio') title = outcome.yearDiff === 0 ? '¡Exacto!' : outcome.correct ? '¡Muy cerca!' : outcome.reveal;
-  else title = outcome.correct ? (outcome.typed ? '¡Correcto! ×2' : '¡Correcto!') : outcome.reveal;
+  else title = outcome.correct ? (outcome.typed ? '¡Correcto! ×1,5' : '¡Correcto!') : outcome.reveal;
   const sub = title.includes(t.title) ? t.artistName : `${t.title} · ${t.artistName}`;
 
   useEffect(() => {

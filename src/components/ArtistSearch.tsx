@@ -8,7 +8,7 @@ import { SafeImg } from './SafeImg';
 
 const catalogGenre = new Map(GENRES.flatMap((g) => g.artists.map((a) => [a.id, g.id] as const)));
 
-export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
+export function ArtistSearch({ onPick, placeholder }: { onPick: (a: ArtistRef) => void; placeholder?: string }) {
   const [q, setQ] = useState('');
   const [results, setResults] = useState<DzArtist[]>([]);
   const [open, setOpen] = useState(false);
@@ -88,7 +88,7 @@ export function ArtistSearch({ onPick }: { onPick: (a: ArtistRef) => void }) {
           aria-controls={listId}
           aria-autocomplete="list"
           aria-activedescendant={active >= 0 ? `${listId}-${active}` : undefined}
-          placeholder="Busca un artista: Clarent, Bad Bunny…"
+          placeholder={placeholder ?? 'Busca uno o varios artistas: Clarent, Bad Bunny…'}
           value={q}
           onChange={(e) => {
             setQ(e.target.value);

@@ -30,7 +30,7 @@ export function RankingStatus({ summary, filter, loggedIn, onLogin, onOpenRankin
   if (!eligible) {
     return (
       <p className="rank-status muted">
-        <Icon name="podium" /> {filter.kind === 'artist' ? 'Las partidas con un artista concreto no puntúan en el ranking.' : 'Solo puntúan las partidas de 10 pruebas.'}
+        <Icon name="podium" /> {filter.kind === 'artist' ? 'Las partidas con artistas concretos no puntúan en el ranking.' : 'Solo puntúan las partidas de 10 pruebas.'}
       </p>
     );
   }

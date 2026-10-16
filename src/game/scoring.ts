@@ -2,6 +2,8 @@ import type { Outcome, Question } from './types';
 
 export const ROUNDS = 10;
 export const BASE_POINTS = 1000;
+/** Escribir la respuesta en vez de elegirla entre las 4 opciones. */
+export const TYPED_BONUS = 1.5;
 
 /** Segundos que se desbloquean en ¿Qué canción es? y cuánto vale acertar en cada paso. */
 export const HEARDLE_STEPS = [1, 2, 4, 8, 16];
@@ -28,7 +30,7 @@ export function roundPoints(q: Question, o: Outcome, streakBefore: number): numb
   const mult = streakMultiplier(streakBefore);
   let pts = 0;
   if (q.kind === 'anio') pts = (o.basePoints ?? 0) * (o.correct ? mult : 1);
-  else if (o.correct) pts = BASE_POINTS * o.factor * (o.typed ? 2 : 1) * mult;
+  else if (o.correct) pts = BASE_POINTS * o.factor * (o.typed ? TYPED_BONUS : 1) * mult;
   return Math.round(pts / 10) * 10;
 }
 

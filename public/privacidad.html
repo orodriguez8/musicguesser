@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0C0817" />
+    <title>Privacidad · MusicGuesser</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c0817;
+        --surface: #150f24;
+        --line: rgba(255, 255, 255, 0.08);
+        --text: #f4f0ff;
+        --muted: #a79fc2;
+        --accent: #ff3d9a;
+        --cyan: #3de3ff;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 15px/1.6 'Manrope', 'Segoe UI', system-ui, sans-serif;
+      }
+      main {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: max(24px, env(safe-area-inset-top)) 16px 56px;
+      }
+      h1 {
+        font-size: 26px;
+        line-height: 1.2;
+        margin: 8px 0 4px;
+      }
+      h2 {
+        font-size: 17px;
+        margin: 32px 0 8px;
+        color: var(--cyan);
+      }
+      p,
+      li {
+        color: #ddd6f3;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      a {
+        color: var(--accent);
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .back {
+        display: inline-block;
+        margin-bottom: 8px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 4px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="./">← Volver a MusicGuesser</a>
+      <h1>Política de privacidad</h1>
+      <p class="muted">Última actualización: 16 de octubre de 2026</p>
+
+      <p>
+        MusicGuesser es un juego gratuito y sin ánimo de lucro creado por Raksoda. Se puede jugar sin cuenta; la
+        cuenta solo sirve para aparecer en el ranking. No hay publicidad, ni analítica, ni se venden o ceden datos a
+        nadie.
+      </p>
+
+      <h2>Qué datos guardamos</h2>
+      <div class="card">
+        <ul>
+          <li><strong>Sin cuenta:</strong> nada en nuestros servidores. Tus récords y ajustes se guardan solo en tu dispositivo.</li>
+          <li>
+            <strong>Con cuenta:</strong> tu nombre de usuario, la cinta que eliges como avatar, la contraseña (cifrada,
+            nunca la vemos) y, si lo das o entras con Google, tu email. Con Google también recibimos tu nombre para
+            proponerte un usuario.
+          </li>
+          <li>
+            <strong>Partidas del ranking:</strong> modo, género, puntuación, aciertos y fecha de cada partida que
+            terminas con la sesión iniciada.
+          </li>
+        </ul>
+      </div>
+      <p>Tu nombre de usuario, tu avatar y tus puntuaciones son públicos en el ranking. Tu email no se muestra a nadie.</p>
+
+      <h2>Para qué los usamos</h2>
+      <p>
+        Solo para que puedas entrar en tu cuenta, recuperar la contraseña (si diste un email) y aparecer en el ranking.
+        No te enviamos publicidad ni boletines.
+      </p>
+
+      <h2>Servicios externos</h2>
+      <ul>
+        <li><strong>Supabase</strong>: guarda las cuentas y el ranking.</li>
+        <li><strong>Google</strong>: solo si eliges «Entrar con Google».</li>
+        <li>
+          <strong>Deezer</strong>, <strong>LRCLIB</strong> y <strong>MusicBrainz</strong>: de ellos salen los fragmentos
+          de audio, las portadas, las letras y los años. El juego se los pide directamente desde tu dispositivo, así que
+          ven tu dirección IP como cualquier web que visitas. No les enviamos ningún dato de tu cuenta.
+        </li>
+        <li><strong>GitHub Pages</strong> aloja la web y <strong>Google Fonts</strong> sirve las tipografías.</li>
+      </ul>
+
+      <h2>En tu dispositivo</h2>
+      <p>
+        Usamos el almacenamiento local del navegador para tus récords, tus ajustes y mantener la sesión iniciada, y una
+        caché para que la app abra más rápido. No usamos cookies de seguimiento.
+      </p>
+
+      <h2 id="borrar-cuenta">Borrar tus datos</h2>
+      <p>
+        En la app, entra en <strong>Tu cuenta → Borrar mi cuenta</strong>. Se eliminan al momento tu cuenta, tu perfil y
+        todas tus partidas del ranking. Para borrar los récords locales, usa «Borrar récords» en los ajustes o
+        borra los datos de la app o del navegador.
+      </p>
+
+      <h2>Menores</h2>
+      <p>
+        El juego es apto para todos los públicos. No pedimos la edad ni datos personales más allá de lo necesario para
+        la cuenta, que es opcional.
+      </p>
+
+      <h2>Contacto</h2>
+      <p>
+        Para cualquier duda o para ejercer tus derechos sobre tus datos, abre una consulta en
+        <a href="https://github.com/orodriguez8/musicguesser/issues" target="_blank" rel="noreferrer">GitHub</a>.
+      </p>
+    </main>
+  </body>
+</html>

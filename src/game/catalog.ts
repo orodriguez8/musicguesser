@@ -1,5 +1,6 @@
 import data from '../data/catalog.json';
 import type { ArtistKind, ArtistRef, Family, Filter } from './types';
+import { ERAS, isUrbanoFilter, LEVELS } from './urbano';
 
 export interface Genre {
   id: string;
@@ -43,8 +44,16 @@ export function familyGenres(ids: string[]): Genre[] {
 }
 
 export function filterLabel(f: Filter): string {
-  if (f.kind === 'artist') return f.artist.name;
+  if (f.kind === 'artist') {
+    const names = f.artists.map((a) => a.name);
+    return names.length > 3 ? `${names.slice(0, 2).join(' · ')} +${names.length - 2}` : names.join(' · ');
+  }
   if (!f.genres.length) return 'Todos los géneros';
   const labels = selectedGenres(f.genres).map((g) => g.label);
-  return labels.length > 3 ? `${labels.slice(0, 2).join(' · ')} +${labels.length - 2}` : labels.join(' · ');
+  const base = labels.length > 3 ? `${labels.slice(0, 2).join(' · ')} +${labels.length - 2}` : labels.join(' · ');
+  if (!isUrbanoFilter(f)) return base;
+  // Urbano: también la época y la dificultad (Normal no se menciona)
+  const era = ERAS.find((e) => e.id === f.era)?.label;
+  const level = f.level && f.level !== 'normal' ? LEVELS.find((l) => l.id === f.level)?.label : undefined;
+  return [base, era, level].filter(Boolean).join(' · ');
 }

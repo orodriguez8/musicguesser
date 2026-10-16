@@ -5,6 +5,7 @@ import { Icon } from '../components/Icon';
 import { GENRES } from '../game/catalog';
 import { MODES, modeTitle } from '../game/modes';
 import type { PlayMode } from '../game/types';
+import { LEVELS, URBANO_GENRES, type Level } from '../game/urbano';
 import { fmtInt } from '../lib/util';
 
 interface Props {
@@ -18,6 +19,10 @@ export function Ranking({ myId, onBack }: Props) {
   const [period, setPeriod] = useState<Period>('semana');
   const [mode, setMode] = useState<PlayMode>('mezcla');
   const [genre, setGenre] = useState('todos');
+  const [levelPick, setLevel] = useState<Level>('normal');
+  // La dificultad solo existe en el urbano (y en el general, que lo incluye)
+  const hasLevels = genre === 'todos' || URBANO_GENRES.has(genre);
+  const level = hasLevels ? levelPick : 'normal';
   const [rows, setRows] = useState<BoardRow[] | null>(null);
   const [mine, setMine] = useState<{ pos: number; score: number } | null>(null);
   const [error, setError] = useState(false);
@@ -27,7 +32,7 @@ export function Ranking({ myId, onBack }: Props) {
     let alive = true;
     setRows(null);
     setError(false);
-    Promise.all([fetchLeaderboard(mode, genre, period), myId ? fetchMyRank(mode, genre, period) : Promise.resolve(null)])
+    Promise.all([fetchLeaderboard(mode, genre, period, level), myId ? fetchMyRank(mode, genre, period, level) : Promise.resolve(null)])
       .then(([r, m]) => {
         if (!alive) return;
         setRows(r);
@@ -37,7 +42,7 @@ export function Ranking({ myId, onBack }: Props) {
     return () => {
       alive = false;
     };
-  }, [mode, genre, period, myId, attempt]);
+  }, [mode, genre, period, level, myId, attempt]);
 
   const meInList = rows?.some((r) => r.user_id === myId);
 
@@ -80,6 +85,15 @@ export function Ranking({ myId, onBack }: Props) {
           </button>
         ))}
       </div>
+      {hasLevels && (
+        <div className="segmented seg-3" role="tablist" aria-label="Dificultad">
+          {LEVELS.map((l) => (
+            <button key={l.id} role="tab" aria-selected={level === l.id} className={level === l.id ? 'on' : ''} onClick={() => setLevel(l.id)}>
+              {l.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       {mine && !meInList && (
         <div className="my-rank">

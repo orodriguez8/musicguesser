@@ -29,7 +29,11 @@ export function Login({ initial = 'login', onDone, onBack }: Props) {
 }
 
 function Credit() {
-  return <span className="credit login-credit">made by Raksoda</span>;
+  return (
+    <span className="credit login-credit">
+      <a href="privacidad.html">Privacidad</a> · made by Raksoda
+    </span>
+  );
 }
 
 /** Campo con aspecto de pantalla LCD de cadena de música. */

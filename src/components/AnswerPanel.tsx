@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { suggestMatches } from '../game/text';
 import type { Option } from '../game/types';
 import { Icon } from './Icon';
 
 interface Props {
   options: Option[];
   answer: number;
-  /** Si existe, se puede escribir la respuesta (vale el doble). */
+  /** Si existe, se puede escribir la respuesta (vale ×1,5). */
   accept?: (input: string) => boolean;
   placeholder?: string;
+  /** Títulos/nombres para el autocompletado mientras escribes. */
+  suggestions?: readonly string[];
   locked: boolean;
   startWithOptions: boolean;
   onResolve: (r: { correct: boolean; typed: boolean }) => void;
@@ -15,7 +18,7 @@ interface Props {
 
 const finePointer = () => window.matchMedia('(pointer: fine)').matches;
 
-export function AnswerPanel({ options, answer, accept, placeholder, locked, startWithOptions, onResolve }: Props) {
+export function AnswerPanel({ options, answer, accept, placeholder, suggestions, locked, startWithOptions, onResolve }: Props) {
   const typing = !!accept;
   const [revealed, setRevealed] = useState(startWithOptions || !typing);
   const [input, setInput] = useState('');
@@ -23,6 +26,35 @@ export function AnswerPanel({ options, answer, accept, placeholder, locked, star
   const [typed, setTyped] = useState<'right' | 'wrong' | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const done = locked || picked !== null || typed !== null;
+  const [listOpen, setListOpen] = useState(false);
+  const [active, setActive] = useState(-1);
+  const listId = useId();
+  const matches = useMemo(() => (suggestions ? suggestMatches(input, suggestions) : []), [input, suggestions]);
+  const showList = listOpen && !done && matches.length > 0;
+
+  const choose = (label: string) => {
+    setInput(label);
+    setListOpen(false);
+    setActive(-1);
+    inputRef.current?.focus({ preventScroll: true });
+  };
+
+  const onKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (!showList) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActive((i) => (i + 1) % matches.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActive((i) => (i <= 0 ? matches.length - 1 : i - 1));
+    } else if (e.key === 'Enter' && active >= 0) {
+      // Enter sobre una sugerencia la elige; el siguiente Enter ya envía
+      e.preventDefault();
+      choose(matches[active]);
+    } else if (e.key === 'Escape') {
+      setListOpen(false);
+    }
+  };
 
   useEffect(() => {
     // En ordenador, el cursor directamente en la caja; en móvil no, que abre el teclado
@@ -38,6 +70,7 @@ export function AnswerPanel({ options, answer, accept, placeholder, locked, star
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (done || !accept || !input.trim()) return;
+    setListOpen(false);
     const ok = accept(input);
     setTyped(ok ? 'right' : 'wrong');
     setRevealed(true);
@@ -66,12 +99,43 @@ export function AnswerPanel({ options, answer, accept, placeholder, locked, star
     <div className="answer">
       {typing && (
         <form className={`answer-form ${typed ?? ''}`} onSubmit={submit}>
+          <div className="suggest-wrap">
+          {showList && (
+            <ul className="search-list suggest-list" id={listId} role="listbox">
+              {matches.map((m, i) => (
+                <li
+                  key={m}
+                  id={`${listId}-${i}`}
+                  role="option"
+                  aria-selected={i === active}
+                  className={i === active ? 'search-item active' : 'search-item'}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    choose(m);
+                  }}
+                >
+                  <span className="search-name">{m}</span>
+                </li>
+              ))}
+            </ul>
+          )}
           <label className="field">
             <span className="sr-only">Tu respuesta</span>
             <input
               ref={inputRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                setListOpen(true);
+                setActive(-1);
+              }}
+              onKeyDown={onKeyDown}
+              onBlur={() => setTimeout(() => setListOpen(false), 150)}
+              role={suggestions ? 'combobox' : undefined}
+              aria-expanded={suggestions ? showList : undefined}
+              aria-controls={suggestions ? listId : undefined}
+              aria-autocomplete={suggestions ? 'list' : undefined}
+              aria-activedescendant={showList && active >= 0 ? `${listId}-${active}` : undefined}
               placeholder={placeholder}
               disabled={done}
               autoComplete="off"
@@ -80,10 +144,11 @@ export function AnswerPanel({ options, answer, accept, placeholder, locked, star
               spellCheck={false}
               enterKeyHint="send"
             />
-            {!revealed && !done && <span className="x2">×2</span>}
+            {!revealed && !done && <span className="x2">×1,5</span>}
             {typed === 'right' && <Icon name="check" className="field-state" />}
             {typed === 'wrong' && <Icon name="x" className="field-state" />}
           </label>
+          </div>
           <button type="submit" className="btn-square btn-cyan" aria-label="Enviar respuesta" disabled={done || !input.trim()}>
             <Icon name="arrow" size={20} />
           </button>
