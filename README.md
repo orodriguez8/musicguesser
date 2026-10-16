@@ -7,7 +7,6 @@ Juego web de adivinar música: del reggaeton al brutal death. Minijuegos de 10 p
 | Modo | Qué hay que hacer |
 |---|---|
 | ¿Qué canción es? | Suena 1 s; puedes pedir 2, 4, 8 o 16 s, pero cada ampliación vale menos |
-| ¿Quién canta? | Reconocer al artista por el fragmento |
 | Completa la letra | Elegir (o escribir) el verso que sigue |
 | Letra misteriosa | Adivinar la canción solo con dos versos |
 | Máquina del tiempo | Acertar el año de lanzamiento (±2 años cuenta como acierto) |
@@ -21,7 +20,8 @@ Juego web de adivinar música: del reggaeton al brutal death. Minijuegos de 10 p
 
 ### Solo con urbano (reggaetón y trap)
 
-- **Época** (vieja escuela hasta 2012, intermedia 2013–2020, nueva desde 2021) y **dificultad** (fácil: los temazos; difícil: temas y artistas menos conocidos). Cada dificultad tiene su ranking.
+- **Época** (vieja escuela, intermedia, nueva): cada artista tiene la suya en `scripts/urbano-overrides.json` y solo salen canciones de esa época.
+- **Dificultad** por popularidad dentro de la época: fácil, los temazos que conoce todo el mundo (8 % más escuchado); normal, conocidas (8–25 %); difícil, buenos números pero menos sonadas (25–45 %). Cada dificultad tiene su ranking.
 - **Retos urbanos**: Clásico (adivina el artista por sus datos), Wordle, Album Quiz, Top 10 de hoy y Pirámide. Reto del día igual para todos, con racha, y modo libre ilimitado.
 
 ### Online (con cuenta)

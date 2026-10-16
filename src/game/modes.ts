@@ -15,7 +15,6 @@ export interface ModeInfo {
 
 export const MODES: ModeInfo[] = [
   { id: 'cancion', title: '¿Qué canción es?', desc: '1 s, 2 s, 4 s…', icon: 'note', tone: 'accent' },
-  { id: 'artista', title: '¿Quién canta?', desc: 'Reconoce la voz', icon: 'mic', tone: 'accent' },
   { id: 'completa', title: 'Completa la letra', desc: '¿Qué viene después?', icon: 'lines', tone: 'cyan' },
   { id: 'misteriosa', title: 'Letra misteriosa', desc: '¿De qué canción es?', icon: 'quote', tone: 'cyan' },
   { id: 'anio', title: 'Máquina del tiempo', desc: 'Acierta el año', icon: 'clock', tone: 'accent' },

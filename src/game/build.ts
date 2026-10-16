@@ -385,8 +385,8 @@ const GEN: Record<ModeId, (ctx: Ctx, count: number) => Promise<Question[]>> = {
 async function genMezcla(ctx: Ctx): Promise<Question[]> {
   const plan: ModeId[] = ctx.db
     ? // Urbano: con los minijuegos que solo existen aquí
-      ['cancion', 'artista', 'anio', 'infiltrado', 'portada', 'cancion', 'intruso', 'albumlink', 'misteriosa', 'artista']
-    : ['cancion', 'artista', 'anio', 'misteriosa', 'portada', 'cancion', 'intruso', 'completa', 'subgenero', 'artista'];
+      ['cancion', 'anio', 'infiltrado', 'portada', 'cancion', 'intruso', 'albumlink', 'misteriosa', 'cancion', 'portada']
+    : ['cancion', 'anio', 'misteriosa', 'portada', 'cancion', 'intruso', 'completa', 'subgenero', 'cancion', 'portada'];
   if (artistMode(ctx)) plan[plan.indexOf('subgenero')] = 'cancion';
   const need = new Map<ModeId, number>();
   plan.forEach((m) => need.set(m, (need.get(m) ?? 0) + 1));

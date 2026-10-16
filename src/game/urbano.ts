@@ -115,9 +115,9 @@ export function eraOf(year: number): Era {
 export type Level = 'facil' | 'normal' | 'dificil';
 
 export const LEVELS: { id: Level; label: string; desc: string }[] = [
-  { id: 'facil', label: 'Fácil', desc: 'Los temazos que conoce todo el mundo' },
-  { id: 'normal', label: 'Normal', desc: 'De todo un poco' },
-  { id: 'dificil', label: 'Difícil', desc: 'Temas conocidos pero no los de siempre, y artistas menos famosos' },
+  { id: 'facil', label: 'Fácil', desc: 'Los temazos de la época que conoce todo el mundo' },
+  { id: 'normal', label: 'Normal', desc: 'Canciones conocidas, sin ser las más sonadas' },
+  { id: 'dificil', label: 'Difícil', desc: 'Buenos temas con buenos números, pero menos sonados' },
 ];
 
 // ---------- Imágenes ----------

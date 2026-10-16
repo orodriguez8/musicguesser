@@ -5,19 +5,25 @@ import { abortError, mapLimit, nonNull, shuffle } from '../lib/util';
 import { freshFirst } from './history';
 import type { Pool } from './pool';
 import type { ArtistRef, Filter, Track } from './types';
-import { artistPicUrl, artistsIn, coverUrl, ERAS, loadUrbano, type Level, type UArtist, type UrbanoDB, type UTrack } from './urbano';
+import { artistPicUrl, artistsIn, coverUrl, ERAS, loadUrbano, type Level, type UrbanoDB, type UTrack } from './urbano';
 
 type GenresFilter = Extract<Filter, { kind: 'genres' }>;
 
 /**
- * Qué canciones de cada artista entran según la dificultad (0 = su canción más escuchada).
- * Difícil se salta sus 2 grandes éxitos pero se queda en temas conocidos, nada de rarezas.
+ * Tramo de popularidad de cada dificultad, contando todas las canciones de la época
+ * (0 = la más escuchada). Fácil: los temazos que conoce todo el mundo. Normal: conocidas.
+ * Difícil: buenos números pero menos sonadas; nada de rarezas.
  */
-const SONGS: Record<Level, [number, number]> = {
-  facil: [0, 6],
-  normal: [0, 12],
-  dificil: [2, 16],
+const BANDS: Record<Level, [number, number]> = {
+  facil: [0, 0.08],
+  normal: [0.08, 0.25],
+  dificil: [0.25, 0.45],
 };
+/** Mínimo de canciones por tramo (con una época pequeña los tramos se ensanchan). */
+const MIN_BAND = 60;
+
+/** Intros, interludios y skits: no son canciones para adivinar. */
+const NOT_A_SONG = /\b(intro|outro|interlude|interludio|skit|preludio)\b/i;
 
 
 export interface UrbanoPool {
@@ -26,32 +32,30 @@ export interface UrbanoPool {
   labels: Pool;
   /** Año original de cada canción (Máquina del tiempo no tiene que buscarlo). */
   years: Map<number, number>;
-  /** Todos los artistas de la época elegida (opciones de ¿Quién canta?) */
+  /** Todos los artistas de la época elegida (para opciones que no mezclen épocas) */
   eraArtists: ArtistRef[];
   db: UrbanoDB;
 }
 
-/** Artistas en juego: los de la época elegida; en Fácil, solo la mitad más famosa. */
-export function filterArtists(db: UrbanoDB, f: GenresFilter): UArtist[] {
-  const list = artistsIn(db, f.genres, f.era).sort((x, y) => y.f - x.f);
-  return f.level === 'facil' ? list.slice(0, Math.max(8, Math.ceil(list.length / 2))) : list;
-}
-
+/**
+ * Canciones en juego: de artistas de la época elegida y publicadas en esa época (así de
+ * Anuel en la intermedia sale el "antiguo"), y del tramo de popularidad de la dificultad.
+ */
 function candidates(db: UrbanoDB, f: GenresFilter): UTrack[] {
   const era = ERAS.find((e) => e.id === f.era);
-  const [from, to] = SONGS[f.level ?? 'normal'];
-  const byArtist = new Map<number, UTrack[]>();
-  for (const t of db.tracks) byArtist.set(t.a, [...(byArtist.get(t.a) ?? []), t]);
-  return filterArtists(db, f).flatMap((a) => {
-    let songs = (byArtist.get(a.id) ?? []).sort((x, y) => y.r - x.r);
-    // De un artista de varias épocas, sus canciones de la época elegida (Anuel "antiguo" en la intermedia)
-    if (era) {
-      const inEra = songs.filter((t) => t.y >= era.from - 1 && t.y <= era.to + 1);
-      if (inEra.length >= 4) songs = inEra;
-    }
-    const slice = songs.slice(from, to);
-    return slice.length >= 3 ? slice : songs.slice(0, to);
-  });
+  const ids = new Set(artistsIn(db, f.genres, f.era).map((a) => a.id));
+  const songs = db.tracks
+    .filter((t) => ids.has(t.a) && !NOT_A_SONG.test(t.t) && (!era || (t.y >= era.from - 1 && t.y <= era.to + 1)))
+    .sort((x, y) => y.r - x.r);
+  const [from, to] = BANDS[f.level ?? 'normal'];
+  let start = Math.floor(songs.length * from);
+  let end = Math.ceil(songs.length * to);
+  // Tramo demasiado corto: se amplía hacia las más conocidas
+  if (end - start < MIN_BAND) {
+    start = Math.max(0, end - MIN_BAND);
+    end = Math.min(songs.length, start + MIN_BAND);
+  }
+  return songs.slice(start, end);
 }
 
 /** Reparte entre artistas: primero lo que no ha salido últimamente, como mucho perArtist de cada uno. */
