@@ -1,0 +1,114 @@
+{
+  "_comment": "Lista de artistas por género. Para añadir uno, escribe su nombre y ejecuta `npm run catalog`. Si Deezer elige un homónimo equivocado, fuerza su ID así: \"Nombre#123456\".",
+  "genres": [
+    {
+      "id": "reggaeton",
+      "label": "Reggaeton",
+      "family": "urbano",
+      "artists": [
+        "Bad Bunny", "Daddy Yankee", "J Balvin", "Karol G", "Ozuna", "Anuel AA", "Rauw Alejandro", "Feid",
+        "Myke Towers", "Don Omar", "Wisin & Yandel", "Nicky Jam", "Farruko", "Arcángel", "Jhayco", "Sech",
+        "Maluma", "Ivy Queen", "Tego Calderón", "Zion & Lennox", "Young Miko", "Bryant Myers", "Lunay",
+        "De La Ghetto", "Plan B", "Jowell & Randy", "Mora", "Ryan Castro", "Blessd"
+      ]
+    },
+    {
+      "id": "trap-es",
+      "label": "Trap y rap en español",
+      "family": "urbano",
+      "artists": [
+        "Clarent", "Quevedo", "Duki", "Trueno", "Rels B", "Morad", "Saiko", "Eladio Carrión", "Bizarrap",
+        "Paulo Londra", "Nicki Nicole", "C. Tangana", "Bad Gyal", "Yung Beef", "Cruz Cafuné", "Kidd Keo",
+        "Delaossa", "Natos y Waor", "Hoke", "Recycled J", "Beny Jr", "Ptazeta", "Lit Killah", "Khea", "Cazzu", "Ysy A"
+      ]
+    },
+    {
+      "id": "metalcore",
+      "label": "Metalcore",
+      "family": "metal",
+      "artists": [
+        "Falling in Reverse", "Motionless in White", "Bring Me The Horizon", "Architects", "Parkway Drive",
+        "Killswitch Engage", "August Burns Red", "As I Lay Dying", "Bullet for My Valentine", "Wage War",
+        "Of Mice & Men", "Asking Alexandria", "Polaris", "Silent Planet", "Currents", "Erra", "Invent Animate",
+        "Spiritbox", "Memphis May Fire", "We Came As Romans", "Ice Nine Kills", "I Prevail", "Fit For A King",
+        "Northlane", "Crown the Empire", "Attila", "While She Sleeps", "Atreyu", "Underoath", "The Devil Wears Prada",
+        "Beartooth", "Make Them Suffer", "Alpha Wolf", "Bad Omens", "Imminence", "Landmvrks", "Dayseeker"
+      ]
+    },
+    {
+      "id": "deathcore",
+      "label": "Deathcore",
+      "family": "metal",
+      "artists": [
+        "Slaughter to Prevail", "Suicide Silence", "Lorna Shore", "Whitechapel", "Thy Art Is Murder", "Chelsea Grin",
+        "Carnifex", "Despised Icon", "Shadow of Intent", "Signs of the Swarm", "Infant Annihilator", "Mental Cruelty",
+        "Bodysnatcher", "Within Destruction", "Rings of Saturn", "Distant", "Angelmaker", "Fit For An Autopsy",
+        "Oceano", "Job for a Cowboy", "Enterprise Earth", "Winds of Plague", "Born of Osiris"
+      ]
+    },
+    {
+      "id": "brutal-death",
+      "label": "Brutal death",
+      "family": "metal",
+      "artists": [
+        "Suffocation", "Dying Fetus", "Devourment", "Cryptopsy", "Defeated Sanity", "Disgorge", "Origin#343348041", "Wormed",
+        "Cerebral Bore", "Abominable Putridity", "Disentomb", "Ingested", "Kraanium", "Analepsy", "Vulvodynia",
+        "Pyrexia", "Internal Bleeding", "Skinless", "Deeds of Flesh", "Putridity", "Cannibal Corpse", "Benighted",
+        "Aborted", "Visceral Disgorge", "Guttural Secrete", "Katalepsy", "Inveracity", "Brodequin", "Severe Torture", "Gorgasm"
+      ]
+    },
+    {
+      "id": "black-metal",
+      "label": "Black metal",
+      "family": "metal",
+      "artists": [
+        "Mayhem", "Darkthrone", "Emperor", "Gorgoroth", "Immortal", "Dissection", "Marduk", "Watain", "Behemoth",
+        "Dimmu Borgir", "Cradle of Filth", "Mgła", "Deafheaven", "Wolves in the Throne Room", "Satyricon",
+        "Bathory", "1349", "Dark Funeral", "Agalloch", "Alcest", "Carach Angren", "Belphegor", "Rotting Christ", "Abbath", "Uada"
+      ]
+    },
+    {
+      "id": "heavy-thrash",
+      "label": "Heavy y thrash",
+      "family": "metal",
+      "artists": [
+        "Metallica", "Iron Maiden", "Black Sabbath", "Judas Priest", "Slayer", "Megadeth", "Anthrax", "Pantera",
+        "Motörhead", "Dio", "Ozzy Osbourne", "Sepultura", "Testament", "Exodus", "Kreator", "Sodom", "Overkill",
+        "Annihilator", "Helloween", "Accept", "Saxon", "Manowar", "Mercyful Fate", "King Diamond", "Machine Head", "Lamb of God"
+      ]
+    },
+    {
+      "id": "rock",
+      "label": "Rock y alternativo",
+      "family": "otros",
+      "artists": [
+        "Linkin Park", "System of a Down", "Slipknot", "Korn#1327", "Deftones", "Foo Fighters", "Red Hot Chili Peppers",
+        "Nirvana", "Queen", "AC/DC", "Guns N' Roses", "Arctic Monkeys", "Muse", "Green Day", "Blink-182",
+        "My Chemical Romance", "Paramore", "The Killers", "Radiohead", "Rammstein", "Evanescence", "Fall Out Boy",
+        "Pearl Jam", "Soundgarden", "Måneskin", "Sleep Token", "Ghost#8506054"
+      ]
+    },
+    {
+      "id": "pop",
+      "label": "Pop",
+      "family": "otros",
+      "artists": [
+        "Taylor Swift", "Dua Lipa", "The Weeknd", "Billie Eilish", "Ariana Grande", "Ed Sheeran", "Harry Styles",
+        "Lady Gaga", "Rihanna", "Bruno Mars", "Olivia Rodrigo", "Sabrina Carpenter", "Shakira", "Rosalía",
+        "Michael Jackson", "Madonna", "Beyoncé", "Justin Bieber", "Katy Perry", "Coldplay", "Imagine Dragons",
+        "Miley Cyrus", "Doja Cat", "Chappell Roan", "SZA", "Lana Del Rey", "Aitana"
+      ]
+    },
+    {
+      "id": "hiphop-us",
+      "label": "Hip hop USA",
+      "family": "otros",
+      "artists": [
+        "Eminem", "Kendrick Lamar", "Drake", "Travis Scott", "JAY-Z", "Nas", "2Pac", "The Notorious B.I.G.",
+        "Snoop Dogg", "Dr. Dre", "50 Cent", "Lil Wayne", "Nicki Minaj", "Cardi B", "J. Cole", "Tyler, The Creator",
+        "A$AP Rocky", "Post Malone", "Future", "Lil Uzi Vert", "Playboi Carti", "21 Savage", "Megan Thee Stallion",
+        "Kid Cudi", "Mac Miller", "Juice WRLD", "Outkast", "Wu-Tang Clan", "Cypress Hill"
+      ]
+    }
+  ]
+}
