@@ -14,6 +14,7 @@ import {
   type PuzzleResult,
   type PuzzleStats,
 } from '../game/daily';
+import { rememberAlbums, rememberPuzzle } from '../game/history';
 import { displayTitle } from '../game/pool';
 import {
   CLASICO_TRIES,
@@ -88,7 +89,7 @@ export function Puzzle({ id, filter, onBack }: Props) {
     const genres = urbano ? filter.genres : ['reggaeton', 'trap-es'];
     const level = urbano ? (filter.level ?? 'normal') : 'normal';
     const era = urbano ? filter.era : undefined;
-    return (): PuzzleOpts => ({ rng: seededRandom(seed), genres, era, level });
+    return (): PuzzleOpts => ({ rng: seededRandom(seed), genres, era, level, fresh: true });
   }, [daily, round, id, filter]);
 
   const saved = daily ? loadDaily<unknown>(id) : null;
@@ -353,6 +354,7 @@ const HINT_ARROW: Partial<Record<Hint, string>> = { up: '↑', down: '↓', 'nea
 
 function Clasico({ db, makeOpts, saved, onSave, onFinish, finished }: GameProps<number[]>) {
   const target = useMemo(() => pickClasico(db, makeOpts()), [db, makeOpts]);
+  useEffect(() => rememberPuzzle('clasico', [target.id]), [target]);
   const [guesses, setGuesses] = useState<number[]>(() => saved ?? []);
   const names = useMemo(() => db.artists.map((a) => a.n), [db]);
   const won = guesses.includes(target.id);
@@ -431,6 +433,7 @@ const LETTER_EMOJI: Record<LetterState, string> = { ok: '🟩', near: '🟨', no
 
 function Wordle({ db, makeOpts, saved, onSave, onFinish, finished }: GameProps<string[]>) {
   const target = useMemo(() => pickWordle(db, makeOpts()), [db, makeOpts]);
+  useEffect(() => rememberPuzzle('wordle', [target.id]), [target]);
   const word = wordleWord(target.n);
   const [guesses, setGuesses] = useState<string[]>(() => saved ?? []);
   const [current, setCurrent] = useState('');
@@ -537,14 +540,17 @@ function Wordle({ db, makeOpts, saved, onSave, onFinish, finished }: GameProps<s
 // ---------- Album Quiz ----------
 
 interface AlbumQuizSave {
+  album?: number;
   found: number[];
   gaveUp?: boolean;
 }
 
 function AlbumQuiz({ db, makeOpts, saved, onSave, onFinish, finished }: GameProps<AlbumQuizSave>) {
   const album = useMemo(() => pickAlbumQuiz(db, makeOpts()), [db, makeOpts]);
+  useEffect(() => rememberAlbums('albumquiz', [{ id: album.id, a: album.a }]), [album]);
   const artist = db.artistById.get(album.a)!;
-  const [state, setState] = useState<AlbumQuizSave>(() => saved ?? { found: [] });
+  // Lo guardado solo vale si es de este mismo disco
+  const [state, setState] = useState<AlbumQuizSave>(() => (saved?.album === album.id ? saved : { album: album.id, found: [] }));
   const over = finished || state.gaveUp || state.found.length === album.tr.length;
   // Sugerencias: todas las canciones del artista (no solo las del disco, que eso lo chivaría)
   const items = useMemo(
@@ -715,6 +721,7 @@ function Top10({ db, saved, onSave, onFinish, finished }: GameProps<Top10Save>) 
 
 function Piramide({ db, makeOpts, saved, onSave, onFinish, finished }: GameProps<number[]>) {
   const songs = useMemo(() => pickPiramide(db, makeOpts()), [db, makeOpts]);
+  useEffect(() => rememberPuzzle('piramide', songs.map((s) => s.id)), [songs]);
   const solution = useMemo(() => [...songs].sort((a, b) => b.rank - a.rank).map((s) => s.id), [songs]);
   // slots[i] = id de la canción colocada en el puesto i (0 = la más escuchada)
   const [slots, setSlots] = useState<(number | null)[]>(() =>

@@ -1,6 +1,8 @@
 // Elección del reto de cada puzle. Con la semilla del día sale el mismo para todo el mundo.
+import { quizAlbums } from './albums';
 import { normText } from './text';
 import { rngPick, rngShuffle } from './daily';
+import { freshFirst, pickFreshAlbums, recentPuzzle } from './history';
 import { artistsIn, coverUrl, artistPicUrl, type Era, type Level, type UAlbum, type UArtist, type UrbanoDB } from './urbano';
 
 export interface PuzzleOpts {
@@ -10,6 +12,8 @@ export interface PuzzleOpts {
   /** En modo libre, la época elegida en el inicio */
   era?: Era;
   level: Level;
+  /** Modo libre: evitar lo que ha salido hace poco (el reto del día es igual para todos y no lo mira). */
+  fresh?: boolean;
 }
 
 const DAILY_GENRES = ['reggaeton', 'trap-es'];
@@ -26,8 +30,14 @@ function famousArtists(db: UrbanoDB, o: PuzzleOpts): UArtist[] {
 
 export const CLASICO_TRIES = 8;
 
+/** Libre: el que lleva más tiempo sin salir (entre los que nunca han salido, al azar). */
+function pickArtist(list: UArtist[], o: PuzzleOpts, game: string): UArtist {
+  if (!o.fresh) return rngPick(list, o.rng);
+  return freshFirst(rngShuffle(list, o.rng), recentPuzzle(game), (a) => a.id)[0];
+}
+
 export function pickClasico(db: UrbanoDB, o: PuzzleOpts): UArtist {
-  return rngPick(famousArtists(db, o).filter((a) => a.d && a.c), o.rng);
+  return pickArtist(famousArtists(db, o).filter((a) => a.d && a.c), o, 'clasico');
 }
 
 /** ok = igual; up/down = el secreto es mayor/menor; near-* = y además está cerca. */
@@ -98,7 +108,7 @@ export function pickWordle(db: UrbanoDB, o: PuzzleOpts): UArtist {
     const w = wordleWord(a.n);
     return w.length >= 4 && w.length <= 9 && /^[a-z]/i.test(a.n);
   });
-  return rngPick(ok, o.rng);
+  return pickArtist(ok, o, 'wordle');
 }
 
 export type LetterState = 'ok' | 'near' | 'no';
@@ -124,13 +134,18 @@ export function scoreWord(guess: string, target: string): LetterState[] {
 
 // ---------- Album Quiz ----------
 
+/** Solo discos de estudio (sin recopilatorios ni directos), una edición por disco y sin intros en la lista. */
 export function pickAlbumQuiz(db: UrbanoDB, o: PuzzleOpts): UAlbum {
   const famous = new Set(famousArtists(db, o).map((a) => a.id));
-  const albums = db.albums
-    .filter((al) => al.k === 'album' && famous.has(al.a) && al.tr.length >= 7 && al.tr.length <= 22)
+  const albums = quizAlbums(db)
+    .filter((al) => famous.has(al.a))
     .sort((x, y) => y.f - x.f);
   const n = o.level === 'facil' ? 30 : o.level === 'normal' ? 90 : albums.length;
-  return rngPick(albums.slice(0, Math.max(n, 1)), o.rng);
+  const top = albums.slice(0, Math.max(n, 1));
+  if (!o.fresh) return rngPick(top, o.rng);
+  // Ni uno de los 10 últimos discos, ni del artista de los 3 últimos
+  const [al] = pickFreshAlbums('albumquiz', rngShuffle(top, o.rng), 1, (x) => ({ id: x.id, a: x.a }));
+  return al ?? rngPick(top, o.rng);
 }
 
 // ---------- Pirámide ----------
@@ -149,10 +164,14 @@ export const PYRAMID_SIZE = 5;
 /** Cinco canciones conocidas, de artistas distintos y con popularidades bien separadas. */
 export function pickPiramide(db: UrbanoDB, o: PuzzleOpts): PyramidSong[] {
   const ids = new Set(artistsIn(db, o.genres, o.era).map((a) => a.id));
-  const pool = db.tracks
+  let pool = db.tracks
     .filter((t) => ids.has(t.a))
     .sort((x, y) => y.r - x.r)
     .slice(0, o.level === 'facil' ? 400 : o.level === 'normal' ? 1000 : 1800);
+  // Libre: fuera las canciones de las últimas pirámides, si quedan de sobra
+  const seen = o.fresh ? recentPuzzle('piramide') : new Map<number, number>();
+  const unseen = pool.filter((t) => !seen.has(t.id));
+  if (unseen.length >= 150) pool = unseen;
   for (let attempt = 0; attempt < 200; attempt++) {
     const pick = rngShuffle(pool, o.rng).slice(0, 40);
     const chosen: typeof pool = [];

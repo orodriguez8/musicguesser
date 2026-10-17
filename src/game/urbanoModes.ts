@@ -1,6 +1,8 @@
 // Minijuegos de 10 pruebas que solo existen con urbano (necesitan la base de datos):
 // El infiltrado y AlbumLink.
 import { shuffle, uniqueBy } from '../lib/util';
+import { editionOf, looksLikeCompilation } from './albums';
+import { pickFreshAlbums } from './history';
 import type { Pool } from './pool';
 import { normText } from './text';
 import type { InfiltradoArtist, Option, Question, Track } from './types';
@@ -202,15 +204,18 @@ export function genAlbumLink(ctx: UrbanoCtx, count: number): Question[] {
   const { db, pool } = ctx;
   const withFeats = (id: number) => {
     const al = db.albumById.get(id);
-    return al && al.ft.length >= 3 ? al : null;
+    return al && al.ft.length >= 3 && !looksLikeCompilation(al) ? al : null;
   };
-  // Discos de los que suena alguna canción en la partida (así hay audio para el resumen)
-  const picks = uniqueBy(
+  // Discos de los que suena alguna canción en la partida (así hay audio para el resumen).
+  // Ni los 10 últimos discos ni el mismo artista que en los 3 anteriores.
+  const picks = pickFreshAlbums(
+    'albumlink',
     shuffle(pool.tracks).filter((t) => !ctx.used.has(t.id) && withFeats(t.albumId)),
-    (t) => t.albumId,
-  ).slice(0, count);
+    count,
+    (t) => ({ id: editionOf(db, t.albumId), a: t.artistId }),
+  );
   const eraIds = new Set(artistsIn(db, ctx.genres, ctx.era).map((a) => a.id));
-  const allAlbums = db.albums.filter((al) => al.ft.length >= 2 && eraIds.has(al.a));
+  const allAlbums = db.albums.filter((al) => al.ft.length >= 2 && eraIds.has(al.a) && !looksLikeCompilation(al));
   return picks.map((t: Track): Question => {
     const al = db.albumById.get(t.albumId)!;
     const artist = db.artistById.get(al.a)!;
@@ -218,7 +223,8 @@ export function genAlbumLink(ctx: UrbanoCtx, count: number): Question[] {
     const near = (y: number | null) => (al.y && y ? Math.abs(al.y - y) : 99);
     const others = uniqueBy(
       [
-        ...shuffle(allAlbums.filter((x) => x.a === al.a && x.id !== al.id)).slice(0, 1),
+        // (nunca otra edición del mismo disco: serían dos respuestas buenas)
+        ...shuffle(allAlbums.filter((x) => x.a === al.a && editionOf(db, x.id) !== editionOf(db, al.id))).slice(0, 1),
         // Discos de otros artistas de la misma época
         ...shuffle(allAlbums.filter((x) => x.a !== al.a).sort((x, y) => near(x.y) - near(y.y)).slice(0, 12)),
       ].filter((x) => normText(x.t) !== normText(al.t)),

@@ -3,7 +3,8 @@ import { getLyrics, lyricsHealth } from '../api/lrclib';
 import { artistType, firstReleaseYear } from '../api/musicbrainz';
 import { abortError, collect, mapLimit, range, sample, shuffle, uniqueBy } from '../lib/util';
 import { artistsOf, catalogArtistType, familyGenres, GENRES, genreById } from './catalog';
-import { freshFirst, recentArtists, recentTracks, remember } from './history';
+import { editionOf } from './albums';
+import { freshFirst, pickFreshAlbums, recentArtists, recentTracks, remember, rememberAlbums, type Recency } from './history';
 import { isUrbanoFilter, type UrbanoDB } from './urbano';
 import { genAlbumLink, genInfiltrado, type UrbanoCtx } from './urbanoModes';
 import { loadUrbanoPool } from './urbanoPool';
@@ -19,7 +20,9 @@ interface Ctx {
   progress: (p: Progress) => void;
   related?: Pool;
   /** Canciones de partidas anteriores: se usan solo si no queda otra. */
-  recent: Set<number>;
+  recent: Recency;
+  /** Artistas que fueron respuesta hace poco: van detrás de los que llevan tiempo sin salir. */
+  rested: Recency;
   /** Canciones que ya salen en esta partida: nunca se repiten. */
   used: Set<number>;
   /** Urbano: títulos de toda la base de datos, para opciones falsas y autocompletado. */
@@ -57,9 +60,12 @@ const distractorPool = (ctx: Ctx) => ctx.related ?? ctx.pool;
  * Primero lo que no ha salido en partidas recientes; lo ya usado en esta partida, nunca.
  */
 function spread(ctx: Ctx, pool: Pool, count: number, perArtist: number): Track[] {
-  const lists = shuffle([...pool.byArtist.values()]).map((ts) => ts.filter((t) => !ctx.used.has(t.id)));
+  const lists = freshFirst(shuffle([...pool.byArtist.values()]), ctx.rested, (ts) => ts[0]?.artistId ?? 0).map((ts) =>
+    ts.filter((t) => !ctx.used.has(t.id)),
+  );
   const fresh = lists.map((ts) => shuffle(ts.filter((t) => !ctx.recent.has(t.id)).slice(0, perArtist)));
-  const old = lists.map((ts) => shuffle(ts.filter((t) => ctx.recent.has(t.id)).slice(0, perArtist)));
+  // Lo ya oído, empezando por lo que hace más que salió
+  const old = lists.map((ts) => freshFirst(shuffle(ts.filter((t) => ctx.recent.has(t.id))), ctx.recent, (t) => t.id).slice(0, perArtist));
   const out: Track[] = [];
   const taken = new Set<number>();
   for (const queues of [fresh, old]) {
@@ -169,7 +175,7 @@ async function genSubgenero(ctx: Ctx, count: number): Promise<Question[]> {
     if (!a.genreId) continue;
     const list = byGenre.get(a.genreId) ?? [];
     const own = (ctx.pool.byArtist.get(a.id) ?? []).filter((t) => !ctx.used.has(t.id));
-    list.push(...freshFirst(shuffle(own.slice(0, 12)), (t) => ctx.recent.has(t.id)).slice(0, 4));
+    list.push(...freshFirst(shuffle(own.slice(0, 12)), ctx.recent, (t) => t.id).slice(0, 4));
     byGenre.set(a.genreId, list);
   }
   if (byGenre.size < 2) return [];
@@ -317,10 +323,18 @@ async function genAnio(ctx: Ctx, count: number): Promise<Question[]> {
 }
 
 const albumLabel = (t: Track) => stripExtras(t.albumTitle) || t.albumTitle;
+/** En urbano, la normal y la deluxe de un disco cuentan como el mismo. */
+const albumKey = (ctx: { db?: UrbanoDB }, t: Track) => (ctx.db ? editionOf(ctx.db, t.albumId) : t.albumId);
 
 async function genPortada(ctx: Ctx, count: number): Promise<Question[]> {
   const tracks = spread(ctx, ctx.pool, count * 3, artistMode(ctx) ? 60 : 15);
-  const albums = uniqueBy(tracks, (t) => `${t.artistId}:${normText(albumLabel(t))}`).slice(0, count);
+  // Ni los 10 últimos discos ni el mismo artista que en los 3 anteriores
+  const albums = pickFreshAlbums(
+    'portada',
+    uniqueBy(tracks, (t) => `${t.artistId}:${normText(albumLabel(t))}`),
+    count,
+    (t) => ({ id: albumKey(ctx, t), a: t.artistId }),
+  );
   const allAlbums = uniqueBy(distractorPool(ctx).tracks, (t) => `${t.artistId}:${normText(albumLabel(t))}`);
   return albums.flatMap((t): Question[] => {
     const key = normText(albumLabel(t));
@@ -340,7 +354,7 @@ async function genPortada(ctx: Ctx, count: number): Promise<Question[]> {
 
 async function genIntruso(ctx: Ctx, count: number): Promise<Question[]> {
   const pool = await withRelated(ctx);
-  const hosts: ArtistRef[] = (artistMode(ctx) ? shuffle(chosenArtists(ctx)) : shuffle(pool.artists)).filter(
+  const hosts: ArtistRef[] = freshFirst(artistMode(ctx) ? shuffle(chosenArtists(ctx)) : shuffle(pool.artists), ctx.rested, (a) => a.id).filter(
     (a) => (pool.byArtist.get(a.id)?.length ?? 0) >= 3,
   );
   if (!hosts.length) return [];
@@ -350,7 +364,8 @@ async function genIntruso(ctx: Ctx, count: number): Promise<Question[]> {
     const host = hosts[i % hosts.length];
     const own = freshFirst(
       shuffle((pool.byArtist.get(host.id) ?? []).slice(0, 25).filter((t) => !used.has(t.id))),
-      (t) => ctx.recent.has(t.id),
+      ctx.recent,
+      (t) => t.id,
     ).slice(0, 3);
     const strangers = pool.tracks.filter((t) => t.artistId !== host.id && !used.has(t.id));
     const sameGenre = strangers.filter((t) => t.genreId === host.genreId);
@@ -421,7 +436,7 @@ function pickArtists(mode: PlayMode, filter: Filter): ArtistRef[] {
   if (filter.kind === 'artist') return filter.artists;
   // Los que fueron respuesta hace poco descansan si hay otros para elegir
   const rested = recentArtists();
-  const pick = (list: ArtistRef[], n: number) => freshFirst(shuffle(list), (a) => rested.has(a.id)).slice(0, n);
+  const pick = (list: ArtistRef[], n: number) => freshFirst(shuffle(list), rested, (a) => a.id).slice(0, n);
   if (mode === 'subgenero') {
     const genres = familyGenres(filter.genres);
     const per = Math.max(2, Math.floor(16 / genres.length));
@@ -461,6 +476,7 @@ export async function buildQuestions(
   if (filter.kind === 'genres') filter = { ...filter, genres: filter.genres.filter((g) => genreById.has(g)) };
 
   const recent = recentTracks();
+  const rested = recentArtists();
   const onStep = (done: number, total: number) => progress({ label: 'Buscando canciones…', done, total });
   let pool: Pool;
   let urbano: Awaited<ReturnType<typeof loadUrbanoPool>> | null = null;
@@ -473,7 +489,7 @@ export async function buildQuestions(
     // AlbumLink: canciones de discos con colaboraciones
     const albumsWithFeats = mode === 'albumlink';
     const clusters = mode === 'mezcla' ? 2 : 0;
-    urbano = await loadUrbanoPool(filter, { count, perArtist, albumsWithFeats, clusters, recent, signal, onStep });
+    urbano = await loadUrbanoPool(filter, { count, perArtist, albumsWithFeats, clusters, recent, rested, signal, onStep });
     pool = urbano.pool;
   } else {
     const artists = pickArtists(mode, filter);
@@ -496,7 +512,7 @@ export async function buildQuestions(
     );
   }
 
-  const ctx: Ctx = { filter, pool, signal, progress, recent, used: new Set(), labels: urbano?.labels, years: urbano?.years, db: urbano?.db, eraArtists: urbano?.eraArtists };
+  const ctx: Ctx = { filter, pool, signal, progress, recent, rested, used: new Set(), labels: urbano?.labels, years: urbano?.years, db: urbano?.db, eraArtists: urbano?.eraArtists };
 
   // Validaciones de un artista concreto: ¿tiene material suficiente para este modo?
   if (filter.kind === 'artist') {
@@ -530,6 +546,11 @@ export async function buildQuestions(
     final.flatMap((q) => questionTracks(q).map((t) => t.id)),
     final.map((q) => questionTrack(q).artistId),
   );
+  for (const kind of ['portada', 'albumlink'] as const)
+    rememberAlbums(
+      kind,
+      final.filter((q) => q.kind === kind).map((q) => ({ id: albumKey(ctx, questionTrack(q)), a: questionTrack(q).artistId })),
+    );
   return final;
 }
 

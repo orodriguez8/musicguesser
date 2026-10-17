@@ -1,8 +1,9 @@
 // Partidas de urbano: las canciones salen de la base de datos (con su año y su popularidad)
 // en vez de los "top" de Deezer. Así se puede filtrar por época y dificultad.
 import { getTrack } from '../api/deezer';
-import { abortError, mapLimit, nonNull, shuffle } from '../lib/util';
-import { freshFirst } from './history';
+import { abortError, mapLimit, nonNull, shuffle, uniqueBy } from '../lib/util';
+import { editionOf, looksLikeCompilation } from './albums';
+import { freshFirst, type Recency } from './history';
 import type { Pool } from './pool';
 import type { ArtistRef, Filter, Track } from './types';
 import { artistPicUrl, artistsIn, coverUrl, ERAS, loadUrbano, type Level, type UrbanoDB, type UTrack } from './urbano';
@@ -58,15 +59,18 @@ function candidates(db: UrbanoDB, f: GenresFilter): UTrack[] {
   return songs.slice(start, end);
 }
 
-/** Reparte entre artistas: primero lo que no ha salido últimamente, como mucho perArtist de cada uno. */
-function pick(list: UTrack[], recent: Set<number>, count: number, perArtist: number, clusters = 0): UTrack[] {
+/**
+ * Reparte entre artistas: primero los que llevan más sin salir y, de cada uno, lo que no ha
+ * sonado últimamente. Como mucho perArtist canciones de cada artista.
+ */
+function pick(list: UTrack[], recent: Recency, rested: Recency, count: number, perArtist: number, clusters = 0): UTrack[] {
   const byArtist = new Map<number, UTrack[]>();
   for (const t of shuffle(list)) {
     const l = byArtist.get(t.a) ?? [];
     l.push(t);
     byArtist.set(t.a, l);
   }
-  const all = shuffle([...byArtist.values()]).map((ts) => freshFirst(ts, (t) => recent.has(t.id)));
+  const all = freshFirst(shuffle([...byArtist.values()]), rested, (ts) => ts[0].a).map((ts) => freshFirst(ts, recent, (t) => t.id));
   let queues = all.map((ts) => ts.slice(0, perArtist));
   if (perArtist > 4) {
     // Varias canciones de cada artista: menos artistas, y de los que tengan bastantes
@@ -115,7 +119,8 @@ export async function loadUrbanoPool(
     albumsWithFeats?: boolean;
     /** Artistas que traen 5 canciones (para que El intruso salga en Partida rápida) */
     clusters?: number;
-    recent: Set<number>;
+    recent: Recency;
+    rested: Recency;
     signal: AbortSignal;
     onStep?: (done: number, total: number) => void;
   },
@@ -123,10 +128,15 @@ export async function loadUrbanoPool(
   const db = await loadUrbano();
   let list = candidates(db, f);
   if (opts.albumsWithFeats) {
-    const linked = list.filter((t) => t.al && (db.albumById.get(t.al)?.ft.length ?? 0) >= 3);
-    if (linked.length >= 15) list = linked;
+    const linked = list.filter((t) => {
+      const al = t.al ? db.albumById.get(t.al) : undefined;
+      return !!al && al.ft.length >= 3 && !looksLikeCompilation(al);
+    });
+    // Una canción por disco (contando la deluxe como el mismo): así hay más discos donde elegir
+    const perAlbum = uniqueBy(shuffle(linked), (t) => editionOf(db, t.al!));
+    if (perAlbum.length >= 15) list = perAlbum;
   }
-  const chosen = pick(list, opts.recent, opts.count, opts.perArtist, opts.clusters);
+  const chosen = pick(list, opts.recent, opts.rested, opts.count, opts.perArtist, opts.clusters);
   let done = 0;
   let failed = 0;
   // El audio caduca a las pocas horas: lo pedimos a Deezer en el momento
