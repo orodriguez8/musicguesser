@@ -9,6 +9,7 @@ import { MODES, modeTitle } from '../game/modes';
 import { roundPoints } from '../game/scoring';
 import type { Filter, Outcome, PlayMode, Question } from '../game/types';
 import { isUrbanoFilter } from '../game/urbano';
+import { logPlay } from '../api/telemetry';
 import { fmtInt, isAbort } from '../lib/util';
 import { packGame, unpackGame, type PackedGame } from '../online/pack';
 import { COUNTDOWN_MS, MAX_PLAYERS, newRoomCode, REVEAL_MS, ROUND_MS, useRoom, validCode, type Player } from '../online/room';
@@ -264,6 +265,16 @@ function Room({
   on('end', () => {
     clearTimers();
     audio.stop();
+    if (state.current.phase !== 'podium') {
+      const mineAll = Object.values(state.current.answers[me.id] ?? {});
+      logPlay({
+        kind: 'room',
+        mode,
+        rounds: state.current.questions.length,
+        correct: mineAll.filter((a) => a.correct).length,
+        score: mineAll.reduce((s, a) => s + a.points, 0),
+      });
+    }
     setPhase('podium');
     if (host) setPlaying(false);
   });
@@ -279,7 +290,7 @@ function Room({
 
   // ---------- Jugador ----------
 
-  const myAnswers = answers[me.id] ?? {};
+  const myAnswers = useMemo(() => answers[me.id] ?? {}, [answers, me.id]);
   const streak = useMemo(() => {
     let s = 0;
     for (let i = index - 1; i >= 0 && myAnswers[i]?.correct; i--) s++;
@@ -325,6 +336,11 @@ function Room({
   if (status === 'full')
     return <Notice title="Sala llena" text={`Esta sala ya tiene ${MAX_PLAYERS} jugadores.`} onLeave={onLeave} />;
   if (status === 'error') return <Notice title="Sin conexión" text="No hemos podido entrar en la sala. Inténtalo de nuevo." onLeave={onLeave} />;
+  const reconnecting = status === 'reconnecting' && (
+    <div className="conn-banner" role="status">
+      <span className="spinner" aria-hidden="true" /> Reconectando con la sala…
+    </div>
+  );
   if (status === 'connecting') return <Notice title="Entrando en la sala…" />;
   if (lateJoin) return <Notice title="Ya han empezado" text="Espera a que acaben esta partida o pide otro código." onLeave={onLeave} />;
   if (!host && players.length > 0 && !hostPlayer && phase !== 'podium')
@@ -334,6 +350,7 @@ function Room({
 
   return (
     <>
+      {reconnecting}
       {(phase === 'countdown' || phase === 'play' || phase === 'podium') && <Scoreboard totals={totals} meId={me.id} podium={phase === 'podium'} />}
 
       {phase === 'lobby' && (

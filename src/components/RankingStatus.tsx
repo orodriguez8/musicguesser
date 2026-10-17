@@ -72,7 +72,7 @@ export function RankingStatus({ summary, filter, loggedIn, onLogin, onOpenRankin
   }
 
   return (
-    <p className="rank-status ko" role="status">
+    <p className={result.reason === 'queued' ? 'rank-status muted' : 'rank-status ko'} role="status">
       <Icon name="podium" /> {result.message}
     </p>
   );

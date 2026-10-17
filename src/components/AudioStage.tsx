@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { audio, useAudio } from '../audio/engine';
 import { HEARDLE_STEPS } from '../game/scoring';
 import type { Track } from '../game/types';
+import { reportError } from '../lib/errors';
 import { Icon } from './Icon';
 import { Visualizer } from './Visualizer';
 
@@ -49,8 +50,12 @@ export function AudioStage({ track, variant, step = 0, onMore, answered, autoPla
     const p = heardle
       ? audio.playRange(track.preview, HEARDLE_START, HEARDLE_START + HEARDLE_STEPS[step])
       : audio.playRange(track.preview, 0);
-    p.catch(() => {});
-  }, [heardle, step, track.preview]);
+    p.catch((e) => {
+      // Que el navegador bloquee el autoplay es normal; que el audio no cargue, no
+      if (e instanceof Error && e.message === 'No se pudo cargar el audio')
+        reportError(e, 'audio', { track: track.id, title: track.title, artist: track.artistName });
+    });
+  }, [heardle, step, track.preview, track.id, track.title, track.artistName]);
 
   useEffect(() => {
     if (autoPlay) play();

@@ -35,7 +35,13 @@ Juego web de adivinar música: del reggaeton al brutal death. Minijuegos de 10 p
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # genera dist/
+npm test         # tests (lógica del juego, pantallas y el SQL contra un Postgres en memoria)
+npm run lint     # oxlint
+npm run check    # tipos + lint + tests, lo mismo que pasa antes de publicar
+npm run check:data  # revisa la base de datos del urbano (duplicados, recopilatorios, homónimos…)
 ```
+
+Cada push a `main` pasa el lint y los tests antes de publicar: si algo falla, no se despliega.
 
 ## Publicar en GitHub Pages
 
@@ -81,3 +87,13 @@ No se aloja ningún archivo de audio: todo se pide en directo. Proyecto sin áni
 ## Base de datos (Supabase)
 
 Después de cambiar `supabase/schema.sql`, pégalo entero en **Supabase → SQL Editor → New query → Run**. Se puede ejecutar varias veces sin romper nada. Las salas en directo no necesitan tablas; el ranking por dificultad, los modos nuevos del ranking y los retos a un amigo sí.
+
+### Panel de administración
+
+En **Tu cuenta** aparece «Panel de administración» solo para las cuentas de la tabla `admins`. La comprobación la hace el servidor, así que nadie más puede leer las cifras aunque toque la app. Para darte acceso, ejecuta una vez en el SQL Editor (con tu email; no lo guardes en el repositorio, que es público):
+
+```sql
+insert into public.admins (user_id) select id from auth.users where email = 'TU_EMAIL';
+```
+
+El panel enseña partidas por día, hora y modo, jugadores y cuántos vuelven, usuarios, quién ha jugado cada reto y cuántas veces, errores de la app y preguntas reportadas.

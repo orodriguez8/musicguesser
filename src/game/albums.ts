@@ -14,6 +14,9 @@ const VERSION = /\b(remix|mix|live|en vivo|versi[oó]n|version|instrumental|acap
 /** Discos de un homónimo que Deezer mezcla con el artista (Alvaro Díaz cantante de copla). */
 const WRONG_ARTIST = new Set([6616073, 499742551, 207866022]);
 
+/** Sin tildes: en JavaScript \b no ve la "É" de "Éxitos" como letra y la palabra no se detecta. */
+const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+
 const MIN_TRACKS = 7;
 const MAX_TRACKS = 22;
 
@@ -21,7 +24,7 @@ const songKey = (t: string) => normText(stripExtras(t)) || normText(t);
 const titleKey = (t: string) => normText(stripExtras(t).replace(/\b(deluxe|edition|edici[oó]n|expanded|reloaded|side [ab])\b/gi, ''));
 
 /** Recopilatorios, directos, remixes... o discos que no son de este artista. */
-export const looksLikeCompilation = (al: UAlbum) => NOT_AN_ALBUM.test(al.t) || WRONG_ARTIST.has(al.id);
+export const looksLikeCompilation = (al: UAlbum) => NOT_AN_ALBUM.test(plain(al.t)) || WRONG_ARTIST.has(al.id);
 
 /** Las canciones del disco que se pueden adivinar: sin intros, versiones ni repetidas. */
 function cleanTracks(al: UAlbum): string[] | null {
@@ -76,7 +79,14 @@ function build(db: UrbanoDB): Index {
       if (tr && tr.length >= MIN_TRACKS && tr.length <= MAX_TRACKS) quiz.push({ ...best, tr });
     }
   }
-  return { edition, quiz };
+  // Los discos conjuntos (OASIS de Bad Bunny y J Balvin...) salen una vez por artista: nos
+  // quedamos con una sola copia, la del artista con más fans
+  const fans = (al: UAlbum) => db.artistById.get(al.a)?.f ?? 0;
+  const seen = new Set<number>();
+  const unique = [...quiz]
+    .sort((x, y) => fans(y) - fans(x))
+    .filter((al) => !seen.has(al.id) && (seen.add(al.id), true));
+  return { edition, quiz: unique };
 }
 
 function index(db: UrbanoDB): Index {

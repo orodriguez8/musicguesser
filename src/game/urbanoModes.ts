@@ -59,7 +59,12 @@ function collabMap(db: UrbanoDB): Map<number, Set<number>> {
     if (a === b) return;
     (m.get(a) ?? m.set(a, new Set()).get(a)!).add(b);
   };
-  for (const t of db.tracks) for (const f of t.ft ?? []) if (db.artistById.has(f)) (add(t.a, f), add(f, t.a));
+  for (const t of db.tracks)
+    for (const f of t.ft ?? []) {
+      if (!db.artistById.has(f)) continue;
+      add(t.a, f);
+      add(f, t.a);
+    }
   return m;
 }
 let collabs: Map<number, Set<number>> | null = null;

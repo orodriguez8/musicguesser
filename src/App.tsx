@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { audio } from './audio/engine';
 import { Icon } from './components/Icon';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Modal } from './components/Modal';
+import { flushPendingScores } from './api/ranking';
+import { logGame } from './api/telemetry';
+import { isUrbanoFilter, loadUrbano } from './game/urbano';
+import { Admin } from './screens/Admin';
 import { MODES, modeTitle } from './game/modes';
 import type { Filter, PlayMode, Summary } from './game/types';
 import { fmtInt } from './lib/util';
@@ -17,6 +22,7 @@ import type { PuzzleId } from './game/daily';
 import { Results } from './screens/Results';
 import { useAuth } from './auth/auth';
 import { onlineEnabled } from './lib/supabase';
+import { deviceId } from './lib/device';
 import { load, save } from './lib/storage';
 import { Account } from './screens/Account';
 import { Login, NewPassword } from './screens/Login';
@@ -40,6 +46,7 @@ type View =
   | { name: 'online'; code?: string }
   | { name: 'challenge'; id: string }
   | { name: 'account' }
+  | { name: 'admin' }
   | { name: 'login'; initial: 'login' | 'signup'; back: View | null }
   | { name: 'game'; mode: PlayMode; filter: Filter; key: number }
   | ResultsView;
@@ -71,6 +78,25 @@ export default function App() {
   const [modal, setModal] = useState<'settings' | 'records' | null>(null);
 
   useEffect(() => audio.setVolume(settings.volume), [settings.volume]);
+
+  // Partidas del ranking que no se pudieron subir sin conexión: al entrar y al volver la red
+  const userId = auth.session?.user.id;
+  useEffect(() => {
+    if (!onlineEnabled || !userId) return;
+    void flushPendingScores();
+    const onOnline = () => void flushPendingScores();
+    window.addEventListener('online', onOnline);
+    return () => window.removeEventListener('online', onOnline);
+  }, [userId]);
+
+  // Con urbano elegido, la base de datos (~1 MB) se descarga en segundo plano: al pulsar
+  // "Jugar" ya está lista (y el service worker la deja en caché para la próxima vez)
+  const urbano = isUrbanoFilter(filter);
+  useEffect(() => {
+    if (!urbano) return;
+    const idle = window.requestIdleCallback ?? ((fn: () => void) => window.setTimeout(fn, 1500));
+    idle(() => void loadUrbano().catch(() => {}));
+  }, [urbano]);
 
   const viewRef = useRef(view);
   viewRef.current = view;
@@ -152,9 +178,14 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  const openAdmin = () => {
+    setView({ name: 'admin' });
+    window.scrollTo(0, 0);
+  };
+
   // Si cierras sesión (o caduca) estando en "Tu cuenta", al inicio en vez de pantalla en blanco
   useEffect(() => {
-    if (view.name === 'account' && auth.ready && !auth.session) setView({ name: 'home' });
+    if ((view.name === 'account' || view.name === 'admin') && auth.ready && !auth.session) setView({ name: 'home' });
   }, [view.name, auth.ready, auth.session]);
 
   const finishSetup = () => {
@@ -165,6 +196,7 @@ export default function App() {
   };
 
   const finish = (mode: PlayMode, f: Filter) => (summary: Summary) => {
+    logGame('game', summary, f);
     const { records: next, isRecord } = recordGame(summary);
     setRecords({ ...next });
     setView({ name: 'results', mode, filter: f, summary, isRecord });
@@ -189,77 +221,94 @@ export default function App() {
     );
   }
 
+  // Si una pantalla falla, aviso con vuelta al inicio (y al cambiar de pantalla se reintenta)
+  const screenKey = view.name === 'game' ? `game:${view.key}` : view.name;
+  const recover = () => {
+    audio.stop();
+    setView({ name: 'home' });
+  };
+
   return (
     <div className="app">
       <div className="glow" aria-hidden="true" />
-      {view.name === 'home' && (
-        <Home
-          filter={filter}
-          onFilter={updateFilter}
-          records={records}
-          onPlay={play}
-          onPuzzle={openPuzzle}
-          onOnline={onlineEnabled ? openOnline : undefined}
-          onOpenSettings={() => setModal('settings')}
-          onOpenRecords={() => setModal('records')}
-          onOpenRanking={onlineEnabled ? openRanking : undefined}
-          account={
-            onlineEnabled && auth.ready
-              ? { profile: auth.profile, onClick: auth.session ? openAccount : () => openLogin('login') }
-              : undefined
-          }
-        />
-      )}
-      {view.name === 'ranking' && <Ranking myId={auth.session?.user.id ?? null} onBack={goHome} />}
-      {view.name === 'puzzle' && <Puzzle key={view.id} id={view.id} filter={filter} onBack={goHome} />}
-      {view.name === 'online' && (
-        <Online
-          me={auth.profile}
-          filter={filter}
-          settings={settings}
-          initialCode={view.code}
-          onBack={goHome}
-          onLogin={() => openLogin('login')}
-        />
-      )}
-      {view.name === 'challenge' && (
-        <Challenge id={view.id} settings={settings} loggedIn={!!auth.session} onBack={goHome} onLogin={() => openLogin('login')} />
-      )}
-      {view.name === 'login' && (
-        <Login
-          initial={view.initial}
-          onBack={goHome}
-          onDone={() => {
-            if (view.back) setView(view.back);
-            else goHome();
-          }}
-        />
-      )}
-      {view.name === 'account' && auth.profile && (
-        <Account profile={auth.profile} email={auth.session?.user.email} onSaved={auth.refreshProfile} onClose={goHome} />
-      )}
-      {view.name === 'game' && (
-        <Game
-          key={view.key}
-          mode={view.mode}
-          filter={view.filter}
-          settings={settings}
-          onExit={goHome}
-          onFinish={finish(view.mode, view.filter)}
-        />
-      )}
-      {view.name === 'results' && (
-        <Results
-          summary={view.summary}
-          filter={view.filter}
-          isRecord={view.isRecord}
-          loggedIn={!!auth.session}
-          onLogin={() => openLogin('login')}
-          onOpenRanking={onlineEnabled ? openRanking : undefined}
-          onHome={goHome}
-          onReplay={() => setView({ name: 'game', mode: view.mode, filter: view.filter, key: Date.now() })}
-        />
-      )}
+      <ErrorBoundary place={view.name} resetKey={screenKey} onReset={recover}>
+        {view.name === 'home' && (
+          <Home
+            filter={filter}
+            onFilter={updateFilter}
+            records={records}
+            onPlay={play}
+            onPuzzle={openPuzzle}
+            onOnline={onlineEnabled ? openOnline : undefined}
+            onOpenSettings={() => setModal('settings')}
+            onOpenRecords={() => setModal('records')}
+            onOpenRanking={onlineEnabled ? openRanking : undefined}
+            account={
+              onlineEnabled && auth.ready
+                ? { profile: auth.profile, onClick: auth.session ? openAccount : () => openLogin('login') }
+                : undefined
+            }
+          />
+        )}
+        {view.name === 'ranking' && <Ranking myId={auth.session?.user.id ?? null} onBack={goHome} />}
+        {view.name === 'puzzle' && <Puzzle key={view.id} id={view.id} filter={filter} onBack={goHome} />}
+        {view.name === 'online' && (
+          <Online
+            me={auth.profile}
+            filter={filter}
+            settings={settings}
+            initialCode={view.code}
+            onBack={goHome}
+            onLogin={() => openLogin('login')}
+          />
+        )}
+        {view.name === 'challenge' && (
+          <Challenge id={view.id} settings={settings} loggedIn={!!auth.session} onBack={goHome} onLogin={() => openLogin('login')} />
+        )}
+        {view.name === 'login' && (
+          <Login
+            initial={view.initial}
+            onBack={goHome}
+            onDone={() => {
+              if (view.back) setView(view.back);
+              else goHome();
+            }}
+          />
+        )}
+        {view.name === 'account' && auth.profile && (
+          <Account
+            profile={auth.profile}
+            email={auth.session?.user.email}
+            onSaved={auth.refreshProfile}
+            onClose={goHome}
+            onAdmin={openAdmin}
+          />
+        )}
+        {view.name === 'admin' && auth.session && <Admin onBack={goHome} />}
+        {view.name === 'game' && (
+          <Game
+            key={view.key}
+            mode={view.mode}
+            filter={view.filter}
+            settings={settings}
+            onExit={goHome}
+            onFinish={finish(view.mode, view.filter)}
+          />
+        )}
+        {view.name === 'results' && (
+          <Results
+            summary={view.summary}
+            filter={view.filter}
+            isRecord={view.isRecord}
+            loggedIn={!!auth.session}
+            onLogin={() => openLogin('login')}
+            onOpenRanking={onlineEnabled ? openRanking : undefined}
+            onHome={goHome}
+            onReplay={() => setView({ name: 'game', mode: view.mode, filter: view.filter, key: Date.now() })}
+          />
+        )}
+
+      </ErrorBoundary>
 
       <Modal open={modal === 'settings'} onClose={() => setModal(null)} title="Ajustes">
         <div className="setting">
@@ -286,6 +335,8 @@ export default function App() {
           <input
             type="checkbox"
             role="switch"
+            aria-checked={settings.showOptions}
+            aria-label="Mostrar las opciones desde el principio"
             checked={settings.showOptions}
             onChange={(e) => updateSettings({ ...settings, showOptions: e.target.checked })}
           />
@@ -305,7 +356,10 @@ export default function App() {
         </div>
         <p className="muted small">
           Los fragmentos de audio (30 s) vienen de Deezer y las letras de LRCLIB. Tus récords y ajustes se guardan solo en este
-          navegador.
+          navegador. <a href="privacidad.html">Privacidad</a> · <a href="condiciones.html">Condiciones de uso</a>
+        </p>
+        <p className="muted small">
+          Id de este dispositivo (por si pides borrar sus estadísticas): <code>{deviceId()}</code>
         </p>
       </Modal>
 

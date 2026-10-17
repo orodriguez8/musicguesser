@@ -28,7 +28,8 @@ export interface Player {
   playing?: boolean;
 }
 
-export type RoomStatus = 'connecting' | 'joined' | 'full' | 'error';
+/** reconnecting: estábamos dentro y se ha cortado; Supabase reintenta solo y volvemos a entrar. */
+export type RoomStatus = 'connecting' | 'joined' | 'reconnecting' | 'full' | 'error';
 
 type Handler = (payload: Record<string, unknown>) => void;
 
@@ -60,12 +61,22 @@ export function useRoom(code: string, me: Profile, host: boolean) {
     for (const ev of ROOM_EVENTS) ch.on('broadcast', { event: ev }, ({ payload }) => handlers.current[ev]?.(payload ?? {}));
     ch.subscribe(async (s) => {
       if (s === 'SUBSCRIBED') {
-        await ch.track(meta.current);
+        await ch.track(meta.current).catch(() => {});
         setStatus((prev) => (prev === 'full' ? prev : 'joined'));
-      } else if (s === 'CHANNEL_ERROR' || s === 'TIMED_OUT') setStatus('error');
+      } else if (s === 'CHANNEL_ERROR' || s === 'TIMED_OUT') {
+        // Antes de entrar es un error; ya dentro, un corte que Supabase reintenta solo
+        setStatus((prev) => (prev === 'joined' || prev === 'reconnecting' ? 'reconnecting' : prev === 'full' ? prev : 'error'));
+      }
     });
+    // El móvil avisa al quedarse sin red: mejor decirlo ya que esperar al tiempo de espera
+    const offline = () => setStatus((prev) => (prev === 'joined' ? 'reconnecting' : prev));
+    const online = () => setStatus((prev) => (prev === 'reconnecting' && ch.state === 'joined' ? 'joined' : prev));
+    window.addEventListener('offline', offline);
+    window.addEventListener('online', online);
     channel.current = ch;
     return () => {
+      window.removeEventListener('offline', offline);
+      window.removeEventListener('online', online);
       channel.current = null;
       ch.untrack().catch(() => {});
       supabase?.removeChannel(ch);

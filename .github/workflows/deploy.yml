@@ -24,6 +24,9 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # Si el lint o algún test fallan, no se publica nada
+      - run: npm run lint
+      - run: npm test
       - run: npm run build
         env:
           # Variables del repositorio (Settings → Secrets and variables → Actions → Variables).

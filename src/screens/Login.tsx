@@ -31,7 +31,7 @@ export function Login({ initial = 'login', onDone, onBack }: Props) {
 function Credit() {
   return (
     <span className="credit login-credit">
-      <a href="privacidad.html">Privacidad</a> · made by Raksoda
+      <a href="privacidad.html">Privacidad</a> · <a href="condiciones.html">Condiciones</a> · made by Raksoda
     </span>
   );
 }

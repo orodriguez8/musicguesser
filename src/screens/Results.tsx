@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { audio, useAudio } from '../audio/engine';
 import { Icon } from '../components/Icon';
 import { RankingStatus } from '../components/RankingStatus';
+import { ReportButton } from '../components/ReportButton';
 import { SafeImg } from '../components/SafeImg';
 import { questionTrack } from '../game/build';
 import { modeTitle } from '../game/modes';
@@ -169,6 +170,10 @@ export function Results({ summary, filter, isRecord, loggedIn, onReplay, onHome,
                 <span className={r.outcome.correct ? 'played-pts ok' : 'played-pts ko'}>
                   {r.points ? `+${fmtInt(r.points)}` : 'Fallada'}
                 </span>
+                <ReportButton
+                  compact
+                  what={{ mode: r.question.kind, trackId: t.id, albumId: t.albumId, title: t.title, artist: t.artistName, album: t.albumTitle }}
+                />
                 <a className="btn-square sm" href={t.link} target="_blank" rel="noreferrer" aria-label={`Abrir ${t.title} en Deezer`}>
                   <Icon name="external" size={16} />
                 </a>

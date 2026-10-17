@@ -4,6 +4,7 @@ import { getTrack } from '../api/deezer';
 import { abortError, mapLimit, nonNull, shuffle, uniqueBy } from '../lib/util';
 import { editionOf, looksLikeCompilation } from './albums';
 import { freshFirst, type Recency } from './history';
+import { normText, stripExtras } from './text';
 import type { Pool } from './pool';
 import type { ArtistRef, Filter, Track } from './types';
 import { artistPicUrl, artistsIn, coverUrl, ERAS, loadUrbano, type Level, type UrbanoDB, type UTrack } from './urbano';
@@ -45,9 +46,11 @@ export interface UrbanoPool {
 function candidates(db: UrbanoDB, f: GenresFilter): UTrack[] {
   const era = ERAS.find((e) => e.id === f.era);
   const ids = new Set(artistsIn(db, f.genres, f.era).map((a) => a.id));
-  const songs = db.tracks
+  let songs = db.tracks
     .filter((t) => ids.has(t.a) && !NOT_A_SONG.test(t.t) && (!era || (t.y >= era.from - 1 && t.y <= era.to + 1)))
     .sort((x, y) => y.r - x.r);
+  // La misma canción con otro título ("feat. X", versión, directo...): solo la más escuchada
+  songs = uniqueBy(songs, (t) => `${t.a}:${normText(stripExtras(t.t)) || normText(t.t)}`);
   const [from, to] = BANDS[f.level ?? 'normal'];
   let start = Math.floor(songs.length * from);
   let end = Math.ceil(songs.length * to);

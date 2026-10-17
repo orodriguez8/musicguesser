@@ -182,6 +182,17 @@ const PATHS = {
       <path d="M13.5 9H21v3.2a3.3 3.3 0 0 1-6.6 0z" fill="currentColor" />
     </>
   ),
+  flag: (
+    <>
+      <path d="M5 21V4" />
+      <path d="M5 4h11l-2 4 2 4H5" />
+    </>
+  ),
+  chart: (
+    <>
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+    </>
+  ),
   podium: (
     <>
       <rect x="9" y="6" width="6" height="15" rx="1" />

@@ -96,7 +96,7 @@ function mb(path) {
 }
 
 async function mapLimit(items, n, fn) {
-  const out = new Array(items.length);
+  const out = Array.from({ length: items.length });
   let next = 0;
   await Promise.all(
     Array.from({ length: Math.min(n, items.length) }, async () => {
@@ -308,7 +308,10 @@ async function buildArtist(a, genreId) {
     .map(({ key, title, al, years }) => {
       const tracks = (al.tracks?.data ?? []).filter((t) => !JUNK.test(t.title)).map((t) => parseTitle(t).base);
       const feats = new Map();
-      for (const c of al.contributors ?? []) if (c.id !== a.id) (people.set(c.id, c.name), feats.set(norm(c.name), c.name));
+      for (const c of al.contributors ?? []) if (c.id !== a.id) {
+        people.set(c.id, c.name);
+        feats.set(norm(c.name), c.name);
+      }
       for (const t of al.tracks?.data ?? []) {
         for (const id of topContrib.get(t.id) ?? []) if (id !== a.id) feats.set(norm(people.get(id)), people.get(id));
         for (const n of parseTitle(t).feats) feats.set(norm(n), feats.get(norm(n)) ?? n);
@@ -393,7 +396,10 @@ for (const [i, { a, genreId }] of urbanArtists.entries()) {
   const r = await buildArtist(a, genreId);
   out.artists.push(r.artist);
   out.albums.push(...r.albums);
-  for (const t of r.tracks) if (!seenTracks.has(t.id)) (seenTracks.add(t.id), out.tracks.push(t));
+  for (const t of r.tracks) if (!seenTracks.has(t.id)) {
+      seenTracks.add(t.id);
+      out.tracks.push(t);
+    }
   const eras = { v: 0, i: 0, n: 0 };
   for (const t of r.tracks) eras[t.y <= 2012 ? 'v' : t.y <= 2020 ? 'i' : 'n']++;
   console.log(
@@ -416,3 +422,7 @@ const kb = (JSON.stringify(out).length / 1024).toFixed(0);
 console.log(`\nGuardado en ${outPath}: ${out.artists.length} artistas, ${out.albums.length} discos, ${out.tracks.length} canciones (${kb} KB)`);
 if (stats.noEra.length) console.log(`\nSin época asignada (añádelos en urbano-overrides.json): ${stats.noEra.join(', ')}`);
 if (stats.mbMiss.length) console.log(`\nSin datos de MusicBrainz (años solo de Deezer): ${stats.mbMiss.join(', ')}`);
+
+// Revisión de calidad: avisa de duplicados, recopilatorios, homónimos...
+const { checkUrbano, printReport } = await import('./check-urbano.mjs');
+printReport(checkUrbano(out));

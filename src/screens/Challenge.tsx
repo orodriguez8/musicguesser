@@ -8,6 +8,7 @@ import { challengeBoard, getChallenge, saveChallengeResult, type BoardEntry, typ
 import { unpackGame } from '../online/pack';
 import type { Settings } from '../settings';
 import { Game } from './Game';
+import { logGame } from '../api/telemetry';
 
 interface Props {
   id: string;
@@ -45,6 +46,7 @@ export function Challenge({ id, settings, loggedIn, onBack, onLogin }: Props) {
   };
 
   const finish = async (reto: Reto, summary: Summary) => {
+    logGame('challenge', summary, null, reto.id);
     setPhase({ k: 'done', reto, summary, saved: false });
     window.scrollTo(0, 0);
     const saved = await saveChallengeResult(reto.id, summary.score, summary.correct).catch(() => false);

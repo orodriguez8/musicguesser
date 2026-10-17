@@ -12,5 +12,5 @@ export function SafeImg(props: ImgHTMLAttributes<HTMLImageElement>) {
       />
     );
   }
-  return <img {...props} onError={() => setFailed(true)} />;
+  return <img alt="" {...props} onError={() => setFailed(true)} />;
 }

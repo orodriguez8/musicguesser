@@ -22,6 +22,8 @@ export function Modal({
   }, [open]);
 
   return (
+    // Clic fuera de la caja = cerrar (con teclado, Escape ya lo cierra el propio <dialog>)
+    // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <dialog
       ref={ref}
       className="modal"

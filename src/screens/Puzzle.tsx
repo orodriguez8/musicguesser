@@ -14,6 +14,8 @@ import {
   type PuzzleResult,
   type PuzzleStats,
 } from '../game/daily';
+import { logPuzzle } from '../api/telemetry';
+import { ReportButton } from '../components/ReportButton';
 import { rememberAlbums, rememberPuzzle } from '../game/history';
 import { displayTitle } from '../game/pool';
 import {
@@ -102,6 +104,7 @@ export function Puzzle({ id, filter, onBack }: Props) {
 
   const finish = (r: PuzzleResult) => {
     setResult(r);
+    logPuzzle(id, r, daily, isUrbanoFilter(filter) ? filter.level : undefined);
     if (daily) setStats(recordDaily(id, r));
   };
 
@@ -612,6 +615,13 @@ function AlbumQuiz({ db, makeOpts, saved, onSave, onFinish, finished }: GameProp
         <button className="btn-ghost" onClick={giveUp}>
           Me rindo
         </button>
+      )}
+      {over && (
+        <ReportButton
+          label="Reportar este disco"
+          reasons={['disco', 'portada', 'artista', 'anio', 'otro']}
+          what={{ mode: 'albumquiz', albumId: album.id, title: album.t, artist: artist.n, album: album.t }}
+        />
       )}
     </>
   );

@@ -5,8 +5,9 @@ import { SafeImg } from '../components/SafeImg';
 import { buildQuestions, GameError, questionTrack } from '../game/build';
 import { filterLabel } from '../game/catalog';
 import { modeTitle } from '../game/modes';
-import { roundPoints, streakMultiplier } from '../game/scoring';
+import { ROUNDS, roundPoints, streakMultiplier } from '../game/scoring';
 import type { Filter, Outcome, PlayMode, Progress, Question, RoundResult, Summary } from '../game/types';
+import { isNetworkError, reportError } from '../lib/errors';
 import { fmtDecimal, fmtInt, isAbort } from '../lib/util';
 import type { Settings } from '../settings';
 import { Round } from './Rounds';
@@ -71,7 +72,7 @@ export function Game({ mode, filter, settings, onExit, onFinish, preset, label }
       .catch((e) => {
         if (isAbort(e)) return;
         // Los GameError traen un mensaje pensado para el jugador; el resto, mensaje genérico
-        if (!(e instanceof GameError)) console.error('[MusicGuesser] Error preparando la partida', e);
+        if (!(e instanceof GameError) && !isNetworkError(e)) reportError(e, `partida:${mode}`, { filter });
         setPhase({
           k: 'error',
           msg: e instanceof GameError ? e.message : 'Algo ha fallado preparando la partida. Vuelve a intentarlo en un momento.',
@@ -215,6 +216,12 @@ export function Game({ mode, filter, settings, onExit, onFinish, preset, label }
           <span className="ready-count">{questions.length}</span>
           <p className="state-title">pruebas listas</p>
           <p className="muted center">{MODE_RULES[mode]}</p>
+          {!preset && questions.length < ROUNDS && (
+            <p className="short-note">
+              Esta vez solo hemos podido preparar {questions.length} pruebas (Deezer o las letras no han dado para más). Solo
+              las partidas de {ROUNDS} puntúan en el ranking.
+            </p>
+          )}
           {TYPING_MODES.has(mode) && !settings.showOptions && (
             <p className="muted center small">Escribir la respuesta vale ×1,5 frente a elegirla entre las opciones.</p>
           )}

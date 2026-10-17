@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
+import { isAdmin } from '../api/admin';
 import { deleteAccount, isUsernameAccount, signOut, updateProfile, USERNAME_RE, type Profile } from '../auth/auth';
 import { Icon } from '../components/Icon';
 import { BigCassette, TapeArt, TAPES } from '../components/Tapes';
@@ -10,9 +11,20 @@ interface Props {
   setup?: boolean;
   onSaved: () => void;
   onClose: () => void;
+  /** Panel de administración (solo se enseña si el servidor dice que eres admin) */
+  onAdmin?: () => void;
 }
 
-export function Account({ profile, email, setup, onSaved, onClose }: Props) {
+export function Account({ profile, email, setup, onSaved, onClose, onAdmin }: Props) {
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => {
+    if (setup || !onAdmin) return;
+    let alive = true;
+    isAdmin().then((v) => alive && setAdmin(v));
+    return () => {
+      alive = false;
+    };
+  }, [setup, onAdmin]);
   const [username, setUsername] = useState(profile.username);
   const [tape, setTape] = useState(TAPES.some((t) => t.id === profile.avatar) ? profile.avatar : TAPES[0].id);
   const [busy, setBusy] = useState(false);
@@ -121,6 +133,11 @@ export function Account({ profile, email, setup, onSaved, onClose }: Props) {
           <p className="muted small center">
             {isUsernameAccount(email) ? 'Cuenta de solo usuario' : email ? `Entras con ${email}` : ''}
           </p>
+          {admin && onAdmin && (
+            <button className="btn-light" onClick={onAdmin}>
+              <Icon name="chart" /> Panel de administración
+            </button>
+          )}
           <button
             className="btn-ghost"
             onClick={async () => {
@@ -136,7 +153,7 @@ export function Account({ profile, email, setup, onSaved, onClose }: Props) {
         </>
       )}
       <span className="credit login-credit">
-        <a href="privacidad.html">Privacidad</a> · made by Raksoda
+        <a href="privacidad.html">Privacidad</a> · <a href="condiciones.html">Condiciones</a> · made by Raksoda
       </span>
     </main>
   );

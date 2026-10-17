@@ -23,5 +23,8 @@ function serviceWorker(): Plugin {
 // base relativa: funciona en https://<usuario>.github.io/<repo>/ sin configurar nada más
 export default defineConfig({
   base: './',
+  define: {
+    __APP_VERSION__: JSON.stringify(process.env.GITHUB_SHA?.slice(0, 7) ?? 'dev'),
+  },
   plugins: [react(), serviceWorker()],
 });

@@ -287,7 +287,7 @@ export function Home({ filter, onFilter, records, onPlay, onPuzzle, onOnline, on
           LRCLIB
         </a>{' '}
         · Proyecto sin ánimo de lucro ·{' '}
-        <a href="privacidad.html">Privacidad</a>
+        <a href="privacidad.html">Privacidad</a> · <a href="condiciones.html">Condiciones</a>
       </footer>
       <span className="credit">made by Raksoda</span>
     </main>
